@@ -1,8 +1,12 @@
-import { Button } from "@mui/material";
-import { useGoogleLogin, GoogleLogin } from "@react-oauth/google";
+import { MenuItem } from "@mui/material";
+import { useGoogleLogin } from "@react-oauth/google";
 import { fetchDataFromApi } from "./utils/fetcher";
 
-export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
+export default function LoginWithGoogle({
+	setGoogleApiToken,
+	setUser,
+	closeMenu,
+}) {
 	const login = useGoogleLogin({
 		scope:
 			"https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/tasks",
@@ -21,8 +25,9 @@ export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 				},
 				profilePicture: apiResponse.photos[0].url,
 			};
-			setUser(theApiUser);
+			closeMenu();
+			setTimeout(() => setUser(theApiUser), 1000);
 		},
 	});
-	return <Button onClick={login}>Login With Google</Button>;
+	return <MenuItem onClick={login}>Sign in With Google</MenuItem>;
 }

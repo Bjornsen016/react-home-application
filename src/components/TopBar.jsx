@@ -1,76 +1,24 @@
-import { useState } from "react";
-import {
-	Checkbox,
-	AppBar,
-	Toolbar,
-	IconButton,
-	Typography,
-	Menu,
-	MenuItem,
-	Box,
-} from "@mui/material";
-import { Menu as MenuIcon, DarkMode, LightMode } from "@mui/icons-material";
-import LoginWithGoogle from "./LoginWithGoogle";
+import { Checkbox, AppBar, Toolbar, Typography, Box } from "@mui/material";
+import { DarkMode, LightMode } from "@mui/icons-material";
+import TopBarMenu from "./TopBarMenu";
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
 export default function TopBar({
 	colorMode,
 	user,
-	googleApiToken,
 	setGoogleApiToken,
 	setUser,
 }) {
-	const [anchorEl, setAnchorEl] = useState(null);
-	const open = Boolean(anchorEl);
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
 	return (
 		<AppBar position='sticky' color='primary'>
 			<Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
 				<div>
-					<IconButton
-						onClick={handleClick}
-						edge='start'
-						color='inherit'
-						aria-label='menu'
-						aria-controls={open ? "menu" : undefined}
-						aria-haspopup='true'
-						aria-expanded={open ? "true" : undefined}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Menu
-						id='menu'
-						anchorEl={anchorEl}
-						open={open}
-						onClose={handleClose}
-						anchorOrigin={{
-							vertical: "bottom",
-							horizontal: "left",
-						}}
-						transformOrigin={{
-							vertical: "top",
-							horizontal: "left",
-						}}
-					>
-						<MenuItem>Profile</MenuItem>
-						<MenuItem>Unlock grid</MenuItem>
-						<MenuItem>
-							<LoginWithGoogle
-								user={user}
-								googleApiToken={googleApiToken}
-								setGoogleApiToken={setGoogleApiToken}
-								setUser={setUser}
-							>
-								Login
-							</LoginWithGoogle>
-						</MenuItem>
-					</Menu>
+					<TopBarMenu
+						user={user}
+						setGoogleApiToken={setGoogleApiToken}
+						setUser={setUser}
+					/>
 					<Checkbox
 						onChange={colorMode.toggleColorMode}
 						icon={<LightMode sx={{ color: "yellow" }} />}

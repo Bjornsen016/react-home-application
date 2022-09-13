@@ -4,9 +4,7 @@ export async function fetchDataFromApi(url, token) {
 		Authorization: `Bearer ${token}`,
 	});
 
-	const baseUrl = new URL(url); //To be able to add the queries as params.
-
-	const result = await fetch(baseUrl, {
+	const result = await fetch(url, {
 		metod: "GET",
 		headers: headers,
 	}).then((res) => res.json());
