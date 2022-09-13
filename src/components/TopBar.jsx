@@ -1,6 +1,7 @@
 import { Checkbox, AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { DarkMode, LightMode } from "@mui/icons-material";
 import TopBarMenu from "./TopBarMenu";
+import Clock from "./Clock";
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
@@ -13,7 +14,7 @@ export default function TopBar({
 	return (
 		<AppBar position='sticky' color='primary'>
 			<Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-				<div>
+				<Box sx={{ display: "flex", alignItems: "center" }}>
 					<TopBarMenu
 						user={user}
 						setGoogleApiToken={setGoogleApiToken}
@@ -24,10 +25,9 @@ export default function TopBar({
 						icon={<LightMode sx={{ color: "yellow" }} />}
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
-				</div>
-				<Typography variant='h6'>
-					Welcome home {user?.names.givenName}
-				</Typography>
+					<Typography variant='h6'>{user?.names.displayName}</Typography>
+				</Box>
+				<Clock />
 				{/* TODO: Make center on the top everytime, make instead of flex? */}
 				<Box
 					borderColor='textPrimary'
