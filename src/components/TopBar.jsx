@@ -10,6 +10,8 @@ import {
 	Box,
 } from "@mui/material";
 import { Menu as MenuIcon, DarkMode, LightMode } from "@mui/icons-material";
+import {WeatherWidget} from "../components"
+
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
@@ -64,13 +66,15 @@ export default function TopBar({ colorMode, user }) {
 				<Typography variant='h6'>Welcome home {user?.given_name}</Typography>
 				{/* TODO: Make center on the top everytime, make instead of flex? */}
 				<Box
-					borderColor='textPrimary'
+					/* borderColor='textPrimary'
 					sx={{
 						border: "2px solid",
 						padding: "10px",
-					}}
+					}} */
 				>
-					<Typography variant='h6'>Weather info here</Typography>
+					<Typography variant='p'>
+						<WeatherWidget/>
+					</Typography>
 				</Box>
 			</Toolbar>
 		</AppBar>
