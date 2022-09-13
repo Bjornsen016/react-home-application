@@ -10,10 +10,17 @@ import {
 	Box,
 } from "@mui/material";
 import { Menu as MenuIcon, DarkMode, LightMode } from "@mui/icons-material";
+import LoginWithGoogle from "./LoginWithGoogle";
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
-export default function TopBar({ colorMode, user }) {
+export default function TopBar({
+	colorMode,
+	user,
+	googleApiToken,
+	setGoogleApiToken,
+	setUser,
+}) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -53,7 +60,16 @@ export default function TopBar({ colorMode, user }) {
 					>
 						<MenuItem>Profile</MenuItem>
 						<MenuItem>Unlock grid</MenuItem>
-						<MenuItem>Login / Logout</MenuItem>
+						<MenuItem>
+							<LoginWithGoogle
+								user={user}
+								googleApiToken={googleApiToken}
+								setGoogleApiToken={setGoogleApiToken}
+								setUser={setUser}
+							>
+								Login
+							</LoginWithGoogle>
+						</MenuItem>
 					</Menu>
 					<Checkbox
 						onChange={colorMode.toggleColorMode}
@@ -61,7 +77,9 @@ export default function TopBar({ colorMode, user }) {
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
 				</div>
-				<Typography variant='h6'>Welcome home {user?.given_name}</Typography>
+				<Typography variant='h6'>
+					Welcome home {user?.names.givenName}
+				</Typography>
 				{/* TODO: Make center on the top everytime, make instead of flex? */}
 				<Box
 					borderColor='textPrimary'
