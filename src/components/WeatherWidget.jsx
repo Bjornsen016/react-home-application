@@ -2,12 +2,13 @@ import React from "react";
 import { useEffect, useState } from "react";
 import FetchData from "./FetchData";
 import UseCurrentLocation from "./UseCurrentLocation";
-import Tooltip from "@mui/material/Tooltip";
+import {Tooltip, Link} from "@mui/material";
 
 const WeatherWidget = () => {
   const [lat, setLat] = useState("59.32932349999999");
   const [long, setLong] = useState("18.068580800000063");
   const [data, setData] = useState([]);
+  
   
     useEffect(() => {
       fetchDataWithLocation();
@@ -21,7 +22,6 @@ const WeatherWidget = () => {
       fetchWeatherData()
        return;
       }
-      console.log(result.coords.latitude);
       setCoordinates(result.coords.latitude, result.coords.longitude).then(fetchWeatherData);
    }
 
@@ -50,23 +50,24 @@ const WeatherWidget = () => {
  }
 
   return(
-    <Tooltip title={data[0].name}>
+    
       <div className="weather-widget">
-        {console.log(data)}
+               <Link to="/weather">
         {data && 
-          data.map(({weather, main, id}) => (
+          data.map(({weather, main, id, name}) => (
             <div key={id} className="flex-column">
              <div className="flex-row">
               <p style={{marginRight:"5px"}}>{Math.round(main.temp)} &#8451;</p>
               <img alt="weather icon" src={`http://openweathermap.org/img/w/${weather[0].icon}.png`}/> 
               </div>
+              <Tooltip title={name}>
               <p style={{marginTop:"0"}}>{`${weather[0].description}`.charAt(0).toUpperCase() + `${weather[0].description}`.slice(1)}</p>
-              
+              </Tooltip>
             </div>
           ))}  
-          
+          </Link>
       </div>
-      </Tooltip>
+      
 
   )
 }

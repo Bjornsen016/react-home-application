@@ -1,4 +1,5 @@
 import { createContext, useState, useMemo } from "react";
+import { Routes, Route } from "react-router-dom";
 import {
   CssBaseline,
   ThemeProvider,
@@ -6,7 +7,7 @@ import {
   Container,
 } from "@mui/material";
 import "./App.css";
-import { TopBar, MainInfoScreen } from "./components";
+import { TopBar, MainInfoScreen, Weather } from "./components";
 //import { GoogleOAuthProvider } from "@react-oauth/google"; Ta inte in än
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
@@ -34,26 +35,33 @@ function App() {
   );
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <TopBar colorMode={colorMode} />
-        <Container
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gridTemplateRows: "2fr 1fr",
-            gridColumnGap: "10px",
-            gridRowGap: "10px",
-            height: "90vh",
-            marginTop: "10px",
-          }}
-          maxWidth="lg"
-        >
-          <MainInfoScreen />
-        </Container>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <div>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <TopBar colorMode={colorMode} />
+          <Container
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gridTemplateRows: "2fr 1fr",
+              gridColumnGap: "10px",
+              gridRowGap: "10px",
+              height: "90vh",
+              marginTop: "10px",
+            }}
+            maxWidth="lg"
+          >
+            <MainInfoScreen />
+          </Container>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+
+      {/* Ska Routing ligga här? */}
+      {/* <Routes>
+        <Route path="/weather" element={<Weather />} />
+      </Routes> */}
+    </div>
   );
 }
 

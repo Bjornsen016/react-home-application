@@ -9,8 +9,10 @@ const UseCurrentLocation = async () => {
   };
 
   function getPosition() {
-    return new Promise((resolve) =>
-      navigator.geolocation.getCurrentPosition(resolve, handleError)
+    return new Promise(
+      (resolve) =>
+        navigator.geolocation.getCurrentPosition(resolve, handleError)
+      //navigator.geolocation.watchPosition(resolve, handleError)
     );
   }
 
@@ -19,9 +21,7 @@ const UseCurrentLocation = async () => {
     return error;
   }
   // Call the Geolocation API
-  location = await getPosition(); /* console.log(location); */
-  /*   navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
-   */
+  location = await getPosition();
   return location;
 };
 

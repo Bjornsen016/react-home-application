@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import Weather from "./Weather";
 //import Calender from "../Calender";
 
 //TODO: Fix styling
@@ -16,7 +17,7 @@ export default function MainInformationScreen() {
 				{/* <Button onClick={() => login()}>Login with google</Button>
 				 */}
 				{/* <Calender /> */}
-				Calender + other components here
+				<Weather/>
 			</Box>
 			<Box
 				borderColor='textPrimary'
