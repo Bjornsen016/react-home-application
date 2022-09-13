@@ -1,4 +1,5 @@
 import { Box, Button } from "@mui/material";
+import { Calendar } from "../";
 
 //TODO: Fix styling
 export default function MainInformationScreen({ user, googleApiToken }) {
@@ -12,8 +13,8 @@ export default function MainInformationScreen({ user, googleApiToken }) {
 					padding: "10px",
 				}}
 			>
-				<Button onClick={() => console.log(user)}>Log user</Button>
-				Calender + other components here
+				{/* <Button onClick={() => console.log(user)}>Log user</Button> */}
+				<Calendar />
 			</Box>
 			<Box
 				borderColor='textPrimary'
