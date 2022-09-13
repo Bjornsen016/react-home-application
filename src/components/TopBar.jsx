@@ -15,7 +15,7 @@ import {WeatherWidget} from "../components"
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
-export default function TopBar({ colorMode, user }) {
+export default function TopBar({ colorMode, user}) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -73,7 +73,7 @@ export default function TopBar({ colorMode, user }) {
 					}} */
 				>
 					<Typography variant='p'>
-						<WeatherWidget/>
+						<WeatherWidget />
 					</Typography>
 				</Box>
 			</Toolbar>

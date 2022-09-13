@@ -1,26 +1,48 @@
+import { SettingsVoice } from "@mui/icons-material";
 import React from "react";
 import { useEffect, useState } from "react";
 import FetchData from "./FetchData";
+import UseCurrentLocation from "./UseCurrentLocation";
+
+/* const geolocationOptions = {
+  // this option defines when should the location request timeout
+  timeout: 1000 * 60 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms)
+}; */
 
 const WeatherWidget = () => {
-     
-  const [lat, setLat] = useState("57.7689708");
-  const [long, setLong] = useState("12.2526081");
+  const [lat, setLat] = useState("59.32932349999999");
+  const [long, setLong] = useState("18.068580800000063");
   const [data, setData] = useState([]);
+  let location;
   
-
-  useEffect(() => {
-    fetchWeatherData();
-    return() => console.log("Aborta api-callet, tex genom AbortController")
-
-},[lat, long]);
+    useEffect(() => {
+      fetchDataWithLocation();
+    },[location]);
 
 
+   const fetchDataWithLocation = async () =>{
+      await getLocation();
+      console.log(location.coords.latitude);
+      await setCoordinates(location.latitude, location.longitude);
+      console.log(lat)
+      fetchWeatherData();
+   }
+
+   const getLocation = async () => {
+    location = await UseCurrentLocation();
+  
+  }
+  async function setCoordinates (latitude, longitude) {
+    setLat (latitude); //Tänk på att setFunktioner är asynkrona varför vi måste lyfta ut dessa i en egen funktion för att garantera att de har blivit satta innan url:en skickas iväg med parametrarna
+    setLong(longitude);
+    
+   }
 
  async function fetchWeatherData(){
   const apiKey= "5622e7863c25a93700490cfec8116633"
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${apiKey}&units=metric`;
   const fetchedData = await FetchData(url);
+  /* console.log(fetchedData) */
   setData(fetchedData);
  }
 

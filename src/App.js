@@ -6,13 +6,13 @@ import {
   Container,
 } from "@mui/material";
 import "./App.css";
-import { TopBar, MainInfoScreen, UseCurrentLocation } from "./components";
+import { TopBar, MainInfoScreen } from "./components";
 //import { GoogleOAuthProvider } from "@react-oauth/google"; Ta inte in än
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
-  //Create theme
+  //Creates theme
   const [mode, setMode] = useState("dark");
   const colorMode = useMemo(
     () => ({
@@ -37,7 +37,6 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <UseCurrentLocation />
         <TopBar colorMode={colorMode} />
         <Container
           sx={{
