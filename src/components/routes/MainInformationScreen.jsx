@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import {HistoryOfYheDay, NameOfYheDay, JokeOfTheDay} from "../index"
 //import Calender from "../Calender";
 
 //TODO: Fix styling
@@ -27,11 +28,8 @@ export default function MainInformationScreen() {
 				}}
 			>
 				{/* {user !== undefined ? <div>Hej {user.given_name}</div> : ""} */}
-				<ul>
-					<li>TODOS</li>
-					<li>Buss tabell</li>
-					<li>Annat?</li>
-				</ul>
+				
+				
 			</Box>
 			<Box
 				borderColor='textPrimary'
@@ -41,11 +39,10 @@ export default function MainInformationScreen() {
 					padding: "10px",
 				}}
 			>
-				<ul>
-					<li>TODOS</li>
-					<li>Buss tabell</li>
-					<li>Annat?</li>
-				</ul>
+				<JokeOfTheDay/>
+			   {/*<HistoryOfYheDay></HistoryOfYheDay> 
+		 	  <NameOfYheDay></NameOfYheDay>  */}
+				
 			</Box>
 		</>
 	);
