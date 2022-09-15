@@ -2,19 +2,43 @@ import HistoryOfTheDay from "./History";
 import NameOfTheDay from "./Name";
 import JokeOfTheDay from "./Joke";
 
-import { React } from "react";
+import { React, useState, useEffect } from "react";
 import Carousel from "react-material-ui-carousel";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 export default function FactOfTheDay(props) {
-  const components = [<HistoryOfTheDay />, <NameOfTheDay />, <JokeOfTheDay />];
+  const [day, setday] = useState(new Date().getDay() + 1);
+  const [month, setmonth] = useState(new Date().getMonth() + 1);
+  const [historyData, setHistoryData] = useState([]);
+  const [randomHistoryData, setHistoryRandomData] = useState(0);
+  const [Historyloading, setHistoryLoading] = useState(true);
+  const [Historyerror, setHistoryError] = useState(false);
+
+  useEffect(() => {
+    const fetchOnThisDayEvent = async () => {
+      await fetch(`https://byabbe.se/on-this-day/${month}/${day}/events.json`)
+        .then((response) => response.json())
+        .then((data) => {
+          setHistoryData(data);
+          setHistoryRandomData(Math.floor(Math.random() * data.events.length));
+          setHistoryLoading(false);
+        })
+        .catch((error) => {
+          setHistoryLoading(false);
+          setHistoryError(true);
+          console.log(error);
+        });
+    };
+    fetchOnThisDayEvent();
+  }, []);
+
   const items = [
     {
-      secondaryHeader: "secondaryHeader #1",
-      primaryHeader: "primaryHeader#1",
-      body: "Probably the most random thing you have ever seen! Probably the most random thing you have ever seen! Probably the most random thing you have ever seen!",
+      secondaryHeader: "History of this day",
+      primaryHeader: `Year ${historyData.events[randomHistoryData].year}`,
+      body: `${historyData.events[randomHistoryData].description}`,
     },
     {
       secondaryHeader: "secondaryHeader #2",
