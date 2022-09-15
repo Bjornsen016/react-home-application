@@ -1,8 +1,23 @@
 import * as React from "react";
-import { List, ListItem } from "@mui/material";
+import "./styles.css";
+import { FormControlLabel, List, ListItem } from "@mui/material";
 import PropTypes from "prop-types";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import UncheckedCircleIcon from "@mui/icons-material/RadioButtonUnchecked";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Checkbox from "@mui/material/Checkbox";
 
 function TabPanel({ list, value, index, ...other }) {
+  const label = { inputProps: { "aria-label": "Checkbox" } };
+
+  const onChangeCheckbox = (event) => {
+    //event.target.checked (boolean)
+  };
+
+  const onChangeAddBtn = (event) => {
+    //event.target.checked (boolean)
+  };
+
   return (
     <div
       role="tabpanel"
@@ -12,10 +27,36 @@ function TabPanel({ list, value, index, ...other }) {
       {...other}
     >
       {value === index && (
-        <List>
+        <List className="task-list">
           {list.items.map((item) => (
-            <ListItem>{item.title}</ListItem>
+            <>
+              <ListItem className="task-item">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      className="task-checkbox"
+                      onChange={(e) => onChangeCheckbox(e)}
+                      icon={<UncheckedCircleIcon />}
+                      checkedIcon={<CheckCircleIcon />}
+                      {...label}
+                    />
+                  }
+                  label={item.title}
+                />
+              </ListItem>
+            </>
           ))}
+          <ListItem className="task-item">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  className="task-checkbox"
+                  onClick={(e) => onChangeAddBtn(e)}
+                  icon={<AddCircleIcon />}
+                />
+              }
+            />
+          </ListItem>
         </List>
       )}
     </div>
@@ -29,44 +70,3 @@ TabPanel.propTypes = {
 };
 
 export default TabPanel;
-
-/* function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-} */
-
-/* export default function BasicTabs() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-    </Box>
-  );
-}
- */
