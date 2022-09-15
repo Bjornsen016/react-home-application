@@ -14,7 +14,7 @@ export default function MainInformationScreen({ user, googleApiToken }) {
 				}}
 			>
 				{/* <Button onClick={() => console.log(user)}>Log user</Button> */}
-				<Calendar />
+				{user && <Calendar googleApiToken={googleApiToken} />}
 			</Box>
 			<Box
 				borderColor='textPrimary'
