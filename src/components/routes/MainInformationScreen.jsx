@@ -39,9 +39,9 @@ export default function MainInformationScreen() {
 					padding: "10px",
 				}}
 			>
-				<JokeOfTheDay/>
-			   {/*<HistoryOfYheDay></HistoryOfYheDay> 
-		 	  <NameOfYheDay></NameOfYheDay>  */}
+			
+			   
+		 	  <NameOfYheDay></NameOfYheDay> 
 				
 			</Box>
 		</>

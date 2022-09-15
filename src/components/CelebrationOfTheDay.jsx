@@ -1,21 +1,29 @@
 import { React, useState, useEffect } from "react";
-import AppCard from "./Card"
+import AppCard from "./Card";
 
-export default function HistoryOfYheDay() {
-  const [day, setday] = useState(new Date().getDay() + 1);
-  const [month, setmonth] = useState(new Date().getMonth() + 1);
+export default function NameOfTheDay() {
+
+    const apiKey = "898278c921a1d2a2107a1e746f7b5592";
+    /**
+     * https://www.daysoftheyear.com/api-docs/
+     * 898278c921a1d2a2107a1e746f7b5592
+     */
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [randomData, setRandomData] = useState(0);
+  console.log(data)
 
   useEffect(() => {
     const fetchOnThisDayEvent = async () => {
-      await fetch(`https://byabbe.se/on-this-day/${month}/${day}/events.json`)
+        
+      await fetch(`https://www.daysoftheyear.com/api/v1/today/`,{
+        headers:{
+            'x-api-key': 'Bearer 12345678'
+        }
+      })
         .then((response) => response.json())
         .then((data) => {
           setData(data);
-          setRandomData(Math.floor(Math.random() * data.events.length));
           setLoading(false);
         })
         .catch((error) => {
@@ -35,12 +43,11 @@ export default function HistoryOfYheDay() {
         </>
       ) : (
         <>
-          <AppCard
-          secondaryHeader="History of this day"
-          primaryHeader={`Year ${data.events[randomData].year}`}
-          bodyText={data.events[randomData].description}
-          buttonText="Learn more"
-          />
+          <AppCard 
+          secondaryHeader={"Celebration of the day"} 
+          primaryHeader="" 
+          bodyText=""
+          buttonText="Learn more"/>
         </>
       )}
     </div>
