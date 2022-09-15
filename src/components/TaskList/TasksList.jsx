@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { fetchDataFromApi } from "./utils/fetcher";
+import { fetchDataFromApi } from "../utils/fetcher";
 import { Tabs, Tab, Divider } from "@mui/material";
-import TabPanel from "./TaskList/TabPanel";
+import TabPanel from "./children/TabPanel";
 
 //useMemo: Returns and stores the calculated value of a function in a variable
 //useCallBack: Returns and stores the actual function itself in a variable

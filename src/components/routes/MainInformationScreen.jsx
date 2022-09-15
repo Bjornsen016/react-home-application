@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import TasksList from "../TasksList";
+import TasksList from "../TaskList/TasksList";
 
 //TODO: Fix styling
 export default function MainInformationScreen({ user, googleApiToken }) {
@@ -24,7 +24,6 @@ export default function MainInformationScreen({ user, googleApiToken }) {
           padding: "10px",
         }}
       >
-        {user !== undefined ? <div>Hej {user.names.givenName}</div> : ""}
         {user !== undefined ? <TasksList token={googleApiToken} /> : ""}
       </Box>
       <Box
