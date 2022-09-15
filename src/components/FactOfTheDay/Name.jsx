@@ -1,29 +1,24 @@
 import { React, useState, useEffect } from "react";
-import AppCard from "./FactOfTheDay/Card";
+import AppCard from "./Card";
 
-export default function JokeOfYheDay() {
+export default function NameOfTheDay() {
+  const [day, setday] = useState(new Date().getDate());
+  const [month, setmonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  console.log(data);
+  console.log(day, month, year);
+
   useEffect(() => {
     const fetchOnThisDayEvent = async () => {
-      await fetch(`https://v2.jokeapi.dev/joke/Programming`)
+      await fetch(
+        `https://sholiday.faboul.se/dagar/v2.1/${year}/${month}/${day}`
+      )
         .then((response) => response.json())
         .then((data) => {
-          setData(
-            data.type === "single"
-              ? {
-                  type: data.type,
-                  setup: data.joke,
-                  response: "",
-                }
-              : {
-                  type: data.type,
-                  setup: `${data.setup}\n\n`,
-                  response: `${data.delivery}`,
-                }
-          );
+          /* const names = data.dagar.map((arr) => arr.namnsdag.join(" och ")); */
+          setData(data.dagar.map((arr) => arr.namnsdag.join(" och ")));
           setLoading(false);
         })
         .catch((error) => {
@@ -34,6 +29,7 @@ export default function JokeOfYheDay() {
     };
     fetchOnThisDayEvent();
   }, []);
+
   return (
     <div>
       {loading ? (
@@ -43,9 +39,9 @@ export default function JokeOfYheDay() {
       ) : (
         <>
           <AppCard
-            secondaryHeader={"Joke of the day"}
+            secondaryHeader={"Name of the day"}
             primaryHeader=""
-            bodyText={`${data.setup} ${data.response} `}
+            bodyText={data}
             buttonText="Learn more"
           />
         </>
