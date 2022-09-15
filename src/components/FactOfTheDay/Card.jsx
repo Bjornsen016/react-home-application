@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
-const AppCard = ({ primaryHeader, secondaryHeader, bodyText, buttonText }) => {
+const AppCard = ({ primaryHeader, secondaryHeader, bodyText }) => {
   return (
     <Card
       sx={{
