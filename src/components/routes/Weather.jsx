@@ -7,38 +7,58 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { TextField } from '@mui/material';
 
 
+  //sets the dates of today and the upcoming three days
   const day1 = new Date(); 
   const day2 = new Date(day1);
   const day3 = new Date(day1);
   const day4 = new Date(day1);
-
   day2.setDate(day2.getDate()+1)
   day3.setDate(day3.getDate()+2)
   day4.setDate(day4.getDate()+3)
 
+
   
   const Weather = () => {
 
-    const [lerumData, setLerumData] = useState([]);
+    const [kirunaData, setKirunaData] = useState([]);
     const [gothenburgData, setGothenburgData] = useState([]);
     const [stockholmData, setStockholmData] = useState([]);
     const [malmoData, setMalmoData] = useState([]);
+    const [userLocationData, setUserLocationData] = useState([]);
+    const [userLocation, setUserLocation]= useState("")
+    const [showUserLocation, setShowUserLocation] = useState(false)
 
-    const locations = [{name:"Lerum", data: lerumData }, {name:"Göteborg", data: gothenburgData}, {name:"Stockholm", data: stockholmData}, {name:"Malmo", data: malmoData}]
+    //Array of pre-chosen locations to fetch data for 
+    const locations = [{name:"Kiruna", data: kirunaData }, {name:"Göteborg", data: gothenburgData}, {name:"Stockholm", data: stockholmData}, {name:"Malmö", data: malmoData}]
 
-    useEffect(() => {
-        fetchWeatherData();
-      
-      },[]);
-
-      async function fetchWeatherData(){
     const apiKey= "5622e7863c25a93700490cfec8116633"
     const url0 = `https://api.openweathermap.org/data/2.5/forecast?q=${locations[0].name}&appid=${apiKey}&units=metric`
     const url1 = `https://api.openweathermap.org/data/2.5/forecast?q=${locations[1].name}&appid=${apiKey}&units=metric`
     const url2 = `https://api.openweathermap.org/data/2.5/forecast?q=${locations[2].name}&appid=${apiKey}&units=metric`
     const url3 = `https://api.openweathermap.org/data/2.5/forecast?q=${locations[3].name}&appid=${apiKey}&units=metric`
+    const urlUser = `https://api.openweathermap.org/data/2.5/forecast?q=${userLocation}&appid=${apiKey}&units=metric`
+    useEffect(() => {
+        fetchWeatherData();
+      
+      },[]); //when to update?
+
+      async function onSubmit(event) {
+          event.preventDefault();
+          console.log(userLocation)
+
+          const fetchedUserData = await FetchData(urlUser);
+          const extractedUserData=[ fetchedUserData[0].list[1], fetchedUserData[0].list[9], fetchedUserData[0].list[17], fetchedUserData[0].list[25]];
+          await setUserLocationData(extractedUserData)
+          locations.push({name: userLocation, data: userLocationData})
+        }
+      
+
+    //TODO: Refactor this part to some kind of loop!
+    //Fetching the data for the pre-chosen locations, extract the neccessary data into new array and then set it in useState
+    async function fetchWeatherData(){
     const fetchedData0 = await FetchData(url0)
     const fetchedData1 = await FetchData(url1)
     const fetchedData2 = await FetchData(url2)
@@ -47,15 +67,14 @@ import TableRow from '@mui/material/TableRow';
     const extractedData1=[ fetchedData1[0].list[1], fetchedData1[0].list[9],fetchedData1[0].list[17],fetchedData1[0].list[25]];
     const extractedData2=[ fetchedData2[0].list[1], fetchedData2[0].list[9],fetchedData2[0].list[17],fetchedData2[0].list[25]];
     const extractedData3=[ fetchedData3[0].list[1], fetchedData3[0].list[9],fetchedData3[0].list[17],fetchedData3[0].list[25]];
-    setLerumData(extractedData0);
+    setKirunaData(extractedData0);
     setGothenburgData(extractedData1);
     setStockholmData(extractedData2);
     setMalmoData(extractedData3);
       }
 
-
-
     return (
+      <div>
         <TableContainer>
             <Table sx={{ minWidth: 450 }} size="small" aria-label="a dense table">
                 <TableHead>
@@ -69,13 +88,13 @@ import TableRow from '@mui/material/TableRow';
                 </TableHead>
                 <TableBody>
                   {locations.map(({name, data}) => (
-                    <TableRow>
+                    <TableRow key={name}>
                     <TableCell component="th" scope="row" >{name}</TableCell>
                         {data && console.log(data)}
                         {data &&
                         data.map(({main, weather, dt_txt}) => (
-                          <TableCell >
-                             <div className='weather-info' key={dt_txt} >
+                          <TableCell key={dt_txt}>
+                             <div className='weather-info'  >
                              <img alt="weather icon" src={`http://openweathermap.org/img/w/${weather[0].icon}.png`}/> 
 
                               <p style={{marginRight:"10px"}}>{Math.round(main.temp)} &#8451;</p>
@@ -88,6 +107,24 @@ import TableRow from '@mui/material/TableRow';
                 </TableBody>
             </Table>
         </TableContainer>
+
+        <form onSubmit={onSubmit}>
+          <TextField 
+          id="outlined-basic" 
+          label="Search city..." 
+          variant="outlined"
+          margin="normal"
+            size="small"
+            >
+          </TextField>
+          {/* <input
+            type="text"
+            value={userLocation}
+             onChange={(e) => setUserLocation(e.target.value)} //Whenever there is a change, an anonymous function (which takes in the event object as a parameter) is fired which in turn calls the setName() function to update the name variable with the current value of the input field.
+           placeholder="Choose a weather location"
+          /> */}
+        </form>
+        </div>
     )
   }
   export default Weather

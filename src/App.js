@@ -35,33 +35,36 @@ function App() {
   );
 
   return (
-    <div>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <TopBar colorMode={colorMode} />
-          <Container
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gridTemplateRows: "2fr 1fr",
-              gridColumnGap: "10px",
-              gridRowGap: "10px",
-              height: "90vh",
-              marginTop: "10px",
-            }}
-            maxWidth="lg"
-          >
-            <MainInfoScreen />
-          </Container>
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-
-      {/* Ska Routing ligga här? */}
-      {/* <Routes>
-        <Route path="/weather" element={<Weather />} />
-      </Routes> */}
-    </div>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <TopBar colorMode={colorMode} />
+        <Container
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gridTemplateRows: "2fr 1fr",
+            gridColumnGap: "10px",
+            gridRowGap: "10px",
+            height: "90vh",
+            marginTop: "10px",
+          }}
+          maxWidth="lg"
+        >
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <MainInfoScreen /* user={user} googleApiToken={googleApiToken} */
+                />
+              }
+            />
+            <Route path="/weather" element={<Weather />} />
+            <Route path="*" element={<div>This route does not exist</div>} />
+          </Routes>
+        </Container>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
