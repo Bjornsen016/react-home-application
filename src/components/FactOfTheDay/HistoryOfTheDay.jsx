@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import AppCard from "./Card"
+import AppCard from "./Card";
 
 export default function HistoryOfYheDay() {
   const [day, setday] = useState(new Date().getDay() + 1);
@@ -36,10 +36,10 @@ export default function HistoryOfYheDay() {
       ) : (
         <>
           <AppCard
-          secondaryHeader="History of this day"
-          primaryHeader={`Year ${data.events[randomData].year}`}
-          bodyText={data.events[randomData].description}
-          buttonText="Learn more"
+            secondaryHeader="History of this day"
+            primaryHeader={`Year ${data.events[randomData].year}`}
+            bodyText={data.events[randomData].description}
+            buttonText="Learn more"
           />
         </>
       )}

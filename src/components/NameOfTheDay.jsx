@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import AppCard from "./Card";
+import AppCard from "./FactOfTheDay/Card";
 
 export default function NameOfTheDay() {
   const [day, setday] = useState(new Date().getDate());
