@@ -27,7 +27,8 @@ const Calendar = ({ googleApiToken }) => {
 	const [showCalenderListModal, setShowCalenderListModal] = useState(false);
 	const [calendarList, setCalendarList] = useState([]);
 	const [chosenCalendars, setChosenCalendars] = useState([]);
-	const [events, setEvents] = useState([]);
+	const [todaysEvents, setTodaysEvents] = useState([]);
+	const [upcomingEvents, setUpcomingEvents] = useState([]);
 
 	const getCalendars = async () => {
 		const url = new URL(baseUrl);
@@ -75,7 +76,28 @@ const Calendar = ({ googleApiToken }) => {
 					minute: "2-digit",
 				});
 
-			allEvents = allEvents.map((evt) => {
+			const isEventToday = (e) => {
+				return (
+					(new Date(e.start.dateTime).getDate() ===
+						new Date(Date.now()).getDate() &&
+						new Date(e.start.dateTime).getMonth() ===
+							new Date(Date.now()).getMonth()) ||
+					(new Date(e.start.date).getDate() ===
+						new Date(Date.now()).getDate() &&
+						new Date(e.start.date).getMonth() ===
+							new Date(Date.now()).getMonth())
+				);
+			};
+
+			let todaysEvents = allEvents.filter((e) => isEventToday(e));
+			console.log(new Date("2022-09-23T08:00:00+01:00").getDate());
+			console.log(todaysEvents);
+			console.log(allEvents);
+
+			let upcomingEvents = allEvents.filter((e) => !isEventToday(e));
+
+			//TODO: Check for end date. If in future need to make something different
+			todaysEvents = todaysEvents.map((evt) => {
 				let time;
 				if (
 					evt.start.dateTime !== undefined &&
@@ -89,8 +111,6 @@ const Calendar = ({ googleApiToken }) => {
 					evt.end.dateTime === undefined
 				) {
 					time = `${toOnlyTime(evt.start.dateTime)}`;
-				} else if (evt.start.date !== undefined && evt.end.date !== undefined) {
-					time = `${toOnlyTime(evt.start.date)} - ${toOnlyTime(evt.end.date)}`;
 				} else if (evt.start.date !== undefined && evt.end.date === undefined) {
 					time = `${toOnlyTime(evt.start.date)}`;
 				}
@@ -98,16 +118,49 @@ const Calendar = ({ googleApiToken }) => {
 				return myEvent;
 			});
 
+			//TODO: Make this into this format: Friday, 16 Sept 17:00 - 20:00
+
+			const toUpcomingDateTime = (dateTimeString) => {
+				return new Date(dateTimeString).toLocaleDateString([], {
+					weekday: "short",
+					month: "short",
+					day: "numeric",
+				});
+			};
+
+			upcomingEvents = upcomingEvents.map((evt) => {
+				let time;
+				if (
+					evt.start.dateTime !== undefined &&
+					evt.end.dateTime !== undefined
+				) {
+					time = `${toUpcomingDateTime(
+						evt.start.dateTime
+					)} - ${toUpcomingDateTime(evt.end.dateTime)}`;
+				} else if (
+					evt.start.dateTime !== undefined &&
+					evt.end.dateTime === undefined
+				) {
+					time = `${toUpcomingDateTime(evt.start.dateTime)}`;
+				} else if (evt.start.date !== undefined && evt.end.date === undefined) {
+					time = `${toUpcomingDateTime(evt.start.date)}`;
+				}
+				let myEvent = { time: time, title: evt.summary };
+				return myEvent;
+			});
+
 			console.log(
-				"Sorted events",
-				allEvents.map((e) => {
-					return `${e.time}: ${e.summary}`;
+				"Sorted today events",
+				todaysEvents.map((e) => {
+					return `${e.time}: ${e.title}`;
 				})
 			);
 
-			setEvents(allEvents);
+			setTodaysEvents(todaysEvents);
+			setUpcomingEvents(upcomingEvents);
 
-			//Put them into the events state . setEvents(...).
+			//Make an interval to update the state. every 10 min? 15, 30?
+			//TODO: TIME TO REFACTOR
 		});
 	};
 
@@ -138,37 +191,45 @@ const Calendar = ({ googleApiToken }) => {
 			<Box style={flexStyle}>
 				{/* Today box */}
 				<Typography variant='h4' align='center' sx={{ marginBottom: "5px" }}>
-					Monday, 7 nov 2022
+					{new Date(Date.now()).toLocaleDateString("en-GB", {
+						weekday: "long",
+						year: "numeric",
+						month: "short",
+						day: "numeric",
+					})}
 				</Typography>
-				{events?.map((evt) => (
+				{
+					//TODO: If no events today. Write something about it
+				}
+				{todaysEvents?.map((evt) => (
 					<CalendarEvent event={evt} />
 				))}
-				{/* <CalendarEvent event={testEvent} /> */}
-				{/* One event in this div and more divs if more events are happening today */}
-				{/* <CalendarEvent event={testEvent2} /> */}
 			</Box>
 			<Box style={flexStyle}>
 				{/* Upcoming box */}
 				<Typography variant='h4' align='center' sx={{ marginBottom: "5px" }}>
 					UPCOMING
 				</Typography>
-				<div>
+				{upcomingEvents?.map((evt) => (
+					<CalendarEvent event={evt} />
+				))}
+				{/* <div>
 					<Typography variant='h5' align='center'>
 						Monday, 5 dec, 19:00 - 22:00: Koda, koda, koda!!
 					</Typography>
 					<Typography variant='body1' align='center'>
 						What is happening
 					</Typography>
-				</div>
+				</div> */}
 				{/* One event in this div */}
-				<div>
+				{/* <div>
 					<Typography variant='h5' align='center'>
 						Heading for one event
 					</Typography>
 					<Typography variant='body1' align='center'>
 						What is happening
 					</Typography>
-				</div>
+				</div> */}
 				{/* One event in this div */}
 			</Box>
 			<CalenderListModal
