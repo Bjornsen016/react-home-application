@@ -2,6 +2,7 @@ import { Checkbox, AppBar, Toolbar, Typography, Box } from "@mui/material";
 import { DarkMode, LightMode } from "@mui/icons-material";
 import TopBarMenu from "./TopBarMenu";
 import Clock from "./Clock";
+import {WeatherWidget} from "../components"
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
@@ -30,13 +31,15 @@ export default function TopBar({
 				<Clock />
 				{/* TODO: Make center on the top everytime, make instead of flex? */}
 				<Box
-					borderColor='textPrimary'
+					/* borderColor='textPrimary'
 					sx={{
 						border: "2px solid",
 						padding: "10px",
-					}}
+					}} */
 				>
-					<Typography variant='h6'>Weather info here</Typography>
+					<Typography variant='p'>
+						<WeatherWidget />
+					</Typography>
 				</Box>
 			</Toolbar>
 		</AppBar>
