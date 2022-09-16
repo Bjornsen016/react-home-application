@@ -3,6 +3,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import LoginWithGoogle from "./LoginWithGoogle";
 import { googleLogout } from "@react-oauth/google";
+import { Link } from "react-router-dom";
 
 function TopBarMenu({ user, setGoogleApiToken, setUser }) {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -42,7 +43,7 @@ function TopBarMenu({ user, setGoogleApiToken, setUser }) {
 				}}
 			>
 				{/* TODO: what kind of items should we have in the menu? */}
-				<MenuItem>Profile</MenuItem>
+				<MenuItem><Link to="/">Home</Link></MenuItem>
 				<MenuItem>Unlock grid</MenuItem>
 
 				{user && (
