@@ -37,7 +37,7 @@ function App() {
 
 	//user states
 	const [user, setUser] = useState(undefined);
-	const [googleApiToken, setGoogleApiToken] = useState("");
+	const [googleApiToken, setGoogleApiToken] = useState({});
 
 	return (
 		<GoogleOAuthProvider clientId={googleApiInfo.clientId}>
@@ -47,15 +47,14 @@ function App() {
 					<TopBar
 						colorMode={colorMode}
 						user={user}
-						googleApiToken={googleApiToken}
 						setGoogleApiToken={setGoogleApiToken}
 						setUser={setUser}
 					/>
 					<Container
 						sx={{
 							display: "grid",
-							gridTemplateColumns: "repeat(2, 50%)",
-							gridTemplateRows: "66% 33%",
+							gridTemplateColumns: "repeat(2, 1fr)",
+							gridTemplateRows: "2fr 1fr",
 							gridColumnGap: "10px",
 							gridRowGap: "10px",
 							height: "90vh",
