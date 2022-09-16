@@ -1,7 +1,3 @@
-import HistoryOfTheDay from "./History";
-import NameOfTheDay from "./Name";
-import JokeOfTheDay from "./Joke";
-
 import { React, useState, useEffect } from "react";
 import Carousel from "react-material-ui-carousel";
 import Card from "@mui/material/Card";
