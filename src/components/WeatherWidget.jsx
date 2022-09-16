@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import FetchData from "./FetchData";
-import UseCurrentLocation from "./UseCurrentLocation";
+import FetchData from "./utils/FetchData";
+import UseCurrentLocation from "./utils/UseCurrentLocation";
 import {Tooltip} from "@mui/material";
 import {Link} from "react-router-dom"
 
@@ -57,8 +57,8 @@ const WeatherWidget = () => {
         
         { 
           data?.map(({weather, main, id, name}) => (
-            <Link to={`/weather?location=${name}`}>
-            <div key={id} className="widget-column">
+            <Link to={`/weather?location=${name}`} key={id}>
+            <div  className="widget-column">
              <div className="widget-row">
               <p style={{margin:"0 10px"}}>{Math.round(main.temp)} &#8451;</p>
               
