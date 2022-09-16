@@ -24,6 +24,7 @@ export default function HistoryOfYheDay() {
           console.log(error);
         });
     };
+    console.log(data);
     fetchOnThisDayEvent();
   }, []);
 
@@ -39,7 +40,6 @@ export default function HistoryOfYheDay() {
             secondaryHeader="History of this day"
             primaryHeader={`Year ${data.events[randomData].year}`}
             bodyText={data.events[randomData].description}
-            buttonText="Learn more"
           />
         </>
       )}

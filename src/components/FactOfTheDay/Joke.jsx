@@ -46,7 +46,6 @@ export default function JokeOfYheDay() {
             secondaryHeader={"Joke of the day"}
             primaryHeader=""
             bodyText={`${data.setup} ${data.response} `}
-            buttonText="Learn more"
           />
         </>
       )}

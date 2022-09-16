@@ -8,49 +8,78 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
-export default function FactOfTheDay(props) {
-  const [day, setday] = useState(new Date().getDay() + 1);
-  const [month, setmonth] = useState(new Date().getMonth() + 1);
-  const [historyData, setHistoryData] = useState([]);
-  const [randomHistoryData, setHistoryRandomData] = useState(0);
-  const [Historyloading, setHistoryLoading] = useState(true);
-  const [Historyerror, setHistoryError] = useState(false);
+export default function FactOfTheDay() {
+  const day = new Date().getDay();
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
+
+  const [items, setItems] = useState([]);
+  console.log(items);
 
   useEffect(() => {
-    const fetchOnThisDayEvent = async () => {
+    const fetchHistory = async () => {
       await fetch(`https://byabbe.se/on-this-day/${month}/${day}/events.json`)
         .then((response) => response.json())
         .then((data) => {
-          setHistoryData(data);
-          setHistoryRandomData(Math.floor(Math.random() * data.events.length));
-          setHistoryLoading(false);
+          const index = Math.floor(Math.random() * data.events.length);
+          const historyItem = {
+            secondaryHeader: `On this day`,
+            primaryHeader: `Year ${data.events[index].year}`,
+            body: `${data.events[index].description}`,
+          };
+
+          setItems((prevItems) => [...prevItems, historyItem]);
         })
         .catch((error) => {
-          setHistoryLoading(false);
-          setHistoryError(true);
           console.log(error);
         });
     };
-    fetchOnThisDayEvent();
+    const fetchJoke = async () => {
+      await fetch(`https://v2.jokeapi.dev/joke/Programming`)
+        .then((response) => response.json())
+        .then((data) => {
+          const jokeData =
+            data.type === "single"
+              ? {
+                  type: data.type,
+                  setup: data.joke,
+                  response: "",
+                }
+              : {
+                  type: data.type,
+                  setup: `${data.setup}\n\n`,
+                  response: `${data.delivery}`,
+                };
+          const jokeItem = {
+            secondaryHeader: "Joke of the day",
+            primaryHeader: "",
+            body: `${jokeData.setup} ${jokeData.response} `,
+          };
+
+          setItems((prevItems) => [...prevItems, jokeItem]);
+        });
+    };
+    const fetchName = async () => {
+      await fetch(
+        `https://sholiday.faboul.se/dagar/v2.1/${year}/${month}/${day}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          const nameData = data.dagar.map((arr) => arr.namnsdag.join(" och "));
+          const nameItem = {
+            secondaryHeader: "Name of the day",
+            primaryHeader: "",
+            body: `${nameData} `,
+          };
+          setItems((prevItems) => [...prevItems, nameItem]);
+        });
+    };
+    setItems([]);
+    fetchHistory();
+    fetchJoke();
+    fetchName();
   }, []);
 
-  const items = [
-    {
-      secondaryHeader: "History of this day",
-      primaryHeader: `Year ${historyData.events[randomHistoryData].year}`,
-      body: `${historyData.events[randomHistoryData].description}`,
-    },
-    {
-      secondaryHeader: "secondaryHeader #2",
-      primaryHeader: "primaryHeader#2",
-      body: "Hello World!",
-    },
-    {
-      secondaryHeader: "secondaryHeader #3",
-      primaryHeader: "primaryHeader#3",
-      body: "lorem<h2>{props.item.name}</h2props.item.description}</p>",
-    },
-  ];
   function Item(props) {
     return (
       <Card
@@ -85,7 +114,7 @@ export default function FactOfTheDay(props) {
 
   return (
     <Carousel>
-      {items.map((item, i) => (
+      {items?.map((item, i) => (
         <Item key={i} item={item} />
       ))}
     </Carousel>
