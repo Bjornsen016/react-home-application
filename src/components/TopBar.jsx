@@ -1,76 +1,45 @@
-import { useState } from "react";
-import {
-	Checkbox,
-	AppBar,
-	Toolbar,
-	IconButton,
-	Typography,
-	Menu,
-	MenuItem,
-	Box,
-} from "@mui/material";
-import { Menu as MenuIcon, DarkMode, LightMode } from "@mui/icons-material";
+import { Checkbox, AppBar, Toolbar, Typography, Box } from "@mui/material";
+import { DarkMode, LightMode } from "@mui/icons-material";
+import TopBarMenu from "./TopBarMenu";
+import Clock from "./Clock";
+import {WeatherWidget} from "../components"
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
-export default function TopBar({ colorMode, user }) {
-	const [anchorEl, setAnchorEl] = useState(null);
-	const open = Boolean(anchorEl);
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
+export default function TopBar({
+	colorMode,
+	user,
+	setGoogleApiToken,
+	setUser,
+}) {
 	return (
 		<AppBar position='sticky' color='primary'>
 			<Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-				<div>
-					<IconButton
-						onClick={handleClick}
-						edge='start'
-						color='inherit'
-						aria-label='menu'
-						aria-controls={open ? "menu" : undefined}
-						aria-haspopup='true'
-						aria-expanded={open ? "true" : undefined}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Menu
-						id='menu'
-						anchorEl={anchorEl}
-						open={open}
-						onClose={handleClose}
-						anchorOrigin={{
-							vertical: "bottom",
-							horizontal: "left",
-						}}
-						transformOrigin={{
-							vertical: "top",
-							horizontal: "left",
-						}}
-					>
-						<MenuItem>Profile</MenuItem>
-						<MenuItem>Unlock grid</MenuItem>
-						<MenuItem>Login / Logout</MenuItem>
-					</Menu>
+				<Box sx={{ display: "flex", alignItems: "center" }}>
+					<TopBarMenu
+						user={user}
+						setGoogleApiToken={setGoogleApiToken}
+						setUser={setUser}
+					/>
 					<Checkbox
 						onChange={colorMode.toggleColorMode}
 						icon={<LightMode sx={{ color: "yellow" }} />}
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
-				</div>
-				<Typography variant='h6'>Welcome home {user?.given_name}</Typography>
+					<Typography variant='h6'>{user?.names.displayName}</Typography>
+				</Box>
+				<Clock />
 				{/* TODO: Make center on the top everytime, make instead of flex? */}
 				<Box
-					borderColor='textPrimary'
+					/* borderColor='textPrimary'
 					sx={{
 						border: "2px solid",
 						padding: "10px",
-					}}
+					}} */
 				>
-					<Typography variant='h6'>Weather info here</Typography>
+					<Typography variant='p'>
+						<WeatherWidget />
+					</Typography>
 				</Box>
 			</Toolbar>
 		</AppBar>

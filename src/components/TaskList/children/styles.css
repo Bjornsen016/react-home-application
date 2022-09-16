@@ -1,0 +1,19 @@
+.task-list {
+  display: "flex";
+  flex-direction: column;
+}
+
+.task-item {
+  display: flex;
+  flex-direction: row;
+  padding: 2px 16px !important;
+}
+
+.task-checkbox {
+  padding: 0 16px !important;
+}
+
+.add-task-btn {
+  width: 56px;
+  height: 24px;
+}
