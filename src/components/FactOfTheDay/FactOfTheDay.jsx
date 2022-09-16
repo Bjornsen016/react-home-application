@@ -5,12 +5,12 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 export default function FactOfTheDay() {
-  const day = new Date().getDay();
+  const day = new Date().getDate();
   const month = new Date().getMonth() + 1;
   const year = new Date().getFullYear();
 
   const [items, setItems] = useState([]);
-  console.log(items);
+  console.log(day, month, year);
 
   useEffect(() => {
     const fetchHistory = async () => {
