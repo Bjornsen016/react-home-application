@@ -53,8 +53,8 @@ function App() {
           <Container
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gridTemplateRows: "2fr 1fr",
+              gridTemplateColumns: "repeat(2, 50%)",
+              gridTemplateRows: "66% 33%",
               gridColumnGap: "10px",
               gridRowGap: "10px",
               height: "90vh",

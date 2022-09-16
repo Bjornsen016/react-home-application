@@ -1,4 +1,5 @@
 import { Box, Button } from "@mui/material";
+import { FactOfTheDay } from "../index";
 import TasksList from "../TaskList/TasksList";
 
 //TODO: Fix styling
@@ -34,11 +35,7 @@ export default function MainInformationScreen({ user, googleApiToken }) {
           padding: "10px",
         }}
       >
-        <ul>
-          <li>TODOS</li>
-          <li>Buss tabell</li>
-          <li>Annat?</li>
-        </ul>
+        <FactOfTheDay></FactOfTheDay>
       </Box>
     </>
   );
