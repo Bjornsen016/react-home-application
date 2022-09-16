@@ -1,5 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { Calendar } from "../";
+import { FactOfTheDay } from "../index";
+import TasksList from "../TaskList/TasksList";
 
 //TODO: Fix styling
 export default function MainInformationScreen({ user, googleApiToken }) {
@@ -13,7 +15,6 @@ export default function MainInformationScreen({ user, googleApiToken }) {
 					padding: "10px",
 				}}
 			>
-				{/* <Button onClick={() => console.log(user)}>Log user</Button> */}
 				{user && <Calendar googleApiToken={googleApiToken} />}
 			</Box>
 			<Box
@@ -24,12 +25,7 @@ export default function MainInformationScreen({ user, googleApiToken }) {
 					padding: "10px",
 				}}
 			>
-				{user !== undefined ? <div>Hej {user.names.givenName}</div> : ""}
-				<ul>
-					<li>TODOS</li>
-					<li>Buss tabell</li>
-					<li>Annat?</li>
-				</ul>
+				{user !== undefined ? <TasksList token={googleApiToken} /> : ""}
 			</Box>
 			<Box
 				borderColor='textPrimary'
@@ -39,11 +35,7 @@ export default function MainInformationScreen({ user, googleApiToken }) {
 					padding: "10px",
 				}}
 			>
-				<ul>
-					<li>TODOS</li>
-					<li>Buss tabell</li>
-					<li>Annat?</li>
-				</ul>
+				<FactOfTheDay></FactOfTheDay>
 			</Box>
 		</>
 	);

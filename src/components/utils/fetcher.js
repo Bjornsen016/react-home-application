@@ -3,7 +3,6 @@ export async function fetchDataFromApi(url, token) {
 		"Content-Type": "application/json;charset=utf-8",
 		Authorization: `Bearer ${token}`,
 	});
-
 	const result = await fetch(url, {
 		metod: "GET",
 		headers: headers,
