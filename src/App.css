@@ -1,3 +1,4 @@
+
 .weather-widget{
 min-width: 50px;
 max-width: 100px;
@@ -24,8 +25,19 @@ align-items: center;
 .weather-widget > a {
     text-decoration: none;
     text-align: right;
+    color: white;
 
 }
+
+.weather-page-container{
+    border: 2px solid;
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
 
 .weather-info{
 display: flex;
@@ -42,7 +54,8 @@ justify-content: flex-end;
     
 }
 .weather-info img{
-    width: 35px;
+    width: 30px;
+    
 }
 .weather-info p{
     margin: 0;

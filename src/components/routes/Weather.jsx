@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { TextField } from '@mui/material';
+import {useLocation} from "react-router-dom";
 
 
   //sets the dates of today and the upcoming three days
@@ -30,6 +31,12 @@ import { TextField } from '@mui/material';
     const [userLocationData, setUserLocationData] = useState([]);
     const [userLocation, setUserLocation]= useState("")
     const [showUserLocation, setShowUserLocation] = useState(false)
+    /* const [userPosition, setUserPosition] = useState("") */
+    
+    //Access location from queryparam
+    const location = useLocation();
+    const userPosition = new URLSearchParams(location.search).get('location')
+    
 
     //Array of pre-chosen locations to fetch data for 
     const locations = [{name:"Kiruna", data: kirunaData }, {name:"Göteborg", data: gothenburgData}, {name:"Stockholm", data: stockholmData}, {name:"Malmö", data: malmoData}]
@@ -42,7 +49,7 @@ import { TextField } from '@mui/material';
     const urlUser = `https://api.openweathermap.org/data/2.5/forecast?q=${userLocation}&appid=${apiKey}&units=metric`
     useEffect(() => {
         fetchWeatherData();
-      
+        console.log(userPosition);
       },[]); //when to update?
 
       async function onSubmit(event) {
@@ -52,8 +59,8 @@ import { TextField } from '@mui/material';
           const fetchedUserData = await FetchData(urlUser)
           const extractedUserData=[ fetchedUserData[0].list[1], fetchedUserData[0].list[9], fetchedUserData[0].list[17], fetchedUserData[0].list[25]];
           console.log(extractedUserData)
-          setUserLocationData(extractedUserData).then(
-          locations.push({name: userLocation, data: userLocationData}))
+          setUserLocationData(extractedUserData)
+          /* .then(locations.push({name: userLocation, data: userLocationData})) */
           setShowUserLocation(true)
           
         }
@@ -77,7 +84,8 @@ import { TextField } from '@mui/material';
       }
 
     return (
-      <div>
+      
+      <div className='weather-page-container'>
         <TableContainer>
             <Table sx={{ minWidth: 450 }} size="small" aria-label="a dense table">
                 <TableHead>
@@ -91,19 +99,23 @@ import { TextField } from '@mui/material';
                 </TableHead>
                 <TableBody>
       {/* UserData, only shown if showUserLocation=true */}
-                 {showUserLocation &&
-                  userLocationData && 
-                    userLocationData.map(({main, weather, dt_txt}) => (
-                      <TableRow>
+          
+                 {showUserLocation && 
+                 <TableRow>
+                  <TableCell component="th" scope="row" >{userLocation}</TableCell>
+                  {
+                    userLocationData?.map(({main, weather, dt_txt}) => (
+                      
                       <TableCell key={dt_txt}>
                          <div className='weather-info'  >
-                         <img alt="weather icon" src={`http://openweathermap.org/img/w/${weather[0].icon}.png`}/> 
+                         <img alt="weather icon" src={`./images/${weather[0].icon}.png`}/> 
 
                           <p style={{marginRight:"10px"}}>{Math.round(main.temp)} &#8451;</p>
                         </div>
                       </TableCell>
-                      </TableRow>
-                ))}                
+                      
+                )) }
+                </TableRow>}
       {/* Pre-chosen forecast */}
                   {locations.map(({name, data}) => (
                     <TableRow key={name}>
