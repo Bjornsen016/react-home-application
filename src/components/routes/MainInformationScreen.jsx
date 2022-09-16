@@ -1,8 +1,7 @@
-import { Box } from "@mui/material";
-//import Calender from "../Calender";
+import { Box, Button } from "@mui/material";
 
 //TODO: Fix styling
-export default function MainInformationScreen() {
+export default function MainInformationScreen({ user, googleApiToken }) {
 	return (
 		<>
 			<Box
@@ -13,9 +12,7 @@ export default function MainInformationScreen() {
 					padding: "10px",
 				}}
 			>
-				{/* <Button onClick={() => login()}>Login with google</Button>
-				 */}
-				{/* <Calender /> */}
+				<Button onClick={() => console.log(user)}>Log user</Button>
 				Calender + other components here
 			</Box>
 			<Box
@@ -26,7 +23,7 @@ export default function MainInformationScreen() {
 					padding: "10px",
 				}}
 			>
-				{/* {user !== undefined ? <div>Hej {user.given_name}</div> : ""} */}
+				{user !== undefined ? <div>Hej {user.names.givenName}</div> : ""}
 				<ul>
 					<li>TODOS</li>
 					<li>Buss tabell</li>
