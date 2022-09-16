@@ -55,10 +55,11 @@ const WeatherWidget = () => {
                <Link to="/weather">
         {data && 
           data.map(({weather, main, id, name}) => (
-            <div key={id} className="flex-column">
-             <div className="flex-row">
-              <p style={{marginRight:"5px"}}>{Math.round(main.temp)} &#8451;</p>
-              <img alt="weather icon" src={`http://openweathermap.org/img/w/${weather[0].icon}.png`}/> 
+            <div key={id} className="widget-column">
+             <div className="widget-row">
+              <p style={{margin:"0 10px"}}>{Math.round(main.temp)} &#8451;</p>
+              
+              <img alt="weather icon" src={`./images/${weather[0].icon}.png`}/> 
               </div>
               <Tooltip title={name}>
               <p style={{marginTop:"0"}}>{`${weather[0].description}`.charAt(0).toUpperCase() + `${weather[0].description}`.slice(1)}</p>

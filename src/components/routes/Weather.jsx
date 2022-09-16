@@ -34,7 +34,7 @@ import { TextField } from '@mui/material';
     //Array of pre-chosen locations to fetch data for 
     const locations = [{name:"Kiruna", data: kirunaData }, {name:"Göteborg", data: gothenburgData}, {name:"Stockholm", data: stockholmData}, {name:"Malmö", data: malmoData}]
 
-    const apiKey= "5622e7863c25a93700490cfec8116633"
+    const apiKey= "fe565ab92507d6d1bb097c37cea898b0"
     const url0 = `https://api.openweathermap.org/data/2.5/forecast?q=${locations[0].name}&appid=${apiKey}&units=metric`
     const url1 = `https://api.openweathermap.org/data/2.5/forecast?q=${locations[1].name}&appid=${apiKey}&units=metric`
     const url2 = `https://api.openweathermap.org/data/2.5/forecast?q=${locations[2].name}&appid=${apiKey}&units=metric`
@@ -47,12 +47,15 @@ import { TextField } from '@mui/material';
 
       async function onSubmit(event) {
           event.preventDefault();
-          console.log(userLocation)
+          setUserLocation(event.target.value)
 
-          const fetchedUserData = await FetchData(urlUser);
+          const fetchedUserData = await FetchData(urlUser)
           const extractedUserData=[ fetchedUserData[0].list[1], fetchedUserData[0].list[9], fetchedUserData[0].list[17], fetchedUserData[0].list[25]];
-          await setUserLocationData(extractedUserData)
-          locations.push({name: userLocation, data: userLocationData})
+          console.log(extractedUserData)
+          setUserLocationData(extractedUserData).then(
+          locations.push({name: userLocation, data: userLocationData}))
+          setShowUserLocation(true)
+          
         }
       
 
@@ -87,16 +90,31 @@ import { TextField } from '@mui/material';
                     </TableRow>
                 </TableHead>
                 <TableBody>
+      {/* UserData, only shown if showUserLocation=true */}
+                 {showUserLocation &&
+                  userLocationData && 
+                    userLocationData.map(({main, weather, dt_txt}) => (
+                      <TableRow>
+                      <TableCell key={dt_txt}>
+                         <div className='weather-info'  >
+                         <img alt="weather icon" src={`http://openweathermap.org/img/w/${weather[0].icon}.png`}/> 
+
+                          <p style={{marginRight:"10px"}}>{Math.round(main.temp)} &#8451;</p>
+                        </div>
+                      </TableCell>
+                      </TableRow>
+                ))}                
+      {/* Pre-chosen forecast */}
                   {locations.map(({name, data}) => (
                     <TableRow key={name}>
                     <TableCell component="th" scope="row" >{name}</TableCell>
-                        {data && console.log(data)}
-                        {data &&
+                      {data &&
                         data.map(({main, weather, dt_txt}) => (
                           <TableCell key={dt_txt}>
                              <div className='weather-info'  >
-                             <img alt="weather icon" src={`http://openweathermap.org/img/w/${weather[0].icon}.png`}/> 
-
+                              <div className='weather-img-container'>
+                                <img alt="weather icon" src={`./images/${weather[0].icon}.png`}/> 
+                              </div>
                               <p style={{marginRight:"10px"}}>{Math.round(main.temp)} &#8451;</p>
                             </div>
                           </TableCell>
@@ -110,19 +128,14 @@ import { TextField } from '@mui/material';
 
         <form onSubmit={onSubmit}>
           <TextField 
-          id="outlined-basic" 
-          label="Search city..." 
-          variant="outlined"
-          margin="normal"
+            id="outlined-basic" 
+            label="Search city..." 
+            variant="outlined"
+            margin="normal"
             size="small"
+            onChange={(e) => setUserLocation(e.target.value)}
             >
           </TextField>
-          {/* <input
-            type="text"
-            value={userLocation}
-             onChange={(e) => setUserLocation(e.target.value)} //Whenever there is a change, an anonymous function (which takes in the event object as a parameter) is fired which in turn calls the setName() function to update the name variable with the current value of the input field.
-           placeholder="Choose a weather location"
-          /> */}
         </form>
         </div>
     )
