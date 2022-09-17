@@ -63,21 +63,33 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 
 			setTodaysEvents(todaysEvents);
 			setUpcomingEvents(upcomingEvents);
-
-			//TODO: Make an interval to update the state. every 10 min? 15, 30?
-			//TODO: TIME TO REFACTOR
 		});
 	};
 
+	//TODO: How often should it automaticly update?
 	useEffect(() => {
+		let interval;
 		if (chosenCalendars?.length > 0) {
 			getEvents(chosenCalendars);
+			interval = setInterval(() => {
+				getEvents(chosenCalendars);
+				console.log("updating calendars");
+			}, 1000 * 60 * 2);
 		} else {
 			getCalendars().then(async (items) => {
 				setCalendarList(items);
 				setShowCalenderListModal(true);
 			});
+			interval = setInterval(() => {
+				getEvents(chosenCalendars);
+				console.log("updating calendars");
+			}, 1000 * 60 * 2);
 		}
+
+		return () => {
+			console.log("Remove interval");
+			clearInterval(interval);
+		};
 	}, []);
 
 	return (
