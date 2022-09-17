@@ -1,33 +1,39 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Typography, CircularProgress } from "@mui/material";
 import { CalendarEvent } from "./CalendarEvent";
 import { CalenderListModal } from "./CalenderListModal";
 import { fetchDataFromApi } from "../utils/fetcher";
 import { useEffect, useState } from "react";
+import { googleApiInfo } from "../../config/googleApiInfo";
 
-const baseUrl = new URL("https://www.googleapis.com");
 const flexStyle = {
 	display: "flex",
 	flexDirection: "column",
 	justifyContent: "space-around",
 };
+const {
+	googleCalendarBaseUrl,
+	googleCalendarListPathname,
+	googleCalendarEventsPathname,
+} = googleApiInfo;
 
 const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 	const [showCalenderListModal, setShowCalenderListModal] = useState(false);
 	const [calendarList, setCalendarList] = useState([]);
 	const [todaysEvents, setTodaysEvents] = useState([]);
 	const [upcomingEvents, setUpcomingEvents] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	const getCalendars = async () => {
-		const url = new URL(baseUrl);
-		url.pathname = "/calendar/v3/users/me/calendarList";
+		const url = new URL(googleCalendarBaseUrl);
+		url.pathname = googleCalendarListPathname;
 		const data = await fetchDataFromApi(url, googleApiToken);
 		return data.items;
 	};
 
 	const fetchEvents = async (calendars, maxAmountPerCalendar) => {
 		const apiEvents = calendars.map(async (calendar) => {
-			const url = new URL(baseUrl);
-			url.pathname = `/calendar/v3/calendars/${calendar}/events`;
+			const url = new URL(googleCalendarBaseUrl);
+			url.pathname = googleCalendarEventsPathname(calendar);
 			url.searchParams.set("maxResults", maxAmountPerCalendar);
 			const today = new Date(Date.now()).toISOString();
 			url.searchParams.set("timeMin", today);
@@ -39,6 +45,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 	};
 
 	const getEvents = async (calendars) => {
+		setLoading(true);
 		const apiEvents = await fetchEvents(calendars, 10); // The number is how many events PER calendar
 		Promise.all(apiEvents).then((evts) => {
 			let allEvents = [];
@@ -63,6 +70,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 
 			setTodaysEvents(todaysEvents);
 			setUpcomingEvents(upcomingEvents);
+			setLoading(false);
 		});
 	};
 
@@ -74,7 +82,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 			interval = setInterval(() => {
 				getEvents(chosenCalendars);
 				console.log("updating calendars");
-			}, 1000 * 60 * 2);
+			}, 1000 * 60 * 5);
 		} else {
 			getCalendars().then(async (items) => {
 				setCalendarList(items);
@@ -83,7 +91,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 			interval = setInterval(() => {
 				getEvents(chosenCalendars);
 				console.log("updating calendars");
-			}, 1000 * 60 * 2);
+			}, 1000 * 60 * 5);
 		}
 
 		return () => {
@@ -94,33 +102,49 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 
 	return (
 		<Container style={{ height: "100%" }} sx={flexStyle} maxWidth='lg'>
-			<Box style={flexStyle}>
-				{/* Today box */}
-				<Typography variant='h4' align='center' sx={{ marginBottom: "5px" }}>
-					{new Date(Date.now()).toLocaleDateString("en-GB", {
-						weekday: "long",
-						year: "numeric",
-						month: "short",
-						day: "numeric",
-					})}
-				</Typography>
-				{todaysEvents?.length === 0 ? (
-					<Typography variant='h5' align='center'>
-						There are no events today. Feel free to roam
-					</Typography>
-				) : (
-					todaysEvents?.map((evt) => <CalendarEvent event={evt} />)
-				)}
-			</Box>
-			<Box style={flexStyle}>
-				{/* Upcoming box */}
-				<Typography variant='h4' align='center' sx={{ marginBottom: "5px" }}>
-					UPCOMING
-				</Typography>
-				{upcomingEvents?.map((evt) => (
-					<CalendarEvent event={evt} />
-				))}
-			</Box>
+			{loading ? (
+				<CircularProgress />
+			) : (
+				<>
+					<Box style={flexStyle}>
+						{/* Today box */}
+						<Typography
+							variant='h4'
+							align='center'
+							sx={{ marginBottom: "5px" }}
+						>
+							{new Date(Date.now()).toLocaleDateString("en-GB", {
+								weekday: "long",
+								year: "numeric",
+								month: "short",
+								day: "numeric",
+							})}
+						</Typography>
+						{todaysEvents?.length === 0 ? (
+							<Typography variant='h5' align='center'>
+								There are no events today. Feel free to roam
+							</Typography>
+						) : (
+							todaysEvents?.map((evt) => (
+								<CalendarEvent key={evt.id} event={evt} />
+							))
+						)}
+					</Box>
+					<Box style={flexStyle}>
+						{/* Upcoming box */}
+						<Typography
+							variant='h4'
+							align='center'
+							sx={{ marginBottom: "5px" }}
+						>
+							UPCOMING
+						</Typography>
+						{upcomingEvents?.map((evt) => (
+							<CalendarEvent key={evt.id} event={evt} />
+						))}
+					</Box>
+				</>
+			)}
 			<CalenderListModal
 				isOpen={showCalenderListModal}
 				setIsOpen={setShowCalenderListModal}
@@ -145,7 +169,7 @@ const sortDatesByEarliestFirst = (a, b) => {
 };
 
 const toOnlyTime = (dateTimeString) =>
-	new Date(dateTimeString).toLocaleTimeString([], {
+	new Date(dateTimeString).toLocaleTimeString("en-GB", {
 		hour: "2-digit",
 		minute: "2-digit",
 	});
@@ -153,8 +177,8 @@ const toOnlyTime = (dateTimeString) =>
 //TODO: Make this into this format: Friday, 16 Sept 17:00 - 20:00
 
 const toUpcomingDateTime = (dateTimeString) => {
-	return new Date(dateTimeString).toLocaleDateString([], {
-		weekday: "short",
+	return new Date(dateTimeString).toLocaleDateString("en-GB", {
+		weekday: "long",
 		month: "short",
 		day: "numeric",
 		hour: "2-digit",
@@ -188,15 +212,13 @@ const createTodaysEvents = (evt) => {
 	//TODO: Check if end is not today and make one for that too.
 	let time;
 	if (evt.start.dateTime !== undefined && evt.end.dateTime !== undefined) {
-		if (isEventEndSameDay(evt)) {
-			time = `${toOnlyTime(evt.start.dateTime)} - ${toOnlyTime(
-				evt.end.dateTime
-			)}`;
-		} else {
-			time = `${toOnlyTime(evt.start.dateTime)} - ${toUpcomingDateTime(
-				evt.end.dateTime
-			)}`;
-		}
+		isEventEndSameDay(evt)
+			? (time = `${toOnlyTime(evt.start.dateTime)} - ${toOnlyTime(
+					evt.end.dateTime
+			  )}`)
+			: (time = `${toOnlyTime(evt.start.dateTime)} - ${toUpcomingDateTime(
+					evt.end.dateTime
+			  )}`);
 	} else if (
 		evt.start.dateTime !== undefined &&
 		evt.end.dateTime === undefined
@@ -205,15 +227,13 @@ const createTodaysEvents = (evt) => {
 	} else if (evt.start.date !== undefined && evt.end.date === undefined) {
 		time = `${toOnlyTime(evt.start.date)}`;
 	} else if (evt.start.date !== undefined && evt.end.date !== undefined) {
-		if (isEventEndSameDay(evt)) {
-			time = `${toOnlyTime(evt.start.date)} - ${toOnlyTime(evt.end.date)}`;
-		} else {
-			time = `${toOnlyTime(evt.start.date)} - ${toUpcomingDateTime(
-				evt.end.date
-			)}`;
-		}
+		isEventEndSameDay(evt)
+			? (time = `${toOnlyTime(evt.start.date)} - ${toOnlyTime(evt.end.date)}`)
+			: (time = `${toOnlyTime(evt.start.date)} - ${toUpcomingDateTime(
+					evt.end.date
+			  )}`);
 	}
-	let myEvent = { time: time, title: evt.summary };
+	let myEvent = { time: time, title: evt.summary, id: `today: ${evt.id}` };
 	return myEvent;
 };
 
@@ -222,15 +242,14 @@ const createUpcomingEvents = (evt) => {
 	let time;
 	switch (true) {
 		case evt.start.dateTime !== undefined && evt.end.dateTime !== undefined:
-			if (isEventEndSameDay(evt)) {
-				time = `${toUpcomingDateTime(evt.start.dateTime)} - ${toOnlyTime(
-					evt.end.dateTime
-				)}`;
-			} else {
-				time = `${toUpcomingDateTime(
-					evt.start.dateTime
-				)} - ${toUpcomingDateTime(evt.end.dateTime)}`;
-			}
+			isEventEndSameDay(evt)
+				? (time = `${toUpcomingDateTime(evt.start.dateTime)} - ${toOnlyTime(
+						evt.end.dateTime
+				  )}`)
+				: (time = `${toUpcomingDateTime(
+						evt.start.dateTime
+				  )} - ${toUpcomingDateTime(evt.end.dateTime)}`);
+
 			break;
 		case evt.start.dateTime !== undefined && evt.end.dateTime === undefined:
 			time = `${toUpcomingDateTime(evt.start.dateTime)}`;
@@ -239,19 +258,18 @@ const createUpcomingEvents = (evt) => {
 			time = `${toUpcomingDateTime(evt.start.date)}`;
 			break;
 		case evt.start.date !== undefined && evt.end.date !== undefined:
-			if (isEventEndSameDay(evt)) {
-				time = `${toUpcomingDateTime(evt.start.date)} - ${toOnlyTime(
-					evt.end.date
-				)}`;
-			} else {
-				time = `${toUpcomingDateTime(evt.start.date)} - ${toUpcomingDateTime(
-					evt.end.date
-				)}`;
-			}
+			isEventEndSameDay(evt)
+				? (time = `${toUpcomingDateTime(evt.start.date)} - ${toOnlyTime(
+						evt.end.date
+				  )}`)
+				: (time = `${toUpcomingDateTime(evt.start.date)} - ${toUpcomingDateTime(
+						evt.end.date
+				  )}`);
+
 			break;
 		default:
 	}
 
-	let myEvent = { time: time, title: evt.summary };
+	let myEvent = { time: time, title: evt.summary, id: `upcoming: ${evt.id}` };
 	return myEvent;
 };

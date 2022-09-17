@@ -51,9 +51,13 @@ function App() {
 	);
 
 	//user states
-	const [user, setUser] = useState(undefined);
-	const [googleApiToken, setGoogleApiToken] = useState({});
-	const [chosenCalendars, setChosenCalendars] = useState([]);
+	const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+	const [googleApiToken, setGoogleApiToken] = useState(
+		JSON.parse(localStorage.getItem("googleApiToken"))
+	);
+	const [chosenCalendars, setChosenCalendars] = useState(
+		JSON.parse(localStorage.getItem("chosenCalendars"))
+	);
 
 	return (
 		<GoogleOAuthProvider clientId={googleApiInfo.clientId}>

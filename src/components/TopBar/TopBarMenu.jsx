@@ -57,7 +57,10 @@ function TopBarMenu({ user, setGoogleApiToken, setUser }) {
 							googleLogout();
 							setUser();
 							setGoogleApiToken();
-							console.log(user);
+							//TODO: Add setCalendars(); to remove the chosen calendars when loggin out too.
+							localStorage.removeItem("user");
+							localStorage.removeItem("googleApiToken");
+							localStorage.removeItem("chosenCalendars");
 							handleClose();
 						}}
 					>

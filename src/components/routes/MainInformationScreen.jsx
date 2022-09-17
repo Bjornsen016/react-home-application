@@ -36,7 +36,7 @@ export default function MainInformationScreen({
 					padding: "10px",
 				}}
 			>
-				{user !== undefined ? <TasksList token={googleApiToken} /> : ""}
+				{user && <TasksList token={googleApiToken} />}
 			</Box>
 			<Box
 				borderColor='textPrimary'

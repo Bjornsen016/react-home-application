@@ -10,17 +10,22 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { fetchDataFromApi } from "../utils/fetcher";
 import { useEffect, useState } from "react";
 import GoogleIcon from "@mui/icons-material/Google";
+import { googleApiInfo } from "../../config/googleApiInfo";
+
+const { scopes, googleGetUserInfoUrl } = googleApiInfo;
 
 export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 	const [showDialog, setShowDialog] = useState(false);
 	const login = useGoogleLogin({
-		scope:
-			"https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/tasks",
+		scope: scopes,
 		onSuccess: async (tokenResponse) => {
-			console.log(tokenResponse);
+			localStorage.setItem(
+				"googleApiToken",
+				JSON.stringify(tokenResponse.access_token)
+			);
 			setGoogleApiToken(tokenResponse.access_token);
 			const apiResponse = await fetchDataFromApi(
-				"https://people.googleapis.com/v1/people/me?personFields=names,photos",
+				googleGetUserInfoUrl,
 				tokenResponse.access_token
 			);
 
@@ -31,6 +36,7 @@ export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 				},
 				profilePicture: apiResponse.photos[0].url,
 			};
+			localStorage.setItem("user", JSON.stringify(theApiUser));
 			setTimeout(() => setUser(theApiUser), 1000);
 		},
 	});
@@ -43,6 +49,7 @@ export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 		setShowDialog(false);
 	};
 
+	//Shows the login dialog when the user is not logged in.
 	useEffect(() => {
 		setShowDialog(true);
 	}, []);
@@ -60,10 +67,10 @@ export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 				Google Sign in
 			</Button>
 			<Dialog open={showDialog}>
-				<DialogTitle>Do you want to sign in with google?</DialogTitle>
+				<DialogTitle>Do you want to sign in with Google?</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						It will give you a view of your calender events and your tasks.
+						It will give you a view of your calendar events and your tasks.
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
