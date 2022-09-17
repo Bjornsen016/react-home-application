@@ -10,7 +10,6 @@ import {
 	Checkbox,
 	FormControlLabel,
 } from "@mui/material";
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 export const CalenderListModal = ({

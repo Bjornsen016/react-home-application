@@ -31,8 +31,7 @@ align-items: center;
 
 .weather-page-container{
     border: 2px solid;
-    grid-column: span 2;
-    grid-row: span 2;
+    grid-area: span 2 / span 2;
     padding: 10px;
     display: flex;
     flex-direction: column;

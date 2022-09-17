@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import LoginWithGoogle from "./LoginWithGoogle";
 import { googleLogout } from "@react-oauth/google";
 import { Link } from "react-router-dom";
 
@@ -43,8 +42,14 @@ function TopBarMenu({ user, setGoogleApiToken, setUser }) {
 				}}
 			>
 				{/* TODO: what kind of items should we have in the menu? */}
-				<MenuItem><Link to="/">Home</Link></MenuItem>
-				<MenuItem>Unlock grid</MenuItem>
+
+				<Link to='/' style={{ textDecoration: "none" }}>
+					<MenuItem divider sx={{ color: "text.primary" }}>
+						Home
+					</MenuItem>
+				</Link>
+
+				<MenuItem divider>Unlock grid</MenuItem>
 
 				{user && (
 					<MenuItem
@@ -58,13 +63,6 @@ function TopBarMenu({ user, setGoogleApiToken, setUser }) {
 					>
 						Sign out
 					</MenuItem>
-				)}
-				{!user && (
-					<LoginWithGoogle
-						setGoogleApiToken={setGoogleApiToken}
-						setUser={setUser}
-						closeMenu={handleClose}
-					/>
 				)}
 			</Menu>
 		</>
