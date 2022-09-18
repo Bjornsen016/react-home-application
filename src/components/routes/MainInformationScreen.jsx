@@ -55,8 +55,7 @@ export default function MainInformationScreen({
 		}
 	};
 
-	//TODO: Make a dialog pop up when clicking on the unlocked grid. This should as for what component you want to show in that box.
-	//TODO: After that refactor to smaller stuff.
+	//TODO: Refactor to smaller stuff / more readable stuff if possible
 
 	return (
 		<>

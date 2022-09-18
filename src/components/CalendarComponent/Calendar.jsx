@@ -192,6 +192,7 @@ const toUpcomingDateTime = (dateTimeString) => {
 };
 
 //TODO: Add so that if the event starts earlier than today we want to display the start differently
+//TODO: Check the year also
 const isEventStartTodayOrEarlier = (e) => {
 	return (
 		(new Date(e.start.dateTime).getDate() <= new Date(Date.now()).getDate() &&
@@ -214,7 +215,6 @@ const isEventEndSameDay = (e) => {
 };
 
 const createTodaysEvents = (evt) => {
-	//TODO: Check if end is not today and make one for that too.
 	let time;
 	if (evt.start.dateTime !== undefined && evt.end.dateTime !== undefined) {
 		isEventEndSameDay(evt)
@@ -243,7 +243,6 @@ const createTodaysEvents = (evt) => {
 };
 
 const createUpcomingEvents = (evt) => {
-	//TODO: Check if end.date is not today and make one for that too.
 	let time;
 	switch (true) {
 		case evt.start.dateTime !== undefined && evt.end.dateTime !== undefined:
@@ -254,7 +253,6 @@ const createUpcomingEvents = (evt) => {
 				: (time = `${toUpcomingDateTime(
 						evt.start.dateTime
 				  )} - ${toUpcomingDateTime(evt.end.dateTime)}`);
-
 			break;
 		case evt.start.dateTime !== undefined && evt.end.dateTime === undefined:
 			time = `${toUpcomingDateTime(evt.start.dateTime)}`;
@@ -270,7 +268,6 @@ const createUpcomingEvents = (evt) => {
 				: (time = `${toUpcomingDateTime(evt.start.date)} - ${toUpcomingDateTime(
 						evt.end.date
 				  )}`);
-
 			break;
 		default:
 	}
