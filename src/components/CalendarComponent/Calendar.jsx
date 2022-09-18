@@ -45,7 +45,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 	};
 
 	const getEvents = async (calendars) => {
-		if (calendars === undefined) {
+		if (calendars == undefined) {
 			console.log("no calendars chosen");
 			setLoading(false);
 			return;
@@ -92,10 +92,10 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 			getCalendars().then(async (items) => {
 				setCalendarList(items);
 				setShowCalenderListModal(true);
-				console.log("adding interval for updating calendars");
+				/* console.log("adding interval for updating calendars");
 				interval = setInterval(() => {
 					getEvents(chosenCalendars);
-				}, 1000 * 60 * 6);
+				}, 1000 * 60 * 6); */ //This is not working correctly
 			});
 		}
 
