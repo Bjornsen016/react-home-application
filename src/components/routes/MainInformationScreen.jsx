@@ -24,6 +24,7 @@ export default function MainInformationScreen({
 	setChosenCalendars,
 	isGridUnlocked,
 }) {
+	//TODO: Save the values in local storage so that next time you open the app it remembers
 	const [bigComponentDialogIsOpen, setbigComponentDialogIsOpen] =
 		useState(false);
 	const [bigComponentValue, setbigComponentValue] = useState("Calendar");
