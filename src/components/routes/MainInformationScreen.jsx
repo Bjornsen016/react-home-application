@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import GridChoiceDialog from "../GridChoiceDialog";
-import { Calendar } from "../";
-import { FactOfTheDay } from "../index";
+import { Calendar, BusTable, FactOfTheDay } from "../";
 import TasksList from "../TaskList/TasksList";
 import { useState } from "react";
 
@@ -35,7 +34,7 @@ export default function MainInformationScreen({
 
 	const [rightComponentDialogIsOpen, setrightComponentDialogIsOpen] =
 		useState(false);
-	const [rightComponentValue, setrightComponentValue] = useState("Facts");
+	const [rightComponentValue, setrightComponentValue] = useState("Bus");
 
 	const returnComponent = (value) => {
 		switch (value) {
@@ -51,6 +50,8 @@ export default function MainInformationScreen({
 				return <TasksList token={googleApiToken} />;
 			case "Facts":
 				return <FactOfTheDay />;
+			case "Bus":
+				return <BusTable />;
 			default:
 				return "Something else";
 		}
@@ -130,14 +131,14 @@ export default function MainInformationScreen({
 				setIsOpen={setleftComponentDialogIsOpen}
 				setValue={setleftComponentValue}
 				value={leftComponentValue}
-				choices={[{ value: "Tasks" }, { value: "Facts" }]}
+				choices={[{ value: "Tasks" }, { value: "Facts" }, { value: "Bus" }]}
 			/>
 			<GridChoiceDialog
 				isOpen={rightComponentDialogIsOpen}
 				setIsOpen={setrightComponentDialogIsOpen}
 				setValue={setrightComponentValue}
 				value={rightComponentValue}
-				choices={[{ value: "Facts" }, { value: "Tasks" }]}
+				choices={[{ value: "Facts" }, { value: "Tasks" }, { value: "Bus" }]}
 			/>
 		</>
 	);

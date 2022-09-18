@@ -14,6 +14,7 @@ import { googleApiInfo } from "../../config/googleApiInfo";
 
 const { scopes, googleGetUserInfoUrl } = googleApiInfo;
 
+//TODO: ATM the token will only live for 1 hour, I think this is because of the app being in testing mode on google api.
 export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 	const [showDialog, setShowDialog] = useState(false);
 	const login = useGoogleLogin({
