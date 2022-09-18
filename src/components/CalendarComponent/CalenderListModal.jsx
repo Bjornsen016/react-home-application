@@ -17,12 +17,10 @@ export const CalenderListModal = ({
 	setIsOpen,
 	calendarList,
 	setChosenCalendars,
-	callbackWhenFinished,
 }) => {
 	const handleSetCalendars = async (values) => {
 		setChosenCalendars(values.calendars);
 		localStorage.setItem("chosenCalendars", JSON.stringify(values.calendars));
-		await callbackWhenFinished(values.calendars);
 		setIsOpen(false);
 	};
 	const handleCancel = async () => {

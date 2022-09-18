@@ -84,6 +84,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 		let interval;
 		if (chosenCalendars?.length > 0) {
 			getEvents(chosenCalendars);
+			console.log("Setting up an interval for updating calendars");
 			interval = setInterval(() => {
 				getEvents(chosenCalendars);
 				console.log("updating calendars");
@@ -92,18 +93,15 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 			getCalendars().then(async (items) => {
 				setCalendarList(items);
 				setShowCalenderListModal(true);
-				/* console.log("adding interval for updating calendars");
-				interval = setInterval(() => {
-					getEvents(chosenCalendars);
-				}, 1000 * 60 * 6); */ //This is not working correctly
+				console.log("Opening the calendar list modal");
 			});
 		}
 
 		return () => {
-			console.log("Remove interval");
+			console.log("Removing calendar interval");
 			clearInterval(interval);
 		};
-	}, []);
+	}, [chosenCalendars]);
 
 	return (
 		<Container style={{ height: "100%" }} sx={flexStyle} maxWidth='lg'>
@@ -155,7 +153,6 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 				setIsOpen={setShowCalenderListModal}
 				calendarList={calendarList}
 				setChosenCalendars={setChosenCalendars}
-				callbackWhenFinished={getEvents}
 			/>
 		</Container>
 	);
