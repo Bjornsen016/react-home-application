@@ -12,6 +12,7 @@ export default function TopBar({
 	user,
 	setGoogleApiToken,
 	setUser,
+	setChosenCalendars,
 }) {
 	return (
 		<AppBar position='sticky' color='primary'>
@@ -30,6 +31,7 @@ export default function TopBar({
 						user={user}
 						setGoogleApiToken={setGoogleApiToken}
 						setUser={setUser}
+						setChosenCalendars={setChosenCalendars}
 					/>
 					<Checkbox
 						onChange={colorMode.toggleColorMode}

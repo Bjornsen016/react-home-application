@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { googleLogout } from "@react-oauth/google";
 import { Link } from "react-router-dom";
+import { IsGridUnlockedContext } from "../../App";
 
-function TopBarMenu({ user, setGoogleApiToken, setUser }) {
+function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
 	const [anchorEl, setAnchorEl] = useState(null);
+	const isGridUnlocked = useContext(IsGridUnlockedContext);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -49,7 +51,15 @@ function TopBarMenu({ user, setGoogleApiToken, setUser }) {
 					</MenuItem>
 				</Link>
 
-				<MenuItem divider>Unlock grid</MenuItem>
+				<MenuItem
+					divider
+					onClick={() => {
+						isGridUnlocked.toggleUnlockGrid();
+						handleClose();
+					}}
+				>
+					Unlock grid
+				</MenuItem>
 
 				{user && (
 					<MenuItem
@@ -57,7 +67,7 @@ function TopBarMenu({ user, setGoogleApiToken, setUser }) {
 							googleLogout();
 							setUser();
 							setGoogleApiToken();
-							//TODO: Add setCalendars(); to remove the chosen calendars when loggin out too.
+							setChosenCalendars();
 							localStorage.removeItem("user");
 							localStorage.removeItem("googleApiToken");
 							localStorage.removeItem("chosenCalendars");

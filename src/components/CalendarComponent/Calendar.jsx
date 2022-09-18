@@ -45,6 +45,11 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 	};
 
 	const getEvents = async (calendars) => {
+		if (calendars === undefined) {
+			console.log("no calendars chosen");
+			setLoading(false);
+			return;
+		}
 		setLoading(true);
 		const apiEvents = await fetchEvents(calendars, 10); // The number is how many events PER calendar
 		Promise.all(apiEvents).then((evts) => {
@@ -87,11 +92,11 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 			getCalendars().then(async (items) => {
 				setCalendarList(items);
 				setShowCalenderListModal(true);
+				console.log("adding interval for updating calendars");
+				interval = setInterval(() => {
+					getEvents(chosenCalendars);
+				}, 1000 * 60 * 6);
 			});
-			interval = setInterval(() => {
-				getEvents(chosenCalendars);
-				console.log("updating calendars");
-			}, 1000 * 60 * 5);
 		}
 
 		return () => {

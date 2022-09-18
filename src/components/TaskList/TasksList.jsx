@@ -75,13 +75,18 @@ const TasksList = ({ token }) => {
 			) : (
 				<>
 					<Tabs value={value} onChange={handleChange}>
-						{task.map((list) => (
-							<Tab label={list.title} />
+						{task.map((list, index) => (
+							<Tab key={"tab: " + index} label={list.title} />
 						))}
 					</Tabs>
 					<Divider />
 					{task.map((list, index) => (
-						<TabPanel list={list} index={index} value={value} />
+						<TabPanel
+							key={"tab-panel: " + index}
+							list={list}
+							index={index}
+							value={value}
+						/>
 					))}
 				</>
 			)}
