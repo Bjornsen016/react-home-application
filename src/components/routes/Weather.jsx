@@ -10,6 +10,10 @@ import TableRow from "@mui/material/TableRow";
 import { TextField } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import WeatherCard from "../WeatherCard";
+import Fab from "@mui/material/Fab";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Link } from "react-router-dom";
+import { Link as MuiLink } from "@mui/material";
 
 //sets the dates of today and the upcoming three days
 const day1 = new Date();
@@ -21,28 +25,27 @@ day3.setDate(day3.getDate() + 2);
 day4.setDate(day4.getDate() + 3);
 
 const Weather = () => {
+  //Access user position name from query param in url
+  const location = useLocation();
+  const fetchUserPosition = new URLSearchParams(location.search).get(
+    "location"
+  );
   //useState for the four initial city forecast
   const [data0, setData0] = useState(undefined);
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
-  //useState for city names (usePosition is initially set to "Kiruna" if there is no userPosition available)
+  //useState for city names (usePosition is set to "Falun" from URL if there is no userPosition available)
   const [data1City, setData1City] = useState([]);
   const [data2City, setData2City] = useState([]);
   const [data3City, setData3City] = useState([]);
-  const [userPosition, setUserPosition] = useState("Kiruna");
+  const [userPosition, setUserPosition] = useState(fetchUserPosition);
   //useState for searched location, data and name.
   const [searchedLocationData, setSearchedLocationData] = useState([]);
   const [searchedLocation, setSearchedLocation] = useState("");
   const [searchedLocationCity, setSearchedLocationCity] = useState([]);
   //This bool decides wether searched location data should be shown or not
   const [showSearchedLocation, setShowSearchedLocation] = useState(false);
-
-  //Access user position name from query param in url
-  const location = useLocation();
-  const fetchUserPosition = new URLSearchParams(location.search).get(
-    "location"
-  );
 
   //Array of pre-chosen locations to fetch data for
   const locations = [
@@ -61,7 +64,7 @@ const Weather = () => {
   const urlSearchedLocation = `https://api.openweathermap.org/data/2.5/forecast?q=${searchedLocation}&appid=${apiKey}&units=metric`;
 
   useEffect(() => {
-    setUserPosition(fetchUserPosition).then(fetchWeatherData());
+    fetchWeatherData();
   }, []);
 
   async function onSubmit(event) {
@@ -123,6 +126,18 @@ const Weather = () => {
 
   return (
     <div className="weather-page-container">
+      <MuiLink
+        component={Link}
+        to="/"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          color: "primary",
+        }}
+      >
+        <ArrowBackIosNewIcon /> Back
+      </MuiLink>
+
       {data0 !== undefined ? (
         <WeatherCard userPositionData={data0} userPositionName={userPosition} />
       ) : (
@@ -132,7 +147,7 @@ const Weather = () => {
         <Table sx={{ minWidth: 450 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>Location</TableCell>
+              <TableCell></TableCell>
               <TableCell align="center">
                 {day1.toLocaleDateString("en-US", { weekday: "long" })}
               </TableCell>
@@ -151,9 +166,9 @@ const Weather = () => {
             {/* UserSearchData, only shown if showSearchedLocation=true */}
             {showSearchedLocation && (
               <TableRow
-                sx={{
+              /* sx={{
                   bgcolor: "darkgray", //Set this to panel-color?
-                }}
+                }} */
               >
                 <TableCell component="th" scope="row">
                   {searchedLocationCity}
@@ -203,8 +218,14 @@ const Weather = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <form onSubmit={onSubmit}>
+      <form
+        onSubmit={onSubmit}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          paddingTop: "15px",
+        }}
+      >
         <TextField
           id="outlined-basic"
           label="Search city..."
