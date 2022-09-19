@@ -55,6 +55,10 @@ const TasksList = ({ token }) => {
 
   useEffect(() => {
     getTaskList(getTaskListsUrl);
+    const interval = setInterval(() => {
+      getTaskList(getTaskListsUrl);
+    }, 1000 * 60 * 5);
+    return clearInterval(interval);
   }, []);
 
   const handleChange = (event, newValue) => {
