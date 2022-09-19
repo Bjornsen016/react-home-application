@@ -19,7 +19,7 @@ export default function FactOfTheDay() {
         .then((data) => {
           const index = Math.floor(Math.random() * data.events.length);
           const historyItem = {
-            secondaryHeader: `On this day`,
+            secondaryHeader: `History of this day`,
             primaryHeader: `Year ${data.events[index].year}`,
             body: `${data.events[index].description}`,
           };
@@ -63,9 +63,10 @@ export default function FactOfTheDay() {
         .then((data) => {
           const nameData = data.dagar.map((arr) => arr.namnsdag.join(" och "));
           const nameItem = {
-            secondaryHeader: "Name of the day",
-            primaryHeader: "",
-            body: `${nameData} `,
+            secondaryHeader: "Name of this day",
+            primaryHeader: `${nameData} `,
+            body: "",
+            style: "Name of this day",
           };
           setItems((prevItems) => [...prevItems, nameItem]);
         });
@@ -78,11 +79,7 @@ export default function FactOfTheDay() {
 
   function Item(props) {
     return (
-      <Card
-        sx={{
-          maxHeight: "100%",
-        }}
-      >
+      <Card>
         <CardContent>
           {" "}
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -109,7 +106,23 @@ export default function FactOfTheDay() {
   }
 
   return (
-    <Carousel>
+    <Carousel
+      interval={8000}
+      //TODO keep 200px or change to REM?
+      height={200}
+      indicatorIconButtonProps={{
+        style: {
+          color: "blue",
+          //TODO change colors or use deafult?
+        },
+      }}
+      activeIndicatorIconButtonProps={{
+        style: {
+          backgroundColor: "red",
+          //TODO change colors or use deafult?
+        },
+      }}
+    >
       {items?.map((item, i) => (
         <Item key={i} item={item} />
       ))}
