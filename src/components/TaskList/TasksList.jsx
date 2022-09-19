@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { fetchDataFromApi } from "../utils/fetcher";
-import { Tabs, Tab, Divider } from "@mui/material";
+import { Tabs, Tab, Divider, CircularProgress } from "@mui/material";
 import TabPanel from "./children/TabPanel";
 
 //useMemo: Returns and stores the calculated value of a function in a variable
@@ -32,30 +32,26 @@ const TasksList = ({ token }) => {
         const lista = {
           items: listOfTasksData.items,
           title: taskLists.items[i].title,
+          listId: taskLists.items[i].id,
         };
 
         await setTask((prevTask) => [...prevTask, lista]);
 
         taskUrl.pathname = orginPath;
         setLoading(false);
-
-        console.log(listOfTasksData);
       }
     },
     [taskUrl, token]
   );
 
-  const getTaskList = useCallback(
-    async (urlPath) => {
-      taskUrl.pathname += urlPath;
-      const taskLists = await fetchDataFromApi(taskUrl, token);
-      await setTaskLists(taskLists);
-      taskUrl.pathname = orginPath;
-      console.log("tasklistset", taskLists);
-      getTasks(taskLists);
-    },
-    [getTasks, taskUrl, token]
-  );
+  const getTaskList = useCallback(async () => {
+    taskUrl.pathname += getTaskListsUrl;
+    const taskLists = await fetchDataFromApi(taskUrl, token);
+    await setTaskLists(taskLists);
+    taskUrl.pathname = orginPath;
+    console.log("tasklistset", taskLists);
+    getTasks(taskLists);
+  }, [getTasks, taskUrl, token]);
 
   useEffect(() => {
     getTaskList(getTaskListsUrl);
@@ -68,7 +64,9 @@ const TasksList = ({ token }) => {
   return (
     <div>
       {loading ? (
-        <div>Loading...</div>
+        <div>
+          <CircularProgress />
+        </div>
       ) : (
         <>
           <Tabs value={value} onChange={handleChange}>
@@ -78,7 +76,13 @@ const TasksList = ({ token }) => {
           </Tabs>
           <Divider />
           {task.map((list, index) => (
-            <TabPanel list={list} index={index} value={value} />
+            <TabPanel
+              list={list}
+              index={index}
+              value={value}
+              getTasks={getTaskList}
+              token={token}
+            />
           ))}
         </>
       )}
