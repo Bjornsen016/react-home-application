@@ -1,1 +1,3 @@
-export { default as FactOfTheDay } from "./FactOfTheDay";
+import FactOfTheDay from "./FactOfTheDay";
+
+export default FactOfTheDay;
