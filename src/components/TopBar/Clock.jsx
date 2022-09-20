@@ -18,7 +18,7 @@ function Clock() {
 
 	setInterval(updateTime, 1000); //TODO: Probably use useEffect or something to dispose of the interval to save from memoryleak
 
-	return <Typography variant='h6'>{currentTime}</Typography>;
+	return <Typography variant='h3'>{currentTime}</Typography>;
 }
 
 export default Clock;

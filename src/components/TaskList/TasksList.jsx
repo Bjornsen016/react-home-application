@@ -63,10 +63,14 @@ const TasksList = ({ token }) => {
   }, [getTasks, taskUrl, token]);
 
   useEffect(() => {
-    getTaskList(getTaskListsUrl);
-    const interval = setInterval(() => {
+    //Added the timeout to let the system get the ApiKey from localStorage if there is one.
+    let interval;
+    setTimeout(() => {
       getTaskList(getTaskListsUrl);
-    }, 1000 * 60 * 5);
+      interval = setInterval(() => {
+        getTaskList(getTaskListsUrl);
+      }, 1000 * 60 * 5);
+    }, 500);
     return clearInterval(interval);
   }, []);
 
