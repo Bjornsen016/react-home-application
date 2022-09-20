@@ -28,18 +28,28 @@ const TasksList = ({ token }) => {
       setTask([]);
       for (let i = 0; i < taskLists.items.length; i++) {
         taskUrl.pathname += "/lists/" + taskLists.items[i].id + "/tasks";
+        taskUrl.searchParams.set("showHidden", "True");
         const listOfTasksData = await fetchDataFromApi(taskUrl, token);
-        const lista = {
+        const taskObjectList = {
           items: listOfTasksData.items,
           title: taskLists.items[i].title,
           listId: taskLists.items[i].id,
         };
 
-        await setTask((prevTask) => [...prevTask, lista]);
+        await setTask((prevTask) => [...prevTask, taskObjectList]);
 
         taskUrl.pathname = orginPath;
         setLoading(false);
       }
+
+      const sortedTaskObjects = task.map((taskList) => {
+        taskList.items = taskList.items.sort((a, b) => {
+          return b.status.length - a.status.length;
+        });
+        return taskList;
+      });
+
+      setTask(sortedTaskObjects);
     },
     [taskUrl, token]
   );
@@ -49,7 +59,6 @@ const TasksList = ({ token }) => {
     const taskLists = await fetchDataFromApi(taskUrl, token);
     await setTaskLists(taskLists);
     taskUrl.pathname = orginPath;
-    console.log("tasklistset", taskLists);
     getTasks(taskLists);
   }, [getTasks, taskUrl, token]);
 

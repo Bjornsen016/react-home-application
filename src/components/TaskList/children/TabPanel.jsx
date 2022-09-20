@@ -7,17 +7,44 @@ import UncheckedCircleIcon from "@mui/icons-material/RadioButtonUnchecked";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Checkbox from "@mui/material/Checkbox";
 import AddTaskForm from "./AddTaskForm";
+import CloseIcon from "@mui/icons-material/Close";
+import { deleteDataFromApi, patchDataToApi } from "../../utils/fetcher";
+import { internal_processStyles } from "@mui/styled-engine";
 
 function TabPanel({ list, value, index, getTasks, token, ...other }) {
   const label = { inputProps: { "aria-label": "Checkbox" } };
   const [open, setOpen] = useState(false);
 
-  const onChangeCheckbox = (event) => {
-    //event.target.checked (boolean)
+  const onChangeCheckbox = async (event) => {
+    let taskBody;
+
+    if (!event.target.checked) {
+      taskBody = { status: "needsAction" };
+    } else {
+      taskBody = { status: "completed" };
+    }
+    const taskUrl = event.target.value;
+
+    await patchDataToApi(taskUrl, token, taskBody);
+    getTasks();
   };
 
   const onChangeAddBtn = (event) => {
     setOpen(true);
+  };
+
+  const handleDelete = async (event) => {
+    let taskUrl;
+
+    if (event.target.id === "") {
+      taskUrl = event.target.parentNode.id;
+    } else {
+      taskUrl = event.target.id;
+    }
+
+    //Delete Task
+    await deleteDataFromApi(taskUrl, token);
+    getTasks();
   };
 
   return (
@@ -36,6 +63,8 @@ function TabPanel({ list, value, index, getTasks, token, ...other }) {
                 <FormControlLabel
                   control={
                     <Checkbox
+                      checked={item.status === "completed"}
+                      value={item.selfLink}
                       className="task-checkbox"
                       onChange={(e) => onChangeCheckbox(e)}
                       icon={<UncheckedCircleIcon />}
@@ -44,6 +73,14 @@ function TabPanel({ list, value, index, getTasks, token, ...other }) {
                     />
                   }
                   label={item.title}
+                />
+
+                <CloseIcon
+                  onClick={(e) => handleDelete(e)}
+                  type="button"
+                  id={item.selfLink}
+                  color="error"
+                  fontSize="small"
                 />
               </ListItem>
             </>

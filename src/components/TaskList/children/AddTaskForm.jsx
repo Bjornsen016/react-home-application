@@ -44,13 +44,11 @@ export default function AddTaskForm({
         autoFocus
         margin="dense"
         id="task"
-        label="Task"
         type="text"
-        fullWidth
         variant="standard"
-        onChange={(e, newValue) => {
+        style={{ padding: " 0 20px", minWidth: "300px" }}
+        onChange={(e) => {
           setValue(e.target.value);
-          console.log(e.target.value);
         }}
       />
       <DialogActions>
