@@ -39,7 +39,11 @@ const Weather = () => {
   const [data1City, setData1City] = useState([]);
   const [data2City, setData2City] = useState([]);
   const [data3City, setData3City] = useState([]);
+  //User specific information
   const [userPosition, setUserPosition] = useState(fetchUserPosition);
+  const [userLocationSun, setUserLocationSun] = useState({
+    /* sunrise:"", sunset:"" */
+  });
   //useState for searched location, data and name.
   const [searchedLocationData, setSearchedLocationData] = useState([]);
   const [searchedLocation, setSearchedLocation] = useState("");
@@ -67,10 +71,12 @@ const Weather = () => {
     fetchWeatherData();
   }, []);
 
+  //Method when user has chosen a city to show forecast for
   async function onSubmit(event) {
     event.preventDefault();
     setSearchedLocation(event.target.value);
 
+    //Fetch data for user chosen city
     const fetchedUserData = await FetchData(urlSearchedLocation);
     setSearchedLocationCity(fetchedUserData[0].city.name);
     const extractedUserData = [
@@ -91,6 +97,11 @@ const Weather = () => {
     const fetchedData1 = await FetchData(url1);
     const fetchedData2 = await FetchData(url2);
     const fetchedData3 = await FetchData(url3);
+    //Saves city names and sun information for user location
+    setUserLocationSun({
+      sunrise: `${fetchedData0[0].city.sunrise}`,
+      sunset: `${fetchedData0[0].city.sunset}`,
+    });
     setData1City(fetchedData1[0].city.name);
     setData2City(fetchedData2[0].city.name);
     setData3City(fetchedData3[0].city.name);
@@ -118,6 +129,7 @@ const Weather = () => {
       fetchedData3[0].list[17],
       fetchedData3[0].list[25],
     ];
+    //Saves the extracted data
     setData0(extractedData0);
     setData1(extractedData1);
     setData2(extractedData2);
@@ -139,7 +151,11 @@ const Weather = () => {
       </MuiLink>
 
       {data0 !== undefined ? (
-        <WeatherCard userPositionData={data0} userPositionName={userPosition} />
+        <WeatherCard
+          userPositionData={data0}
+          userPositionName={userPosition}
+          sun={userLocationSun}
+        />
       ) : (
         <></>
       )}

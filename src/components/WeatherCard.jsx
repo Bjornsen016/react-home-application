@@ -6,10 +6,15 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import AirIcon from "@mui/icons-material/Air";
 
-const WeatherCard = ({ userPositionData, userPositionName }) => {
-  console.log(userPositionData);
-
+const WeatherCard = ({ userPositionData, userPositionName, sun }) => {
   const today = new Date();
+  const timestamp = require("@rockyli/timestamp");
+  console.log(
+    timestamp.toDatetimeString(sun.sunrise, {
+      format: "HH:ss",
+      timezone: "UTC+02",
+    })
+  );
 
   return (
     <div className="weather-card-container">
@@ -47,12 +52,24 @@ const WeatherCard = ({ userPositionData, userPositionName }) => {
         <div style={{ display: "flex", alignProperty: "center" }}>
           <ArrowUpwardIcon />
           {/* <WbTwilightIcon/> */}
-          <p style={{ marginLeft: "5px" }}>Sunrise: 7:00</p>
+          <p style={{ marginLeft: "5px" }}>
+            Sunrise:<span> </span>
+            {timestamp.toDatetimeString(sun.sunrise, {
+              format: "HH:ss",
+              timezone: "UTC+02",
+            })}
+          </p>
         </div>
         <div style={{ display: "flex", alignProperty: "center" }}>
           <ArrowDownwardIcon />
           {/* <WbTwilightIcon/>  */}
-          <p style={{ marginLeft: "5px" }}>Sunset: 19.20</p>
+          <p style={{ marginLeft: "5px" }}>
+            Sunrise:<span> </span>
+            {timestamp.toDatetimeString(sun.sunset, {
+              format: "HH:ss",
+              timezone: "UTC+02",
+            })}
+          </p>
         </div>
         <div style={{ display: "flex", alignProperty: "center" }}>
           <AirIcon />
