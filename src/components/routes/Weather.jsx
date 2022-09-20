@@ -10,10 +10,10 @@ import TableRow from "@mui/material/TableRow";
 import { TextField } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import WeatherCard from "../WeatherCard";
-import Fab from "@mui/material/Fab";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Link } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
+import { useContext } from "react";
 
 //sets the dates of today and the upcoming three days
 const day1 = new Date();
@@ -24,12 +24,14 @@ day2.setDate(day2.getDate() + 1);
 day3.setDate(day3.getDate() + 2);
 day4.setDate(day4.getDate() + 3);
 
-const Weather = () => {
+const Weather = ({ colorMode }) => {
   //Access user position name from query param in url
   const location = useLocation();
   const fetchUserPosition = new URLSearchParams(location.search).get(
     "location"
   );
+  //Gets colormode from app
+
   //useState for the four initial city forecast
   const [data0, setData0] = useState(undefined);
   const [data1, setData1] = useState([]);
@@ -41,9 +43,7 @@ const Weather = () => {
   const [data3City, setData3City] = useState([]);
   //User specific information
   const [userPosition, setUserPosition] = useState(fetchUserPosition);
-  const [userLocationSun, setUserLocationSun] = useState({
-    /* sunrise:"", sunset:"" */
-  });
+  const [userLocationSun, setUserLocationSun] = useState({});
   //useState for searched location, data and name.
   const [searchedLocationData, setSearchedLocationData] = useState([]);
   const [searchedLocation, setSearchedLocation] = useState("");
@@ -193,10 +193,17 @@ const Weather = () => {
                   ({ main, weather, dt_txt, city }) => (
                     <TableCell key={dt_txt}>
                       <div className="weather-info">
-                        <img
-                          alt="weather icon"
-                          src={`./images/${weather[0].icon}.png`}
-                        />
+                        {colorMode === "dark" ? (
+                          <img
+                            alt="weather icon"
+                            src={`./images/${weather[0].icon}.png`}
+                          />
+                        ) : (
+                          <img
+                            alt="weather icon"
+                            src={`./images/${weather[0].icon}_b.png`}
+                          />
+                        )}
 
                         <p style={{ marginRight: "10px" }}>
                           {Math.round(main.temp)} &#8451;
@@ -218,10 +225,17 @@ const Weather = () => {
                     <TableCell key={dt_txt}>
                       <div className="weather-info">
                         <div className="weather-img-container">
-                          <img
-                            alt="weather icon"
-                            src={`./images/${weather[0].icon}.png`}
-                          />
+                          {colorMode === "dark" ? (
+                            <img
+                              alt="weather icon"
+                              src={`./images/${weather[0].icon}.png`}
+                            />
+                          ) : (
+                            <img
+                              alt="weather icon"
+                              src={`./images/${weather[0].icon}_b.png`}
+                            />
+                          )}
                         </div>
                         <p style={{ marginRight: "10px" }}>
                           {Math.round(main.temp)} &#8451;

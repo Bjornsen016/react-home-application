@@ -12,7 +12,10 @@ import { Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleApiInfo } from "./config/googleApiInfo";
 
-const ColorModeContext = createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = createContext({
+  toggleColorMode: () => {},
+  mode: "",
+});
 //TODO: Make responsive
 const mainContainerStyle = {
   display: "grid",
@@ -30,20 +33,6 @@ const mainContainerStyle = {
   gridColumnGap: "10px",
   gridRowGap: "10px",
   height: { sm: "90vh", xs: "100%" },
-  marginTop: "10px",
-  marginBottom: "10px",
-};
-
-const mobileContainerStyle = {
-  display: "grid",
-  gridTemplateColumns: "repeat(1, 100%)",
-  gridTemplateAreas: `"big-component"
-  "small-component-left" 
-  "small-component-right"
-  `,
-
-  gridRowGap: "10px",
-  height: "90vh",
   marginTop: "10px",
   marginBottom: "10px",
 };
@@ -71,6 +60,7 @@ function App() {
       toggleColorMode: () => {
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
+      mode,
     }),
     []
   );
@@ -121,7 +111,7 @@ function App() {
                     />
                   }
                 />
-                <Route path="/weather" element={<Weather />} />
+                <Route path="/weather" element={<Weather colorMode={mode} />} />
                 <Route
                   path="*"
                   element={<div>This route does not exist</div>}
