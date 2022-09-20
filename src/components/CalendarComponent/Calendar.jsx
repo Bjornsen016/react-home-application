@@ -194,9 +194,13 @@ const isEventStartTodayOrEarlier = (e) => {
 	return (
 		(new Date(e.start.dateTime).getDate() <= new Date(Date.now()).getDate() &&
 			new Date(e.start.dateTime).getMonth() <=
-				new Date(Date.now()).getMonth()) ||
+				new Date(Date.now()).getMonth() &&
+			new Date(e.start.dateTime).getFullYear() <=
+				new Date(Date.now()).getFullYear()) ||
 		(new Date(e.start.date).getDate() <= new Date(Date.now()).getDate() &&
-			new Date(e.start.date).getMonth() <= new Date(Date.now()).getMonth())
+			new Date(e.start.date).getMonth() <= new Date(Date.now()).getMonth() &&
+			new Date(e.start.date).getFullYear() <=
+				new Date(Date.now()).getFullYear())
 	);
 };
 
@@ -205,9 +209,13 @@ const isEventEndSameDay = (e) => {
 		(new Date(e.start.dateTime).getDate() ===
 			new Date(e.end.dateTime).getDate() &&
 			new Date(e.start.dateTime).getMonth() ===
-				new Date(e.end.dateTime).getMonth()) ||
+				new Date(e.end.dateTime).getMonth() &&
+			new Date(e.start.dateTime).getFullYear() ===
+				new Date(Date.now()).getFullYear()) ||
 		(new Date(e.start.date).getDate() === new Date(e.end.date).getDate() &&
-			new Date(e.start.date).getMonth() === new Date(e.end.date).getMonth())
+			new Date(e.start.date).getMonth() === new Date(e.end.date).getMonth() &&
+			new Date(e.start.date).getFullYear() ===
+				new Date(Date.now()).getFullYear())
 	);
 };
 
