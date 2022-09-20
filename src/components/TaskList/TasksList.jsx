@@ -15,52 +15,46 @@ const TasksList = ({ token }) => {
   const taskUrl = new URL("https://content-tasks.googleapis.com");
   const orginPath = "/tasks/v1";
   const getTaskListsUrl = "/users/@me/lists";
-  /* const getListOfTasksUrl = `/lists/${taskLists}/tasks`;
-  const insertTaskUrl = `/lists/${taskLists}/tasks`;
-  const updateTaskUrl = `/lists/${taskLists}/tasks/${task}`;
-  const deleteTaskUrl = `/lists/${taskLists}/tasks/${task}`;
- */
+
   taskUrl.pathname = orginPath;
 
-  const getTasks = useCallback(
-    async (taskLists) => {
-      console.log(taskLists.items);
-      setTask([]);
-      for (let i = 0; i < taskLists.items.length; i++) {
-        taskUrl.pathname += "/lists/" + taskLists.items[i].id + "/tasks";
-        taskUrl.searchParams.set("showHidden", "True");
-        const listOfTasksData = await fetchDataFromApi(taskUrl, token);
-        const taskObjectList = {
-          items: listOfTasksData.items,
-          title: taskLists.items[i].title,
-          listId: taskLists.items[i].id,
-        };
+  const getTasks = async (lists) => {
+    const newTaskList = [];
 
-        await setTask((prevTask) => [...prevTask, taskObjectList]);
+    for (let i = 0; i < lists.items.length; i++) {
+      taskUrl.pathname += "/lists/" + lists.items[i].id + "/tasks";
+      taskUrl.searchParams.set("showHidden", "True");
+      const listOfTasksData = await fetchDataFromApi(taskUrl, token);
+      const taskObjectList = {
+        items: listOfTasksData.items,
+        title: lists.items[i].title,
+        listId: lists.items[i].id,
+      };
 
-        taskUrl.pathname = orginPath;
-        setLoading(false);
-      }
+      newTaskList.push(taskObjectList);
 
-      const sortedTaskObjects = task.map((taskList) => {
-        taskList.items = taskList.items.sort((a, b) => {
-          return b.status.length - a.status.length;
-        });
-        return taskList;
+      taskUrl.pathname = orginPath;
+      setLoading(false);
+    }
+
+    //sort completed tasks last.
+    const sortedTaskObjects = newTaskList.map((taskList) => {
+      taskList.items = taskList.items.sort((a, b) => {
+        return b.status.length - a.status.length;
       });
+      return taskList;
+    });
 
-      setTask(sortedTaskObjects);
-    },
-    [taskUrl, token]
-  );
+    setTask(sortedTaskObjects);
+  };
 
-  const getTaskList = useCallback(async () => {
+  const getTaskList = async () => {
     taskUrl.pathname += getTaskListsUrl;
-    const taskLists = await fetchDataFromApi(taskUrl, token);
-    await setTaskLists(taskLists);
+    const lists = await fetchDataFromApi(taskUrl, token);
+    await setTaskLists(lists);
     taskUrl.pathname = orginPath;
-    getTasks(taskLists);
-  }, [getTasks, taskUrl, token]);
+    getTasks(lists);
+  };
 
   useEffect(() => {
     //Added the timeout to let the system get the ApiKey from localStorage if there is one.
@@ -94,6 +88,7 @@ const TasksList = ({ token }) => {
           <Divider />
           {task.map((list, index) => (
             <TabPanel
+              key={list.id}
               list={list}
               index={index}
               value={value}

@@ -58,32 +58,30 @@ function TabPanel({ list, value, index, getTasks, token, ...other }) {
       {value === index && (
         <List className="task-list">
           {list.items.map((item) => (
-            <>
-              <ListItem className="task-item">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={item.status === "completed"}
-                      value={item.selfLink}
-                      className="task-checkbox"
-                      onChange={(e) => onChangeCheckbox(e)}
-                      icon={<UncheckedCircleIcon />}
-                      checkedIcon={<CheckCircleIcon />}
-                      {...label}
-                    />
-                  }
-                  label={item.title}
-                />
+            <ListItem key={item.id} className="task-item">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={item.status === "completed"}
+                    value={item.selfLink}
+                    className="task-checkbox"
+                    onChange={(e) => onChangeCheckbox(e)}
+                    icon={<UncheckedCircleIcon />}
+                    checkedIcon={<CheckCircleIcon />}
+                    {...label}
+                  />
+                }
+                label={item.title}
+              />
 
-                <CloseIcon
-                  onClick={(e) => handleDelete(e)}
-                  type="button"
-                  id={item.selfLink}
-                  color="error"
-                  fontSize="small"
-                />
-              </ListItem>
-            </>
+              <CloseIcon
+                onClick={(e) => handleDelete(e)}
+                type="button"
+                id={item.selfLink}
+                color="error"
+                fontSize="small"
+              />
+            </ListItem>
           ))}
           <ListItem className="task-item">
             <FormControlLabel
