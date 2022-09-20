@@ -105,6 +105,7 @@ const Weather = ({ colorMode }) => {
     setData1City(fetchedData1[0].city.name);
     setData2City(fetchedData2[0].city.name);
     setData3City(fetchedData3[0].city.name);
+
     const extractedData0 = [
       fetchedData0[0].list[1],
       fetchedData0[0].list[9],
@@ -155,6 +156,7 @@ const Weather = ({ colorMode }) => {
           userPositionData={data0}
           userPositionName={userPosition}
           sun={userLocationSun}
+          colorMode={colorMode}
         />
       ) : (
         <></>
@@ -181,11 +183,7 @@ const Weather = ({ colorMode }) => {
           <TableBody>
             {/* UserSearchData, only shown if showSearchedLocation=true */}
             {showSearchedLocation && (
-              <TableRow
-              /* sx={{
-                  bgcolor: "darkgray", //Set this to panel-color?
-                }} */
-              >
+              <TableRow>
                 <TableCell component="th" scope="row">
                   {searchedLocationCity}
                 </TableCell>
@@ -204,7 +202,6 @@ const Weather = ({ colorMode }) => {
                             src={`./images/${weather[0].icon}_b.png`}
                           />
                         )}
-
                         <p style={{ marginRight: "10px" }}>
                           {Math.round(main.temp)} &#8451;
                         </p>
