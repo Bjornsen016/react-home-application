@@ -9,12 +9,6 @@ import AirIcon from "@mui/icons-material/Air";
 const WeatherCard = ({ userPositionData, userPositionName, sun }) => {
   const today = new Date();
   const timestamp = require("@rockyli/timestamp");
-  console.log(
-    timestamp.toDatetimeString(sun.sunrise, {
-      format: "HH:ss",
-      timezone: "UTC+02",
-    })
-  );
 
   return (
     <div className="weather-card-container">
@@ -64,7 +58,7 @@ const WeatherCard = ({ userPositionData, userPositionName, sun }) => {
           <ArrowDownwardIcon />
           {/* <WbTwilightIcon/>  */}
           <p style={{ marginLeft: "5px" }}>
-            Sunrise:<span> </span>
+            Sunset:<span> </span>
             {timestamp.toDatetimeString(sun.sunset, {
               format: "HH:ss",
               timezone: "UTC+02",
