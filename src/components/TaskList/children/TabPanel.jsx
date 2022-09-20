@@ -49,6 +49,7 @@ function TabPanel({ list, value, index, getTasks, token, ...other }) {
 
   return (
     <div
+      className="tab-panel"
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}

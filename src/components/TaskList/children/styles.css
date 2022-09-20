@@ -1,17 +1,28 @@
+.tab-panel {
+  overflow: auto;
+  height: 85%;
+}
+
 .task-list {
   display: "flex";
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .task-item {
   display: flex;
   flex-direction: row;
-  padding: 2px 16px !important;
+  padding: 4px 16px !important;
   justify-content: space-between !important;
 }
 
 .task-checkbox {
-  padding: 0 16px !important;
+  margin: 0 16px !important;
+  padding: 0 !important;
+}
+
+.task-checkbox:hover {
+  background-color: darkslategray !important;
 }
 
 .add-task-btn {

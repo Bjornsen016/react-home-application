@@ -33,6 +33,9 @@ export default function AddTaskForm({
 
     taskUrl.pathname = orginPath;
 
+    setOpen(false);
+    setValue(null);
+
     getTaskList();
   };
 

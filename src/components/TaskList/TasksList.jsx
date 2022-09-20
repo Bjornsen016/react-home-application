@@ -73,7 +73,7 @@ const TasksList = ({ token }) => {
   };
 
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       {loading ? (
         <div>
           <CircularProgress />
