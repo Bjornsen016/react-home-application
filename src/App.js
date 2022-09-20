@@ -13,7 +13,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleApiInfo } from "./config/googleApiInfo";
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
-//TODO: Make responsive
+
 const mainContainerStyle = {
 	display: "grid",
 	gridTemplateColumns: "repeat(2, 50%)",
