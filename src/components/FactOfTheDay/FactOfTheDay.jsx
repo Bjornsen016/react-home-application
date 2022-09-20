@@ -51,7 +51,7 @@ export default function FactOfTheDay() {
             };
       const jokeCard = {
         secondaryHeader: "Joke of the day",
-        primaryHeader: "",
+        primaryHeader: "Programming Joke",
         body: `${jokeData.setup} ${jokeData.response} `,
       };
       setJokeCard(jokeCard);
@@ -65,7 +65,7 @@ export default function FactOfTheDay() {
       const nameCard = {
         secondaryHeader: "Name of this day",
         primaryHeader: `${nameData} `,
-        body: "",
+        body: `Read more at https://svenskanamn.se/namnsdagar/`,
       };
       setNameCard(nameCard);
       setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
@@ -82,8 +82,9 @@ export default function FactOfTheDay() {
         .then((data) => {
           const eventCard = {
             secondaryHeader: `Event of this day`,
-            primaryHeader: `${data.data[0].name}`,
-            body: `${data.data[0].excerpt}`,
+            primaryHeader: `${data.data[3].name}`,
+            body: `${data.data[3].excerpt}`,
+            paddingTop: `65px`,
           };
           setEventCard(eventCard);
           setCardInfo((prevAppCard) => [...prevAppCard, eventCard]);
@@ -121,7 +122,11 @@ export default function FactOfTheDay() {
   function AppCard(props) {
     return (
       <Card>
-        <CardContent>
+        <CardContent
+          sx={{
+            backgroundColor: "inherit",
+          }}
+        >
           {" "}
           <Typography
             sx={{
@@ -154,10 +159,11 @@ export default function FactOfTheDay() {
             variant="body2"
             sx={{
               display: "flex",
-              alignItems: "center",
+              /*  alignItems: "center", */
               height: "100px",
               overflow: "auto",
               whiteSpace: "pre-line",
+              paddingTop: props.item.padding,
             }}
           >
             {props.item.body}
@@ -169,9 +175,10 @@ export default function FactOfTheDay() {
 
   return (
     <Carousel
+      className="carousel"
       interval={8000}
       //TODO keep 200px or change to REM?
-      height={220}
+      height={"90%"}
       indicatorIconButtonProps={{
         style: {
           color: "",
