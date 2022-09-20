@@ -20,11 +20,11 @@ const WeatherCard = ({
       <div className="weather-card-lc">
         <h1 style={{ marginTop: "0" }}>{userPositionName}</h1>
         <p>
-          {today.toLocaleDateString("en-US", { month: "long" })}
+          {today.toLocaleDateString("en-GB", { month: "long" })}
           <span> </span>
           {today.getDate()}
         </p>
-        <p>{today.toLocaleDateString("en-US", { weekday: "long" })}</p>
+        <p>{today.toLocaleDateString("en-GB", { weekday: "long" })}</p>
       </div>
       <div className="weather-card-cc">
         {colorMode === "dark" ? (

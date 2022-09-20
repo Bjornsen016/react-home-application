@@ -111,21 +111,23 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
         <>
           <Box style={flexStyle}>
             {/* Today box */}
-            <Typography
-              variant="h4"
-              align="center"
-              sx={{ marginBottom: "5px" }}
-            >
-              {new Date(Date.now()).toLocaleDateString("en-GB", {
-                weekday: "long",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
+            <Typography variant="p" align="center" sx={{ marginBottom: "5px" }}>
+              {new Date(Date.now())
+                .toLocaleDateString("en-GB", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+                .toLocaleUpperCase()}
             </Typography>
             {todaysEvents?.length === 0 ? (
-              <Typography variant="h5" align="center">
-                There are no events today. Feel free to roam
+              <Typography
+                variant="p"
+                align="center"
+                sx={{ paddingBottom: "20px" }}
+              >
+                There are no events today. Feel free to roam...
               </Typography>
             ) : (
               todaysEvents?.map((evt) => (
@@ -136,15 +138,31 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
           <Box style={flexStyle}>
             {/* Upcoming box */}
             <Typography
-              variant="h4"
+              variant="p"
               align="center"
-              sx={{ marginBottom: "5px" }}
+              sx={{ marginBottom: "5px", textTransform: "uppercase" }}
             >
-              UPCOMING
+              Upcoming...
             </Typography>
-            {upcomingEvents?.map((evt, index) => (
-              <CalendarEvent key={evt.id} event={evt} index={index} />
-            ))}
+            <Container
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                width: {
+                  xs: "90%",
+                  sm: "80%",
+                  md: "70%",
+                  lg: "550px",
+                  xl: "550px",
+                },
+                maxWidth: "550px",
+              }}
+            >
+              {upcomingEvents?.map((evt, index) => (
+                <CalendarEvent key={evt.id} event={evt} index={index} />
+              ))}
+            </Container>
           </Box>
         </>
       )}
