@@ -110,9 +110,12 @@ gap: 1%;
   .weather-card-cc img{
     width: 20%;
   }
+  .carousel{
+    overflow: visible !important;
+  }
 }
 
 .carousel{
     height: 100%;
-
+    
 }

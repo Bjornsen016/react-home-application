@@ -121,64 +121,66 @@ export default function FactOfTheDay() {
 
   function AppCard(props) {
     return (
-      <Card>
-        <CardContent
-          sx={{
-            backgroundColor: "inherit",
-          }}
-        >
-          {" "}
-          <Typography
+      <div>
+        <Card>
+          <CardContent
             sx={{
-              fontSize: 14,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-            color="text.secondary"
-            gutterBottom
-          >
-            {props.item.secondaryHeader}
-            {props.item.showbutton ? (
-              <Button
-                //TODO buttonarea is not 100% clickable
-                size="small"
-                onClick={() => {
-                  updateHistoryCard();
-                }}
-              >
-                <UpdateOutlinedIcon />
-              </Button>
-            ) : (
-              ""
-            )}
-          </Typography>
-          <Typography variant="h6" component="div">
-            {props.item.primaryHeader}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              display: "flex",
-              /*  alignItems: "center", */
-              height: "100px",
-              overflow: "auto",
-              whiteSpace: "pre-line",
-              paddingTop: props.item.padding,
+              backgroundColor: "inherit",
             }}
           >
-            {props.item.body}
-          </Typography>
-        </CardContent>
-      </Card>
+            {" "}
+            <Typography
+              sx={{
+                fontSize: 14,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {props.item.secondaryHeader}
+              {props.item.showbutton ? (
+                <Button
+                  //TODO buttonarea is not 100% clickable
+                  size="small"
+                  onClick={() => {
+                    updateHistoryCard();
+                  }}
+                >
+                  <UpdateOutlinedIcon />
+                </Button>
+              ) : (
+                ""
+              )}
+            </Typography>
+            <Typography variant="h6" component="div">
+              {props.item.primaryHeader}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                display: "flex",
+                /*  alignItems: "center", */
+                height: "100px",
+                overflow: "auto",
+                whiteSpace: "pre-line",
+                paddingTop: props.item.padding,
+              }}
+            >
+              {props.item.body}
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   return (
     <Carousel
       className="carousel"
+      sx={{ overflow: { xs: "visible" }, height: { sm: "85%" } }}
       interval={8000}
-      //TODO keep 200px or change to REM?
-      height={"90%"}
+      /* height={"85%"} */
       indicatorIconButtonProps={{
         style: {
           color: "",
