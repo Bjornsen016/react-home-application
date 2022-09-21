@@ -82,9 +82,8 @@ export default function FactOfTheDay() {
         .then((data) => {
           const eventCard = {
             secondaryHeader: `Event of this day`,
-            primaryHeader: `${data.data[3].name}`,
-            body: `${data.data[3].excerpt}`,
-            paddingTop: `65px`,
+            primaryHeader: `${data.data[0].name}`,
+            body: `${data.data[0].excerpt}`,
           };
           setEventCard(eventCard);
           setCardInfo((prevAppCard) => [...prevAppCard, eventCard]);
@@ -96,8 +95,8 @@ export default function FactOfTheDay() {
     fetchJoke();
     fetchName();
   }, []);
-  //TODO keep this update function?
-  const updateHistoryCard = () => {
+  //Refactor instead of fething a new event on update = save index on initial fetch and use useState instead.
+  const updateHistoryCard = async () => {
     const fetchHistory = async () => {
       const historyData = await FetchData(
         `https://byabbe.se/on-this-day/${month}/${day}/events.json`
@@ -113,9 +112,9 @@ export default function FactOfTheDay() {
       setCardInfo((prevAppCard) => [...prevAppCard, historyCard]);
     };
     setCardInfo([]);
+    await fetchHistory();
     setCardInfo((prevAppCard) => [...prevAppCard, eventCard]);
     setCardInfo((prevAppCard) => [...prevAppCard, jokeCard]);
-    fetchHistory();
     setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
   };
 
@@ -127,7 +126,6 @@ export default function FactOfTheDay() {
             backgroundColor: "inherit",
           }}
         >
-          {" "}
           <Typography
             sx={{
               fontSize: 14,
@@ -146,20 +144,25 @@ export default function FactOfTheDay() {
                   updateHistoryCard();
                 }}
               >
-                <UpdateOutlinedIcon />
+                <UpdateOutlinedIcon padding="none" />
               </Button>
             ) : (
               ""
             )}
           </Typography>
-          <Typography variant="h6" component="div">
+          <Typography
+            sx={{
+              marginBottom: "0.35em",
+            }}
+            variant="h6"
+            component="div"
+          >
             {props.item.primaryHeader}
           </Typography>
           <Typography
             variant="body2"
             sx={{
               display: "flex",
-              /*  alignItems: "center", */
               height: "100px",
               overflow: "auto",
               whiteSpace: "pre-line",
@@ -174,24 +177,7 @@ export default function FactOfTheDay() {
   }
 
   return (
-    <Carousel
-      className="carousel"
-      interval={8000}
-      //TODO keep 200px or change to REM?
-      height={"90%"}
-      indicatorIconButtonProps={{
-        style: {
-          color: "",
-          //TODO change colors or use deafult?
-        },
-      }}
-      activeIndicatorIconButtonProps={{
-        style: {
-          backgroundColor: "",
-          //TODO change colors or use deafult?
-        },
-      }}
-    >
+    <Carousel className="carousel" interval={8000} height={"90%"}>
       {cardInfo?.map((item, i) => (
         <AppCard key={i} item={item} />
       ))}
