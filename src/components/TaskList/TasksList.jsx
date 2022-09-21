@@ -82,13 +82,13 @@ const TasksList = ({ token }) => {
         <>
           <Tabs value={value} onChange={handleChange}>
             {task.map((list) => (
-              <Tab label={list.title} />
+              <Tab key={list.listId + "tab"} label={list.title} />
             ))}
           </Tabs>
           <Divider />
           {task.map((list, index) => (
             <TabPanel
-              key={list.id}
+              key={list.listId + "tabPanel"}
               list={list}
               index={index}
               value={value}
