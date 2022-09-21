@@ -1,40 +1,52 @@
 import React from "react";
 import "../App.css";
+import { Box } from "@mui/material";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
-import WbTwilightIcon from "@mui/icons-material/WbTwilight";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import AirIcon from "@mui/icons-material/Air";
+import { ColorModeContext } from "../App";
+import { useContext } from "react";
 
-const WeatherCard = ({ userPositionData, userPositionName }) => {
-  console.log(userPositionData);
-
+const WeatherCard = ({ userPositionData, userPositionName, sun }) => {
+  //npm package to be able to convert unix timestamp to UTC time
   const today = new Date();
+  const timestamp = require("@rockyli/timestamp");
+
+  //Gets colorMode from App.js
+  const { mode } = useContext(ColorModeContext);
 
   return (
-    <div className="weather-card-container">
+    <Box className="weather-card-container">
       <div className="weather-card-lc">
         <h1 style={{ marginTop: "0" }}>{userPositionName}</h1>
         <p>
-          {today.toLocaleDateString("en-US", { month: "long" })}
+          {today.toLocaleDateString("en-GB", { month: "long" })}
           <span> </span>
           {today.getDate()}
         </p>
-        <p>{today.toLocaleDateString("en-US", { weekday: "long" })}</p>
+        <p>{today.toLocaleDateString("en-GB", { weekday: "long" })}</p>
       </div>
       <div className="weather-card-cc">
-        <img
-          src={`./images/${userPositionData[0].weather[0].icon}.png`}
-          alt="weatherIcon"
-        />{" "}
+        {mode === "dark" ? (
+          <img
+            alt="weather icon"
+            src={`./images/${userPositionData[0].weather[0].icon}.png`}
+          />
+        ) : (
+          <img
+            alt="weather icon"
+            src={`./images/${userPositionData[0].weather[0].icon}_b.png`}
+          />
+        )}
         <div style={{ display: "flex", alignItems: "center" }}>
           <DeviceThermostatIcon />
           <h2 style={{ margin: "5px 0" }}>
-            {Math.round(userPositionData[0].main.temp)} &#8451;
+            {Math.round(userPositionData[0].main.temp)}&#176;C
           </h2>
         </div>
         <p>
-          Feels like {Math.round(userPositionData[0].main.feels_like)} &#8451;
+          Feels like {Math.round(userPositionData[0].main.feels_like)}&#176;C
         </p>{" "}
         <p>
           {`${userPositionData[0].weather[0].description}`
@@ -47,22 +59,34 @@ const WeatherCard = ({ userPositionData, userPositionName }) => {
         <div style={{ display: "flex", alignProperty: "center" }}>
           <ArrowUpwardIcon />
           {/* <WbTwilightIcon/> */}
-          <p style={{ marginLeft: "5px" }}>Sunrise: 7:00</p>
+          <p style={{ marginLeft: "5px" }}>
+            Sunrise:<span> </span>
+            {timestamp.toDatetimeString(sun.sunrise, {
+              format: "HH:ss",
+              timezone: "UTC+02",
+            })}
+          </p>
         </div>
         <div style={{ display: "flex", alignProperty: "center" }}>
           <ArrowDownwardIcon />
           {/* <WbTwilightIcon/>  */}
-          <p style={{ marginLeft: "5px" }}>Sunset: 19.20</p>
+          <p style={{ marginLeft: "5px" }}>
+            Sunset:<span> </span>
+            {timestamp.toDatetimeString(sun.sunset, {
+              format: "HH:ss",
+              timezone: "UTC+02",
+            })}
+          </p>
         </div>
         <div style={{ display: "flex", alignProperty: "center" }}>
           <AirIcon />
           <p style={{ marginLeft: "5px" }}>
-            wind: {Math.round(userPositionData[0].wind.speed)}km/h
+            Wind: {Math.round(userPositionData[0].wind.speed)}km/h
             {/* list[1].wind.speed */}
           </p>
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 export default WeatherCard;

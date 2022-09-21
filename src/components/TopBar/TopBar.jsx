@@ -15,17 +15,22 @@ export default function TopBar({
 	setChosenCalendars,
 }) {
 	return (
-		<AppBar position='sticky' color='primary'>
+		<AppBar position='static' color='primary'>
 			<Toolbar
 				sx={{
 					display: "grid",
 					justifyContent: "space-around",
-					gridTemplateColumns: "33% 33% 33%",
+					gridTemplateColumns: "33% 34% 33%",
 					justifyItems: "center",
 				}}
 			>
 				<Box
-					sx={{ display: "flex", alignItems: "center", justifySelf: "start" }}
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						justifySelf: "start",
+						flexWrap: "wrap",
+					}}
 				>
 					<TopBarMenu
 						user={user}
@@ -38,7 +43,9 @@ export default function TopBar({
 						icon={<LightMode sx={{ color: "yellow" }} />}
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
-					<Typography variant='h6'>{user?.names.displayName}</Typography>
+					<Typography variant='h6' sx={{ fontSize: { xs: "80%", sm: "100%" } }}>
+						{user?.names.displayName}
+					</Typography>
 					{!user && (
 						<LoginWithGoogle
 							setGoogleApiToken={setGoogleApiToken}
@@ -48,7 +55,7 @@ export default function TopBar({
 				</Box>
 				<Clock />
 				{/* TODO: Make center on the top everytime, make instead of flex? */}
-				<Box sx={{ justifySelf: "end" }}>
+				<Box sx={{ justifySelf: "end", fontSize: { xs: "80%", sm: "100%" } }}>
 					<Typography variant='p'>
 						<WeatherWidget />
 					</Typography>

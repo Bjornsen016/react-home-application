@@ -1,19 +1,20 @@
 import * as React from "react";
 import FetchData from "../utils/FetchData";
-import { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import { TextField } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import {
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+  Link as MuiLink,
+} from "@mui/material";
+import { useLocation, Link } from "react-router-dom";
 import WeatherCard from "../WeatherCard";
-import Fab from "@mui/material/Fab";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { Link } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
+import { ColorModeContext } from "../../App";
 
 //sets the dates of today and the upcoming three days
 const day1 = new Date();
@@ -30,6 +31,9 @@ const Weather = () => {
   const fetchUserPosition = new URLSearchParams(location.search).get(
     "location"
   );
+  const { mode } = useContext(ColorModeContext);
+  //Gets colormode from app
+
   //useState for the four initial city forecast
   const [data0, setData0] = useState(undefined);
   const [data1, setData1] = useState([]);
@@ -39,7 +43,9 @@ const Weather = () => {
   const [data1City, setData1City] = useState([]);
   const [data2City, setData2City] = useState([]);
   const [data3City, setData3City] = useState([]);
+  //User specific information
   const [userPosition, setUserPosition] = useState(fetchUserPosition);
+  const [userLocationSun, setUserLocationSun] = useState({});
   //useState for searched location, data and name.
   const [searchedLocationData, setSearchedLocationData] = useState([]);
   const [searchedLocation, setSearchedLocation] = useState("");
@@ -67,10 +73,12 @@ const Weather = () => {
     fetchWeatherData();
   }, []);
 
+  //Method when user has chosen a city to show forecast for
   async function onSubmit(event) {
     event.preventDefault();
     setSearchedLocation(event.target.value);
 
+    //Fetch data for user chosen city
     const fetchedUserData = await FetchData(urlSearchedLocation);
     setSearchedLocationCity(fetchedUserData[0].city.name);
     const extractedUserData = [
@@ -91,9 +99,15 @@ const Weather = () => {
     const fetchedData1 = await FetchData(url1);
     const fetchedData2 = await FetchData(url2);
     const fetchedData3 = await FetchData(url3);
+    //Saves city names and sun information for user location
+    setUserLocationSun({
+      sunrise: `${fetchedData0[0].city.sunrise}`,
+      sunset: `${fetchedData0[0].city.sunset}`,
+    });
     setData1City(fetchedData1[0].city.name);
     setData2City(fetchedData2[0].city.name);
     setData3City(fetchedData3[0].city.name);
+
     const extractedData0 = [
       fetchedData0[0].list[1],
       fetchedData0[0].list[9],
@@ -118,6 +132,7 @@ const Weather = () => {
       fetchedData3[0].list[17],
       fetchedData3[0].list[25],
     ];
+    //Saves the extracted data
     setData0(extractedData0);
     setData1(extractedData1);
     setData2(extractedData2);
@@ -139,12 +154,22 @@ const Weather = () => {
       </MuiLink>
 
       {data0 !== undefined ? (
-        <WeatherCard userPositionData={data0} userPositionName={userPosition} />
+        <WeatherCard
+          userPositionData={data0}
+          userPositionName={userPosition}
+          sun={userLocationSun}
+        />
       ) : (
         <></>
       )}
-      <TableContainer>
-        <Table sx={{ minWidth: 450 }} size="small" aria-label="a dense table">
+      <TableContainer
+        sx={{ display: "flex", justifyContent: { sx: "left", sm: "center" } }}
+      >
+        <Table
+          sx={{ maxWidth: "600px" }}
+          size="small"
+          aria-label="a dense table"
+        >
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -165,11 +190,7 @@ const Weather = () => {
           <TableBody>
             {/* UserSearchData, only shown if showSearchedLocation=true */}
             {showSearchedLocation && (
-              <TableRow
-              /* sx={{
-                  bgcolor: "darkgray", //Set this to panel-color?
-                }} */
-              >
+              <TableRow>
                 <TableCell component="th" scope="row">
                   {searchedLocationCity}
                 </TableCell>
@@ -177,13 +198,19 @@ const Weather = () => {
                   ({ main, weather, dt_txt, city }) => (
                     <TableCell key={dt_txt}>
                       <div className="weather-info">
-                        <img
-                          alt="weather icon"
-                          src={`./images/${weather[0].icon}.png`}
-                        />
-
+                        {mode === "dark" ? (
+                          <img
+                            alt="weather icon"
+                            src={`./images/${weather[0].icon}.png`}
+                          />
+                        ) : (
+                          <img
+                            alt="weather icon"
+                            src={`./images/${weather[0].icon}_b.png`}
+                          />
+                        )}
                         <p style={{ marginRight: "10px" }}>
-                          {Math.round(main.temp)} &#8451;
+                          {Math.round(main.temp)}&#176;C
                         </p>
                       </div>
                     </TableCell>
@@ -202,13 +229,20 @@ const Weather = () => {
                     <TableCell key={dt_txt}>
                       <div className="weather-info">
                         <div className="weather-img-container">
-                          <img
-                            alt="weather icon"
-                            src={`./images/${weather[0].icon}.png`}
-                          />
+                          {mode === "dark" ? (
+                            <img
+                              alt="weather icon"
+                              src={`./images/${weather[0].icon}.png`}
+                            />
+                          ) : (
+                            <img
+                              alt="weather icon"
+                              src={`./images/${weather[0].icon}_b.png`}
+                            />
+                          )}
                         </div>
                         <p style={{ marginRight: "10px" }}>
-                          {Math.round(main.temp)} &#8451;
+                          {Math.round(main.temp)}&#176;C
                         </p>
                       </div>
                     </TableCell>

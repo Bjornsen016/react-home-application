@@ -58,7 +58,7 @@ function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
 						handleClose();
 					}}
 				>
-					Unlock grid
+					{isGridUnlocked.unlocked ? "Lock widgets" : "Change widgets"}
 				</MenuItem>
 
 				{user && (

@@ -4,3 +4,4 @@ export { default as Calendar } from "./CalendarComponent/Calendar";
 export { default as Weather } from "./routes/Weather";
 export { default as UseCurrentLocation } from "./utils/UseCurrentLocation";
 export { default as FactOfTheDay } from "./FactOfTheDay";
+export { default as BusTable } from "./BusTable";

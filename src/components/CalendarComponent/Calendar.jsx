@@ -112,39 +112,81 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 					<Box style={flexStyle}>
 						{/* Today box */}
 						<Typography
-							variant='h4'
+							variant='p'
 							align='center'
-							sx={{ marginBottom: "5px" }}
+							sx={{ marginBottom: "5px", color: "primary.main" }}
 						>
-							{new Date(Date.now()).toLocaleDateString("en-GB", {
-								weekday: "long",
-								year: "numeric",
-								month: "short",
-								day: "numeric",
-							})}
+							{new Date(Date.now())
+								.toLocaleDateString("en-GB", {
+									weekday: "long",
+									year: "numeric",
+									month: "short",
+									day: "numeric",
+								})
+								.toLocaleUpperCase()}
 						</Typography>
 						{todaysEvents?.length === 0 ? (
-							<Typography variant='h5' align='center'>
-								There are no events today. Feel free to roam
+							<Typography
+								variant='p'
+								align='center'
+								sx={{ paddingBottom: "20px" }}
+							>
+								There are no events today. Feel free to roam...
 							</Typography>
 						) : (
-							todaysEvents?.map((evt) => (
-								<CalendarEvent key={evt.id} event={evt} />
-							))
+							<Container
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									justifyContent: "center",
+									width: {
+										xs: "90%",
+										sm: "80%",
+										md: "70%",
+										lg: "550px",
+										xl: "550px",
+									},
+									maxWidth: "550px",
+								}}
+							>
+								{todaysEvents?.map((evt) => (
+									<CalendarEvent key={evt.id} event={evt} />
+								))}
+							</Container>
 						)}
 					</Box>
 					<Box style={flexStyle}>
 						{/* Upcoming box */}
 						<Typography
-							variant='h4'
+							variant='p'
 							align='center'
-							sx={{ marginBottom: "5px" }}
+							sx={{
+								marginBottom: "5px",
+								textTransform: "uppercase",
+								color: "primary.main",
+							}}
 						>
-							UPCOMING
+							Upcoming...
 						</Typography>
-						{upcomingEvents?.map((evt) => (
-							<CalendarEvent key={evt.id} event={evt} />
-						))}
+						<Container
+							sx={{
+								display: "flex",
+								flexDirection: "column",
+								justifyContent: "center",
+								width: {
+									xs: "90%",
+									sm: "80%",
+									md: "70%",
+									lg: "550px",
+									xl: "550px",
+								},
+								maxWidth: "550px",
+							}}
+						>
+							{upcomingEvents?.map((evt, index) => (
+								<CalendarEvent key={evt.id} event={evt} index={index} />
+							))}
+						</Container>
 					</Box>
 				</>
 			)}
@@ -194,9 +236,13 @@ const isEventStartTodayOrEarlier = (e) => {
 	return (
 		(new Date(e.start.dateTime).getDate() <= new Date(Date.now()).getDate() &&
 			new Date(e.start.dateTime).getMonth() <=
-				new Date(Date.now()).getMonth()) ||
+				new Date(Date.now()).getMonth() &&
+			new Date(e.start.dateTime).getFullYear() <=
+				new Date(Date.now()).getFullYear()) ||
 		(new Date(e.start.date).getDate() <= new Date(Date.now()).getDate() &&
-			new Date(e.start.date).getMonth() <= new Date(Date.now()).getMonth())
+			new Date(e.start.date).getMonth() <= new Date(Date.now()).getMonth() &&
+			new Date(e.start.date).getFullYear() <=
+				new Date(Date.now()).getFullYear())
 	);
 };
 
@@ -205,9 +251,13 @@ const isEventEndSameDay = (e) => {
 		(new Date(e.start.dateTime).getDate() ===
 			new Date(e.end.dateTime).getDate() &&
 			new Date(e.start.dateTime).getMonth() ===
-				new Date(e.end.dateTime).getMonth()) ||
+				new Date(e.end.dateTime).getMonth() &&
+			new Date(e.start.dateTime).getFullYear() ===
+				new Date(Date.now()).getFullYear()) ||
 		(new Date(e.start.date).getDate() === new Date(e.end.date).getDate() &&
-			new Date(e.start.date).getMonth() === new Date(e.end.date).getMonth())
+			new Date(e.start.date).getMonth() === new Date(e.end.date).getMonth() &&
+			new Date(e.start.date).getFullYear() ===
+				new Date(Date.now()).getFullYear())
 	);
 };
 

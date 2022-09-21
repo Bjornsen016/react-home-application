@@ -53,9 +53,7 @@ const WeatherWidget = () => {
         <Link to={`/weather?location=${name}`} key={id}>
           <div className="widget-column">
             <div className="widget-row">
-              <p style={{ margin: "0 10px" }}>
-                {Math.round(main.temp)} &#8451;
-              </p>
+              <p style={{ margin: "0 10px" }}>{Math.round(main.temp)}&#176;C</p>
 
               <img alt="weather icon" src={`./images/${weather[0].icon}.png`} />
             </div>

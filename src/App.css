@@ -78,10 +78,12 @@ margin: 35px;
 padding: 5%;
 justify-content: center;
 gap: 1%;
+max-width: 650px;
 }
 .weather-card-container p{
     margin: 0;
     font-size: 0.9rem;
+    
 }
 .weather-card-lc, .weather-card-cc, .weather-card-rc{
     display: flex;
@@ -110,4 +112,15 @@ gap: 1%;
   .weather-card-cc img{
     width: 20%;
   }
+  .carousel{
+    overflow: visible !important;
+  }
+  .weather-page-container{
+    border: 2px solid;
+    grid-area: span 1/span 1;
+}
+}
+.carousel{
+    height: 100%;
+    
 }
