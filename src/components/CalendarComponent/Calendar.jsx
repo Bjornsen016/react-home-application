@@ -1,5 +1,6 @@
 import { Box, Container, Typography, CircularProgress } from "@mui/material";
 import { CalendarEvent } from "./CalendarEvent";
+import { EventsContainer } from "./EventsContainer";
 import { CalenderListModal } from "./CalenderListModal";
 import { fetchDataFromApi } from "../utils/fetcher";
 import { useEffect, useState } from "react";
@@ -109,85 +110,8 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 				<CircularProgress />
 			) : (
 				<>
-					<Box style={flexStyle}>
-						{/* Today box */}
-						<Typography
-							variant='p'
-							align='center'
-							sx={{ marginBottom: "5px", color: "primary.main" }}
-						>
-							{new Date(Date.now())
-								.toLocaleDateString("en-GB", {
-									weekday: "long",
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-								})
-								.toLocaleUpperCase()}
-						</Typography>
-						{todaysEvents?.length === 0 ? (
-							<Typography
-								variant='p'
-								align='center'
-								sx={{ paddingBottom: "20px" }}
-							>
-								There are no events today. Feel free to roam...
-							</Typography>
-						) : (
-							<Container
-								sx={{
-									display: "flex",
-									flexDirection: "column",
-									justifyContent: "center",
-									width: {
-										xs: "90%",
-										sm: "80%",
-										md: "70%",
-										lg: "550px",
-										xl: "550px",
-									},
-									maxWidth: "550px",
-								}}
-							>
-								{todaysEvents?.map((evt) => (
-									<CalendarEvent key={evt.id} event={evt} />
-								))}
-							</Container>
-						)}
-					</Box>
-					<Box style={flexStyle}>
-						{/* Upcoming box */}
-						<Typography
-							variant='p'
-							align='center'
-							sx={{
-								marginBottom: "5px",
-								textTransform: "uppercase",
-								color: "primary.main",
-							}}
-						>
-							Upcoming...
-						</Typography>
-						<Container
-							sx={{
-								display: "flex",
-								flexDirection: "column",
-								justifyContent: "center",
-								width: {
-									xs: "90%",
-									sm: "80%",
-									md: "70%",
-									lg: "550px",
-									xl: "550px",
-								},
-								maxWidth: "550px",
-							}}
-						>
-							{upcomingEvents?.map((evt, index) => (
-								<CalendarEvent key={evt.id} event={evt} index={index} />
-							))}
-						</Container>
-					</Box>
+					<EventsContainer events={todaysEvents} />
+					<EventsContainer events={upcomingEvents} />
 				</>
 			)}
 			<CalenderListModal

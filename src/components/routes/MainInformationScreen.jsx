@@ -75,8 +75,16 @@ export default function MainInformationScreen({
 		return isGridUnlocked ? unlockedAttributes : lockedAttributes;
 	};
 
-	const addUnlockedOnClick = () => {
+	const addUnlockedOnClickBig = () => {
 		return isGridUnlocked ? () => setbigComponentDialogIsOpen(true) : () => {};
+	};
+	const addUnlockedOnClickLeft = () => {
+		return isGridUnlocked ? () => setleftComponentDialogIsOpen(true) : () => {};
+	};
+	const addUnlockedOnClickRight = () => {
+		return isGridUnlocked
+			? () => setrightComponentDialogIsOpen(true)
+			: () => {};
 	};
 
 	//TODO: Refactor to smaller stuff / more readable stuff if possible
@@ -86,7 +94,7 @@ export default function MainInformationScreen({
 			{
 				<>
 					<Box
-						onClick={addUnlockedOnClick()}
+						onClick={addUnlockedOnClickBig()}
 						borderColor='textPrimary'
 						gridArea='big-component'
 						sx={addAttributes()}
@@ -94,7 +102,7 @@ export default function MainInformationScreen({
 						{returnComponent(bigComponentValue)}
 					</Box>
 					<Box
-						onClick={addUnlockedOnClick()}
+						onClick={addUnlockedOnClickLeft()}
 						borderColor='textPrimary'
 						gridArea='small-component-left'
 						sx={addAttributes()}
@@ -102,7 +110,7 @@ export default function MainInformationScreen({
 						{returnComponent(leftComponentValue)}
 					</Box>
 					<Box
-						onClick={addUnlockedOnClick()}
+						onClick={addUnlockedOnClickRight()}
 						borderColor='textPrimary'
 						gridArea='small-component-right'
 						sx={addAttributes()}
