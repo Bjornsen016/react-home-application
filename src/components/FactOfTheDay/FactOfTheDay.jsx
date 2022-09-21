@@ -67,7 +67,13 @@ export default function FactOfTheDay() {
         secondaryHeader: "Name of this day",
         primaryHeader: `${nameData} `,
         body: () => (
-          <Link target="_blank" href="https://svenskanamn.se/namnsdagar/">
+          <Link
+            target="_blank"
+            href="https://svenskanamn.se/namnsdagar/"
+            sx={{
+              color: "text.primary",
+            }}
+          >
             Read more
           </Link>
         ),
