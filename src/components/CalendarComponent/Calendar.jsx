@@ -111,7 +111,11 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
         <>
           <Box style={flexStyle}>
             {/* Today box */}
-            <Typography variant="p" align="center" sx={{ marginBottom: "5px" }}>
+            <Typography
+              variant="p"
+              align="center"
+              sx={{ marginBottom: "5px", color: "primary.main" }}
+            >
               {new Date(Date.now())
                 .toLocaleDateString("en-GB", {
                   weekday: "long",
@@ -140,7 +144,11 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
             <Typography
               variant="p"
               align="center"
-              sx={{ marginBottom: "5px", textTransform: "uppercase" }}
+              sx={{
+                marginBottom: "5px",
+                textTransform: "uppercase",
+                color: "primary.main",
+              }}
             >
               Upcoming...
             </Typography>

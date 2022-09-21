@@ -71,7 +71,7 @@ export default function FactOfTheDay() {
       setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
     };
     const fetchEvent = async () => {
-      //TODO needs to fetch via proxy for now and has to go if not fixed
+      //TODO needs to fetch via proxy for now
       const headers = new Headers({
         "X-Api-Key": daysOfTheYearApiInfo.key,
       });
