@@ -1,18 +1,20 @@
 import * as React from "react";
 import FetchData from "../utils/FetchData";
-import { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import { TextField } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import {
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+  Link as MuiLink,
+} from "@mui/material";
+import { useLocation, Link } from "react-router-dom";
 import WeatherCard from "../WeatherCard";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { Link } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
+import { ColorModeContext } from "../../App";
 
 //sets the dates of today and the upcoming three days
 const day1 = new Date();
@@ -23,12 +25,13 @@ day2.setDate(day2.getDate() + 1);
 day3.setDate(day3.getDate() + 2);
 day4.setDate(day4.getDate() + 3);
 
-const Weather = ({ colorMode }) => {
+const Weather = () => {
   //Access user position name from query param in url
   const location = useLocation();
   const fetchUserPosition = new URLSearchParams(location.search).get(
     "location"
   );
+  const { mode } = useContext(ColorModeContext);
   //Gets colormode from app
 
   //useState for the four initial city forecast
@@ -155,7 +158,6 @@ const Weather = ({ colorMode }) => {
           userPositionData={data0}
           userPositionName={userPosition}
           sun={userLocationSun}
-          colorMode={colorMode}
         />
       ) : (
         <></>
@@ -196,7 +198,7 @@ const Weather = ({ colorMode }) => {
                   ({ main, weather, dt_txt, city }) => (
                     <TableCell key={dt_txt}>
                       <div className="weather-info">
-                        {colorMode === "dark" ? (
+                        {mode === "dark" ? (
                           <img
                             alt="weather icon"
                             src={`./images/${weather[0].icon}.png`}
@@ -227,7 +229,7 @@ const Weather = ({ colorMode }) => {
                     <TableCell key={dt_txt}>
                       <div className="weather-info">
                         <div className="weather-img-container">
-                          {colorMode === "dark" ? (
+                          {mode === "dark" ? (
                             <img
                               alt="weather icon"
                               src={`./images/${weather[0].icon}.png`}

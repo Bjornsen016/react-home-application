@@ -60,9 +60,9 @@ function App() {
       toggleColorMode: () => {
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
-      mode,
+      mode: mode,
     }),
-    []
+    [mode]
   );
 
   const theme = useMemo(() => {
@@ -111,7 +111,10 @@ function App() {
                     />
                   }
                 />
-                <Route path="/weather" element={<Weather colorMode={mode} />} />
+                <Route
+                  path="/weather"
+                  element={<Weather /* colorMode={mode} */ />}
+                />
                 <Route
                   path="*"
                   element={<div>This route does not exist</div>}

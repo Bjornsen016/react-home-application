@@ -5,16 +5,16 @@ import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import AirIcon from "@mui/icons-material/Air";
+import { ColorModeContext } from "../App";
+import { useContext } from "react";
 
-const WeatherCard = ({
-  userPositionData,
-  userPositionName,
-  sun,
-  colorMode,
-}) => {
+const WeatherCard = ({ userPositionData, userPositionName, sun }) => {
   //npm package to be able to convert unix timestamp to UTC time
   const today = new Date();
   const timestamp = require("@rockyli/timestamp");
+
+  //Gets colorMode from App.js
+  const { mode } = useContext(ColorModeContext);
 
   return (
     <Box className="weather-card-container">
@@ -28,7 +28,7 @@ const WeatherCard = ({
         <p>{today.toLocaleDateString("en-GB", { weekday: "long" })}</p>
       </div>
       <div className="weather-card-cc">
-        {colorMode === "dark" ? (
+        {mode === "dark" ? (
           <img
             alt="weather icon"
             src={`./images/${userPositionData[0].weather[0].icon}.png`}
