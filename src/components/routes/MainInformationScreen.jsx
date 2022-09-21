@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import GridChoiceDialog from "../GridChoiceDialog";
 import { Calendar, BusTable, FactOfTheDay } from "../";
 import TasksList from "../TaskList/TasksList";
@@ -39,15 +39,29 @@ export default function MainInformationScreen({
 	const returnComponent = (value) => {
 		switch (value) {
 			case "Calendar":
+				if (user) {
+					return (
+						<Calendar
+							googleApiToken={googleApiToken}
+							chosenCalendars={chosenCalendars}
+							setChosenCalendars={setChosenCalendars}
+						/>
+					);
+				}
 				return (
-					<Calendar
-						googleApiToken={googleApiToken}
-						chosenCalendars={chosenCalendars}
-						setChosenCalendars={setChosenCalendars}
-					/>
+					<Typography variant='h5' align='center'>
+						You must log in to use this widget
+					</Typography>
 				);
 			case "Tasks":
-				return <TasksList token={googleApiToken} />;
+				if (user) {
+					return <TasksList token={googleApiToken} />;
+				}
+				return (
+					<Typography variant='h5' align='center'>
+						You must log in to use this widget
+					</Typography>
+				);
 			case "Facts":
 				return <FactOfTheDay />;
 			case "Bus":
@@ -57,62 +71,46 @@ export default function MainInformationScreen({
 		}
 	};
 
+	const addAttributes = () => {
+		return isGridUnlocked ? unlockedAttributes : lockedAttributes;
+	};
+
+	const addUnlockedOnClick = () => {
+		return isGridUnlocked ? () => setbigComponentDialogIsOpen(true) : () => {};
+	};
+
 	//TODO: Refactor to smaller stuff / more readable stuff if possible
 
 	return (
 		<>
-			{isGridUnlocked ? (
+			{
 				<>
 					<Box
-						onClick={() => setbigComponentDialogIsOpen(true)}
+						onClick={addUnlockedOnClick()}
 						borderColor='textPrimary'
 						gridArea='big-component'
-						sx={unlockedAttributes}
+						sx={addAttributes()}
 					>
-						{user ? returnComponent(bigComponentValue) : ""}
+						{returnComponent(bigComponentValue)}
 					</Box>
 					<Box
-						onClick={() => setleftComponentDialogIsOpen(true)}
+						onClick={addUnlockedOnClick()}
 						borderColor='textPrimary'
 						gridArea='small-component-left'
-						sx={unlockedAttributes}
+						sx={addAttributes()}
 					>
-						{user ? returnComponent(leftComponentValue) : ""}
+						{returnComponent(leftComponentValue)}
 					</Box>
 					<Box
-						onClick={() => setrightComponentDialogIsOpen(true)}
+						onClick={addUnlockedOnClick()}
 						borderColor='textPrimary'
 						gridArea='small-component-right'
-						sx={unlockedAttributes}
+						sx={addAttributes()}
 					>
 						{returnComponent(rightComponentValue)}
 					</Box>
 				</>
-			) : (
-				<>
-					<Box
-						borderColor='textPrimary'
-						gridArea='big-component'
-						sx={lockedAttributes}
-					>
-						{user ? returnComponent(bigComponentValue) : ""}
-					</Box>
-					<Box
-						borderColor='textPrimary'
-						gridArea='small-component-left'
-						sx={lockedAttributes}
-					>
-						{user ? returnComponent(leftComponentValue) : ""}
-					</Box>
-					<Box
-						borderColor='textPrimary'
-						gridArea='small-component-right'
-						sx={lockedAttributes}
-					>
-						{returnComponent(rightComponentValue)}
-					</Box>
-				</>
-			)}
+			}
 
 			{/* The different dialogs to choose what to show */}
 			<GridChoiceDialog
