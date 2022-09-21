@@ -25,7 +25,9 @@ This application uses a bunch of different external API's to fetch data from oth
 - [Open Weather Map](https://openweathermap.org/api)
 - [Västtrafik](https://developer.vasttrafik.se/portal/#/)
 - [Days Of The Year](https://www.daysoftheyear.com/%22%3edays)
--
+- [On this day](https://byabbe.se/on-this-day/)
+- [Joke API](https://v2.jokeapi.dev/)
+- [Name of the Day](https://sholiday.faboul.se/)
 
 For design and responsive content we have mainly used [MUI](https://mui.com/).
 
