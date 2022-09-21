@@ -81,6 +81,7 @@ function TabPanel({ list, value, index, getTasks, token, ...other }) {
                 id={item.selfLink}
                 color="error"
                 fontSize="small"
+                sx={{ cursor: "pointer" }}
               />
             </ListItem>
           ))}

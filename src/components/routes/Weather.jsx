@@ -13,7 +13,6 @@ import WeatherCard from "../WeatherCard";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Link } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
-import { useContext } from "react";
 
 //sets the dates of today and the upcoming three days
 const day1 = new Date();
@@ -161,8 +160,14 @@ const Weather = ({ colorMode }) => {
       ) : (
         <></>
       )}
-      <TableContainer>
-        <Table sx={{ minWidth: 450 }} size="small" aria-label="a dense table">
+      <TableContainer
+        sx={{ display: "flex", justifyContent: { sx: "left", sm: "center" } }}
+      >
+        <Table
+          sx={{ maxWidth: "600px" }}
+          size="small"
+          aria-label="a dense table"
+        >
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
@@ -203,7 +208,7 @@ const Weather = ({ colorMode }) => {
                           />
                         )}
                         <p style={{ marginRight: "10px" }}>
-                          {Math.round(main.temp)} &#8451;
+                          {Math.round(main.temp)}&#176;C
                         </p>
                       </div>
                     </TableCell>
@@ -235,7 +240,7 @@ const Weather = ({ colorMode }) => {
                           )}
                         </div>
                         <p style={{ marginRight: "10px" }}>
-                          {Math.round(main.temp)} &#8451;
+                          {Math.round(main.temp)}&#176;C
                         </p>
                       </div>
                     </TableCell>

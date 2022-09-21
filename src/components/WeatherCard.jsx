@@ -1,5 +1,6 @@
 import React from "react";
 import "../App.css";
+import { Box } from "@mui/material";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -16,7 +17,7 @@ const WeatherCard = ({
   const timestamp = require("@rockyli/timestamp");
 
   return (
-    <div className="weather-card-container" style={{}}>
+    <Box className="weather-card-container">
       <div className="weather-card-lc">
         <h1 style={{ marginTop: "0" }}>{userPositionName}</h1>
         <p>
@@ -41,11 +42,11 @@ const WeatherCard = ({
         <div style={{ display: "flex", alignItems: "center" }}>
           <DeviceThermostatIcon />
           <h2 style={{ margin: "5px 0" }}>
-            {Math.round(userPositionData[0].main.temp)} &#8451;
+            {Math.round(userPositionData[0].main.temp)}&#176;C
           </h2>
         </div>
         <p>
-          Feels like {Math.round(userPositionData[0].main.feels_like)} &#8451;
+          Feels like {Math.round(userPositionData[0].main.feels_like)}&#176;C
         </p>{" "}
         <p>
           {`${userPositionData[0].weather[0].description}`
@@ -80,12 +81,12 @@ const WeatherCard = ({
         <div style={{ display: "flex", alignProperty: "center" }}>
           <AirIcon />
           <p style={{ marginLeft: "5px" }}>
-            wind: {Math.round(userPositionData[0].wind.speed)}km/h
+            Wind: {Math.round(userPositionData[0].wind.speed)}km/h
             {/* list[1].wind.speed */}
           </p>
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 export default WeatherCard;

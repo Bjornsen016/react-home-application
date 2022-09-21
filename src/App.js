@@ -16,11 +16,11 @@ export const ColorModeContext = createContext({
   toggleColorMode: () => {},
   mode: "",
 });
-//TODO: Make responsive
+
 const mainContainerStyle = {
   display: "grid",
-  gridTemplateColumns: { sm: "repeat(2, 50%)", xs: "repeat(1)" },
-  gridTemplateRows: { sm: "66% 33%", xs: "auto" },
+  gridTemplateColumns: { xs: "repeat(1, 100%)", sm: "repeat(2, 50%)" }, //TODO: Change layout for landscape
+  gridTemplateRows: { xs: "auto", sm: "66% 33%" },
   gridTemplateAreas: {
     sm: `"big-component big-component"
   "small-component-left small-component-right"
