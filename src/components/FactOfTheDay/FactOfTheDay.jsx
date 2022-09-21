@@ -82,9 +82,8 @@ export default function FactOfTheDay() {
         .then((data) => {
           const eventCard = {
             secondaryHeader: `Event of this day`,
-            primaryHeader: `${data.data[3].name}`,
-            body: `${data.data[3].excerpt}`,
-            paddingTop: `65px`,
+            primaryHeader: `${data.data[0].name}`,
+            body: `${data.data[0].excerpt}`,
           };
           setEventCard(eventCard);
           setCardInfo((prevAppCard) => [...prevAppCard, eventCard]);
@@ -96,8 +95,7 @@ export default function FactOfTheDay() {
     fetchJoke();
     fetchName();
   }, []);
-  //TODO keep this update function?
-  const updateHistoryCard = () => {
+  const updateHistoryCard = async () => {
     const fetchHistory = async () => {
       const historyData = await FetchData(
         `https://byabbe.se/on-this-day/${month}/${day}/events.json`
@@ -113,65 +111,67 @@ export default function FactOfTheDay() {
       setCardInfo((prevAppCard) => [...prevAppCard, historyCard]);
     };
     setCardInfo([]);
+    await fetchHistory();
     setCardInfo((prevAppCard) => [...prevAppCard, eventCard]);
     setCardInfo((prevAppCard) => [...prevAppCard, jokeCard]);
-    fetchHistory();
     setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
   };
 
   function AppCard(props) {
     return (
-      <div>
-        <Card>
-          <CardContent
+      <Card>
+        <CardContent
+          sx={{
+            backgroundColor: "inherit",
+          }}
+        >
+          <Typography
             sx={{
-              backgroundColor: "inherit",
+              fontSize: 14,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+            color="text.secondary"
+            gutterBottom
+          >
+            {props.item.secondaryHeader}
+            {props.item.showbutton ? (
+              <Button
+                //TODO buttonarea is not 100% clickable
+                size="small"
+                onClick={() => {
+                  updateHistoryCard();
+                }}
+              >
+                <UpdateOutlinedIcon padding="none" />
+              </Button>
+            ) : (
+              ""
+            )}
+          </Typography>
+          <Typography
+            sx={{
+              marginBottom: "0.35em",
+            }}
+            variant="h6"
+            component="div"
+          >
+            {props.item.primaryHeader}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              display: "flex",
+              height: "100px",
+              overflow: "auto",
+              whiteSpace: "pre-line",
+              paddingTop: props.item.padding,
             }}
           >
-            {" "}
-            <Typography
-              sx={{
-                fontSize: 14,
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-              color="text.secondary"
-              gutterBottom
-            >
-              {props.item.secondaryHeader}
-              {props.item.showbutton ? (
-                <Button
-                  //TODO buttonarea is not 100% clickable
-                  size="small"
-                  onClick={() => {
-                    updateHistoryCard();
-                  }}
-                >
-                  <UpdateOutlinedIcon />
-                </Button>
-              ) : (
-                ""
-              )}
-            </Typography>
-            <Typography variant="h6" component="div">
-              {props.item.primaryHeader}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                display: "flex",
-                /*  alignItems: "center", */
-                height: "100px",
-                overflow: "auto",
-                whiteSpace: "pre-line",
-                paddingTop: props.item.padding,
-              }}
-            >
-              {props.item.body}
-            </Typography>
-          </CardContent>
-        </Card>
-      </div>
+            {props.item.body}
+          </Typography>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -180,19 +180,6 @@ export default function FactOfTheDay() {
       className="carousel"
       sx={{ overflow: { xs: "visible" }, height: { sm: "85%" } }}
       interval={8000}
-      /* height={"85%"} */
-      indicatorIconButtonProps={{
-        style: {
-          color: "",
-          //TODO change colors or use deafult?
-        },
-      }}
-      activeIndicatorIconButtonProps={{
-        style: {
-          backgroundColor: "",
-          //TODO change colors or use deafult?
-        },
-      }}
     >
       {cardInfo?.map((item, i) => (
         <AppCard key={i} item={item} />
