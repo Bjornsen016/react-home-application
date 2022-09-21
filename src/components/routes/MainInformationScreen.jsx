@@ -34,7 +34,7 @@ export default function MainInformationScreen({
 
 	const [rightComponentDialogIsOpen, setrightComponentDialogIsOpen] =
 		useState(false);
-	const [rightComponentValue, setrightComponentValue] = useState("Bus");
+	const [rightComponentValue, setrightComponentValue] = useState("Facts");
 
 	const returnComponent = (value) => {
 		switch (value) {

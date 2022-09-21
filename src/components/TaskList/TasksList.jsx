@@ -1,97 +1,105 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { fetchDataFromApi } from "../utils/fetcher";
-import { Tabs, Tab, Divider } from "@mui/material";
+import { Tabs, Tab, Divider, CircularProgress } from "@mui/material";
 import TabPanel from "./children/TabPanel";
 
 //useMemo: Returns and stores the calculated value of a function in a variable
 //useCallBack: Returns and stores the actual function itself in a variable
 
 const TasksList = ({ token }) => {
-	const [value, setValue] = useState(0);
-	const [loading, setLoading] = useState(true);
-	const [taskLists, setTaskLists] = useState();
-	const [task, setTask] = useState([]);
+  const [value, setValue] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [taskLists, setTaskLists] = useState();
+  const [task, setTask] = useState([]);
 
-	const taskUrl = new URL("https://content-tasks.googleapis.com");
-	const orginPath = "/tasks/v1";
-	const getTaskListsUrl = "/users/@me/lists";
-	/* const getListOfTasksUrl = `/lists/${taskLists}/tasks`;
-  const insertTaskUrl = `/lists/${taskLists}/tasks`;
-  const updateTaskUrl = `/lists/${taskLists}/tasks/${task}`;
-  const deleteTaskUrl = `/lists/${taskLists}/tasks/${task}`;
- */
-	taskUrl.pathname = orginPath;
+  const taskUrl = new URL("https://content-tasks.googleapis.com");
+  const orginPath = "/tasks/v1";
+  const getTaskListsUrl = "/users/@me/lists";
 
-	const getTasks = useCallback(
-		async (taskLists) => {
-			console.log(taskLists.items);
-			setTask([]);
-			for (let i = 0; i < taskLists.items.length; i++) {
-				taskUrl.pathname += "/lists/" + taskLists.items[i].id + "/tasks";
-				const listOfTasksData = await fetchDataFromApi(taskUrl, token);
-				const lista = {
-					items: listOfTasksData.items,
-					title: taskLists.items[i].title,
-				};
+  taskUrl.pathname = orginPath;
 
-				await setTask((prevTask) => [...prevTask, lista]);
+  const getTasks = async (lists) => {
+    const newTaskList = [];
 
-				taskUrl.pathname = orginPath;
-				setLoading(false);
+    for (let i = 0; i < lists.items.length; i++) {
+      taskUrl.pathname += "/lists/" + lists.items[i].id + "/tasks";
+      taskUrl.searchParams.set("showHidden", "True");
+      const listOfTasksData = await fetchDataFromApi(taskUrl, token);
+      const taskObjectList = {
+        items: listOfTasksData.items,
+        title: lists.items[i].title,
+        listId: lists.items[i].id,
+      };
 
-				console.log(listOfTasksData);
-			}
-		},
-		[taskUrl, token]
-	);
+      newTaskList.push(taskObjectList);
 
-	const getTaskList = useCallback(
-		async (urlPath) => {
-			taskUrl.pathname += urlPath;
-			const taskLists = await fetchDataFromApi(taskUrl, token);
-			await setTaskLists(taskLists);
-			taskUrl.pathname = orginPath;
-			console.log("tasklistset", taskLists);
-			getTasks(taskLists);
-		},
-		[getTasks, taskUrl, token]
-	);
+      taskUrl.pathname = orginPath;
+      setLoading(false);
+    }
 
-	useEffect(() => {
-		//Added the timeout to let the system get the ApiKey from localStorage if there is one.
-		setTimeout(() => {
-			getTaskList(getTaskListsUrl);
-		}, 500);
-	}, []);
+    //sort completed tasks last.
+    const sortedTaskObjects = newTaskList.map((taskList) => {
+      taskList.items = taskList.items.sort((a, b) => {
+        return b.status.length - a.status.length;
+      });
+      return taskList;
+    });
 
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
+    setTask(sortedTaskObjects);
+  };
 
-	return (
-		<div>
-			{loading ? (
-				<div>Loading...</div>
-			) : (
-				<>
-					<Tabs value={value} onChange={handleChange}>
-						{task.map((list, index) => (
-							<Tab key={"tab: " + index} label={list.title} />
-						))}
-					</Tabs>
-					<Divider />
-					{task.map((list, index) => (
-						<TabPanel
-							key={"tab-panel: " + index}
-							list={list}
-							index={index}
-							value={value}
-						/>
-					))}
-				</>
-			)}
-		</div>
-	);
+  const getTaskList = async () => {
+    taskUrl.pathname += getTaskListsUrl;
+    const lists = await fetchDataFromApi(taskUrl, token);
+    await setTaskLists(lists);
+    taskUrl.pathname = orginPath;
+    getTasks(lists);
+  };
+
+  useEffect(() => {
+    //Added the timeout to let the system get the ApiKey from localStorage if there is one.
+    let interval;
+    setTimeout(() => {
+      getTaskList(getTaskListsUrl);
+      interval = setInterval(() => {
+        getTaskList(getTaskListsUrl);
+      }, 1000 * 60 * 5);
+    }, 500);
+    return clearInterval(interval);
+  }, []);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <div style={{ height: "100%" }}>
+      {loading ? (
+        <div>
+          <CircularProgress />
+        </div>
+      ) : (
+        <>
+          <Tabs value={value} onChange={handleChange}>
+            {task.map((list) => (
+              <Tab key={list.listId + "tab"} label={list.title} />
+            ))}
+          </Tabs>
+          <Divider />
+          {task.map((list, index) => (
+            <TabPanel
+              key={list.listId + "tabPanel"}
+              list={list}
+              index={index}
+              value={value}
+              getTasks={getTaskList}
+              token={token}
+            />
+          ))}
+        </>
+      )}
+    </div>
+  );
 };
 
 export default TasksList;

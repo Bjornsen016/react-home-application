@@ -12,23 +12,34 @@ import { Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleApiInfo } from "./config/googleApiInfo";
 
-const ColorModeContext = createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = createContext({
+	toggleColorMode: () => {},
+	mode: "",
+});
 
 const mainContainerStyle = {
 	display: "grid",
-	gridTemplateColumns: "repeat(2, 50%)",
-	gridTemplateRows: "66% 33%",
-	gridTemplateAreas: `"big-component big-component"
-"small-component-left small-component-right"
-`,
-	gridColumnGap: "10px",
-	gridRowGap: "10px",
-	height: "90vh",
+	gridTemplateColumns: { xs: "repeat(1, 100%)", sm: "repeat(2, 49.5%)" }, //TODO: Change layout for landscape
+	gridTemplateRows: { xs: "auto", sm: "66% 33%" },
+	gridTemplateAreas: {
+		sm: `"big-component big-component"
+  "small-component-left small-component-right"
+  `,
+		xs: `"big-component"
+  "small-component-left" 
+  "small-component-right"
+  `,
+	},
+	gridColumnGap: "1%",
+	gridRowGap: "1%",
+	height: { sm: "89vh", xs: "100%" },
 	marginTop: "10px",
+	marginBottom: "10px",
 };
 
 export const IsGridUnlockedContext = createContext({
 	toggleUnlockGrid: () => {},
+	unlocked: false,
 });
 
 //TODO: Look into changing some of the useStates to useContexts
@@ -41,6 +52,7 @@ function App() {
 		toggleUnlockGrid: () => {
 			setIsGridUnlocked((prev) => !prev);
 		},
+		unlocked: isGridUnlocked,
 	};
 
 	//Creates theme
@@ -50,8 +62,9 @@ function App() {
 			toggleColorMode: () => {
 				setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
 			},
+			mode: mode,
 		}),
-		[]
+		[mode]
 	);
 
 	const theme = useMemo(() => {
@@ -85,6 +98,7 @@ function App() {
 							setUser={setUser}
 							setChosenCalendars={setChosenCalendars}
 						/>
+
 						<Container sx={mainContainerStyle} maxWidth='lg'>
 							<Routes>
 								<Route
