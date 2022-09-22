@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import { fetchDataFromApi } from "../utils/fetcher";
 import { Tabs, Tab, Divider, CircularProgress } from "@mui/material";
 import TabPanel from "./children/TabPanel";
+import { UserAuth } from "../contexts/UserAuthContext";
 
 //useMemo: Returns and stores the calculated value of a function in a variable
 //useCallBack: Returns and stores the actual function itself in a variable
 
-const TasksList = ({ token }) => {
+const TasksList = () => {
+	const { googleApiToken } = UserAuth();
 	const [value, setValue] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [taskLists, setTaskLists] = useState();
@@ -24,7 +26,10 @@ const TasksList = ({ token }) => {
 		for (let i = 0; i < lists.items.length; i++) {
 			taskUrl.pathname += "/lists/" + lists.items[i].id + "/tasks";
 			taskUrl.searchParams.set("showHidden", "True");
-			const listOfTasksData = await fetchDataFromApi(taskUrl, token);
+			const listOfTasksData = await fetchDataFromApi(
+				taskUrl,
+				googleApiToken.get
+			);
 			const taskObjectList = {
 				items: listOfTasksData.items,
 				title: lists.items[i].title,
@@ -50,7 +55,7 @@ const TasksList = ({ token }) => {
 
 	const getTaskList = async () => {
 		taskUrl.pathname += getTaskListsUrl;
-		const lists = await fetchDataFromApi(taskUrl, token);
+		const lists = await fetchDataFromApi(taskUrl, googleApiToken.get);
 		await setTaskLists(lists);
 		taskUrl.pathname = orginPath;
 		getTasks(lists);
@@ -93,7 +98,6 @@ const TasksList = ({ token }) => {
 							index={index}
 							value={value}
 							getTasks={getTaskList}
-							token={token}
 						/>
 					))}
 				</>

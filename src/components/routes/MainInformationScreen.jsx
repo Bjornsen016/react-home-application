@@ -3,6 +3,7 @@ import GridChoiceDialog from "../GridChoiceDialog";
 import { Calendar, BusTable, FactOfTheDay } from "../";
 import TasksList from "../TaskList/TasksList";
 import { useState } from "react";
+import { UserAuth } from "../contexts/UserAuthContext";
 
 const boxStyle = {
 	border: "2px solid",
@@ -10,12 +11,8 @@ const boxStyle = {
 };
 
 //TODO: Fix styling
-export default function MainInformationScreen({
-	user,
-	googleApiToken,
-	chosenCalendars,
-	setChosenCalendars,
-}) {
+export default function MainInformationScreen() {
+	const { user } = UserAuth();
 	//TODO: Save the values in local storage so that next time you open the app it remembers
 	const [bigComponentDialogIsOpen, setbigComponentDialogIsOpen] =
 		useState(false);
@@ -32,14 +29,8 @@ export default function MainInformationScreen({
 	const returnComponent = (value) => {
 		switch (value) {
 			case "Calendar":
-				if (user) {
-					return (
-						<Calendar
-							googleApiToken={googleApiToken}
-							chosenCalendars={chosenCalendars}
-							setChosenCalendars={setChosenCalendars}
-						/>
-					);
+				if (user.user) {
+					return <Calendar />;
 				}
 				return (
 					<Typography variant='h5' align='center'>
@@ -47,8 +38,8 @@ export default function MainInformationScreen({
 					</Typography>
 				);
 			case "Tasks":
-				if (user) {
-					return <TasksList token={googleApiToken} />;
+				if (user.user) {
+					return <TasksList />;
 				}
 				return (
 					<Typography variant='h5' align='center'>

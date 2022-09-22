@@ -3,8 +3,10 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { googleLogout } from "@react-oauth/google";
 import { Link } from "react-router-dom";
+import { UserAuth } from "../contexts/UserAuthContext";
 
-function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
+function TopBarMenu() {
+	const { user, googleApiToken, chosenCalendars } = UserAuth();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -16,9 +18,9 @@ function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
 
 	const handleSignOut = () => {
 		googleLogout();
-		setUser();
-		setGoogleApiToken();
-		setChosenCalendars();
+		user.setUser();
+		googleApiToken.set();
+		chosenCalendars.setChosenCalendars();
 		localStorage.removeItem("user");
 		localStorage.removeItem("googleApiToken");
 		localStorage.removeItem("chosenCalendars");

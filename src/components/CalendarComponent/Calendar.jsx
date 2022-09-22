@@ -1,10 +1,10 @@
-import { Box, Container, Typography, CircularProgress } from "@mui/material";
-import { CalendarEvent } from "./CalendarEvent";
+import { Container, CircularProgress } from "@mui/material";
 import { EventsContainer } from "./EventsContainer";
 import { CalenderListModal } from "./CalenderListModal";
 import { fetchDataFromApi } from "../utils/fetcher";
 import { useEffect, useState } from "react";
 import { googleApiInfo } from "../../config/googleApiInfo";
+import { UserAuth } from "../contexts/UserAuthContext";
 
 const flexStyle = {
 	display: "flex",
@@ -17,7 +17,9 @@ const {
 	googleCalendarEventsPathname,
 } = googleApiInfo;
 
-const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
+const Calendar = () => {
+	const { googleApiToken, chosenCalendars } = UserAuth();
+
 	const [showCalenderListModal, setShowCalenderListModal] = useState(false);
 	const [calendarList, setCalendarList] = useState([]);
 	const [todaysEvents, setTodaysEvents] = useState([]);
@@ -27,7 +29,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 	const getCalendars = async () => {
 		const url = new URL(googleCalendarBaseUrl);
 		url.pathname = googleCalendarListPathname;
-		const data = await fetchDataFromApi(url, googleApiToken);
+		const data = await fetchDataFromApi(url, googleApiToken.get);
 		return data.items;
 	};
 
@@ -39,7 +41,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 			const today = new Date(Date.now()).toISOString();
 			url.searchParams.set("timeMin", today);
 
-			const data = await fetchDataFromApi(url, googleApiToken);
+			const data = await fetchDataFromApi(url, googleApiToken.get);
 			return data.items;
 		});
 		return apiEvents;
@@ -83,11 +85,11 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 	//TODO: How often should it automaticly update?
 	useEffect(() => {
 		let interval;
-		if (chosenCalendars?.length > 0) {
-			getEvents(chosenCalendars);
+		if (chosenCalendars.chosenCalendars?.length > 0) {
+			getEvents(chosenCalendars.chosenCalendars);
 			console.log("Setting up an interval for updating calendars");
 			interval = setInterval(() => {
-				getEvents(chosenCalendars);
+				getEvents(chosenCalendars.chosenCalendars);
 				console.log("updating calendars");
 			}, 1000 * 60 * 5);
 		} else {
@@ -102,7 +104,7 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 			console.log("Removing calendar interval");
 			clearInterval(interval);
 		};
-	}, [chosenCalendars]);
+	}, [chosenCalendars.chosenCalendars]);
 
 	return (
 		<Container style={{ height: "100%" }} sx={flexStyle} maxWidth='lg'>
@@ -118,7 +120,6 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 				isOpen={showCalenderListModal}
 				setIsOpen={setShowCalenderListModal}
 				calendarList={calendarList}
-				setChosenCalendars={setChosenCalendars}
 			/>
 		</Container>
 	);

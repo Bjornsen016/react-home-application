@@ -5,16 +5,13 @@ import Clock from "./Clock";
 import WeatherWidget from "./WeatherWidget";
 import LoginWithGoogle from "./LoginWithGoogle";
 import { ColorMode } from "../contexts/ColorModeContext";
+import { UserAuth } from "../contexts/UserAuthContext";
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
-export default function TopBar({
-	user,
-	setGoogleApiToken,
-	setUser,
-	setChosenCalendars,
-}) {
+export default function TopBar() {
 	const { toggleColorMode } = ColorMode();
+	const { user } = UserAuth();
 	return (
 		<AppBar position='static' color='primary'>
 			<Toolbar
@@ -34,10 +31,10 @@ export default function TopBar({
 					}}
 				>
 					<TopBarMenu
-						user={user}
+					/* user={user.user}
 						setGoogleApiToken={setGoogleApiToken}
-						setUser={setUser}
-						setChosenCalendars={setChosenCalendars}
+						setUser={user.setUser}
+						setChosenCalendars={setChosenCalendars} */
 					/>
 					<Checkbox
 						onChange={toggleColorMode}
@@ -45,12 +42,12 @@ export default function TopBar({
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
 					<Typography variant='h6' sx={{ fontSize: { xs: "80%", sm: "100%" } }}>
-						{user?.names.displayName}
+						{user.user?.names.displayName}
 					</Typography>
-					{!user && (
+					{!user.user && (
 						<LoginWithGoogle
-							setGoogleApiToken={setGoogleApiToken}
-							setUser={setUser}
+						/* setGoogleApiToken={setGoogleApiToken}
+							setUser={user.setUser} */
 						/>
 					)}
 				</Box>

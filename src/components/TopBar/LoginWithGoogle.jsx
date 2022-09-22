@@ -11,11 +11,13 @@ import { fetchDataFromApi } from "../utils/fetcher";
 import { useEffect, useState } from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import { googleApiInfo } from "../../config/googleApiInfo";
+import { UserAuth } from "../contexts/UserAuthContext";
 
 const { scopes, googleGetUserInfoUrl } = googleApiInfo;
 
 //TODO: ATM the token will only live for 1 hour, I think this is because of the app being in testing mode on google api.
-export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
+export default function LoginWithGoogle() {
+	const { user, googleApiToken } = UserAuth();
 	const [showDialog, setShowDialog] = useState(false);
 	const login = useGoogleLogin({
 		scope: scopes,
@@ -24,7 +26,7 @@ export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 				"googleApiToken",
 				JSON.stringify(tokenResponse.access_token)
 			);
-			setGoogleApiToken(tokenResponse.access_token);
+			googleApiToken.set(tokenResponse.access_token);
 			const apiResponse = await fetchDataFromApi(
 				googleGetUserInfoUrl,
 				tokenResponse.access_token
@@ -38,7 +40,9 @@ export default function LoginWithGoogle({ setGoogleApiToken, setUser }) {
 				profilePicture: apiResponse.photos[0].url,
 			};
 			localStorage.setItem("user", JSON.stringify(theApiUser));
-			setTimeout(() => setUser(theApiUser), 1000);
+			setTimeout(() => {
+				user.setUser(theApiUser);
+			}, 1000);
 		},
 	});
 
