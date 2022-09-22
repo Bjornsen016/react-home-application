@@ -1,19 +1,28 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { googleLogout } from "@react-oauth/google";
 import { Link } from "react-router-dom";
-import { IsGridUnlockedContext } from "../../App";
 
 function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
 	const [anchorEl, setAnchorEl] = useState(null);
-	const isGridUnlocked = useContext(IsGridUnlockedContext);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleSignOut = () => {
+		googleLogout();
+		setUser();
+		setGoogleApiToken();
+		setChosenCalendars();
+		localStorage.removeItem("user");
+		localStorage.removeItem("googleApiToken");
+		localStorage.removeItem("chosenCalendars");
+		handleClose();
 	};
 
 	return (
@@ -51,32 +60,7 @@ function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
 					</MenuItem>
 				</Link>
 
-				<MenuItem
-					divider
-					onClick={() => {
-						isGridUnlocked.toggleUnlockGrid();
-						handleClose();
-					}}
-				>
-					{isGridUnlocked.unlocked ? "Lock widgets" : "Change widgets"}
-				</MenuItem>
-
-				{user && (
-					<MenuItem
-						onClick={() => {
-							googleLogout();
-							setUser();
-							setGoogleApiToken();
-							setChosenCalendars();
-							localStorage.removeItem("user");
-							localStorage.removeItem("googleApiToken");
-							localStorage.removeItem("chosenCalendars");
-							handleClose();
-						}}
-					>
-						Sign out
-					</MenuItem>
-				)}
+				{user && <MenuItem onClick={handleSignOut}>Sign out</MenuItem>}
 			</Menu>
 		</>
 	);

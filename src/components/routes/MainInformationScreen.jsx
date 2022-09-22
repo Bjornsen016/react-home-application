@@ -4,13 +4,7 @@ import { Calendar, BusTable, FactOfTheDay } from "../";
 import TasksList from "../TaskList/TasksList";
 import { useState } from "react";
 
-const unlockedAttributes = {
-	border: "2px dashed yellow",
-	padding: "10px",
-	cursor: "pointer",
-};
-
-const lockedAttributes = {
+const boxStyle = {
 	border: "2px solid",
 	padding: "10px",
 };
@@ -21,7 +15,6 @@ export default function MainInformationScreen({
 	googleApiToken,
 	chosenCalendars,
 	setChosenCalendars,
-	isGridUnlocked,
 }) {
 	//TODO: Save the values in local storage so that next time you open the app it remembers
 	const [bigComponentDialogIsOpen, setbigComponentDialogIsOpen] =
@@ -71,22 +64,6 @@ export default function MainInformationScreen({
 		}
 	};
 
-	const addAttributes = () => {
-		return isGridUnlocked ? unlockedAttributes : lockedAttributes;
-	};
-
-	const addUnlockedOnClickBig = () => {
-		return isGridUnlocked ? () => setbigComponentDialogIsOpen(true) : () => {};
-	};
-	const addUnlockedOnClickLeft = () => {
-		return isGridUnlocked ? () => setleftComponentDialogIsOpen(true) : () => {};
-	};
-	const addUnlockedOnClickRight = () => {
-		return isGridUnlocked
-			? () => setrightComponentDialogIsOpen(true)
-			: () => {};
-	};
-
 	//TODO: Refactor to smaller stuff / more readable stuff if possible
 
 	return (
@@ -94,38 +71,35 @@ export default function MainInformationScreen({
 			{
 				<>
 					<Box
-						/* onClick={addUnlockedOnClickBig()} */
 						onContextMenu={(event) => {
 							event.preventDefault();
 							setbigComponentDialogIsOpen(true);
 						}}
 						borderColor='textPrimary'
 						gridArea='big-component'
-						sx={addAttributes()}
+						sx={boxStyle}
 					>
 						{returnComponent(bigComponentValue)}
 					</Box>
 					<Box
-						/* onClick={addUnlockedOnClickLeft()} */
 						onContextMenu={(event) => {
 							event.preventDefault();
 							setleftComponentDialogIsOpen(true);
 						}}
 						borderColor='textPrimary'
 						gridArea='small-component-left'
-						sx={addAttributes()}
+						sx={boxStyle}
 					>
 						{returnComponent(leftComponentValue)}
 					</Box>
 					<Box
-						/* onClick={addUnlockedOnClickRight()} */
 						onContextMenu={(event) => {
 							event.preventDefault();
 							setrightComponentDialogIsOpen(true);
 						}}
 						borderColor='textPrimary'
 						gridArea='small-component-right'
-						sx={addAttributes()}
+						sx={boxStyle}
 					>
 						{returnComponent(rightComponentValue)}
 					</Box>

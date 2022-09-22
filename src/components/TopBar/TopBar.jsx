@@ -4,16 +4,17 @@ import TopBarMenu from "./TopBarMenu";
 import Clock from "./Clock";
 import WeatherWidget from "./WeatherWidget";
 import LoginWithGoogle from "./LoginWithGoogle";
+import { ColorMode } from "../contexts/ColorModeContext";
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
 export default function TopBar({
-	colorMode,
 	user,
 	setGoogleApiToken,
 	setUser,
 	setChosenCalendars,
 }) {
+	const { toggleColorMode } = ColorMode();
 	return (
 		<AppBar position='static' color='primary'>
 			<Toolbar
@@ -39,7 +40,7 @@ export default function TopBar({
 						setChosenCalendars={setChosenCalendars}
 					/>
 					<Checkbox
-						onChange={colorMode.toggleColorMode}
+						onChange={toggleColorMode}
 						icon={<LightMode sx={{ color: "yellow" }} />}
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
@@ -54,7 +55,6 @@ export default function TopBar({
 					)}
 				</Box>
 				<Clock />
-				{/* TODO: Make center on the top everytime, make instead of flex? */}
 				<Box sx={{ justifySelf: "end", fontSize: { xs: "80%", sm: "100%" } }}>
 					<Typography variant='p'>
 						<WeatherWidget />

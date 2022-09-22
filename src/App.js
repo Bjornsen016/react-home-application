@@ -11,11 +11,7 @@ import { TopBar, MainInfoScreen, Weather } from "./components";
 import { Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleApiInfo } from "./config/googleApiInfo";
-
-export const ColorModeContext = createContext({
-	toggleColorMode: () => {},
-	mode: "",
-});
+import { ColorModeContextProvider } from "./components/contexts/ColorModeContext";
 
 const mainContainerStyle = {
 	display: "grid",
@@ -37,45 +33,9 @@ const mainContainerStyle = {
 	marginBottom: "10px",
 };
 
-export const IsGridUnlockedContext = createContext({
-	toggleUnlockGrid: () => {},
-	unlocked: false,
-});
-
 //TODO: Look into changing some of the useStates to useContexts
 
 function App() {
-	//Creates a way to unlock the grid.
-	const [isGridUnlocked, setIsGridUnlocked] = useState(false);
-
-	const gridUnlock = {
-		toggleUnlockGrid: () => {
-			setIsGridUnlocked((prev) => !prev);
-		},
-		unlocked: isGridUnlocked,
-	};
-
-	//Creates theme
-	const [mode, setMode] = useState("dark");
-	const colorMode = useMemo(
-		() => ({
-			toggleColorMode: () => {
-				setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-			},
-			mode: mode,
-		}),
-		[mode]
-	);
-
-	const theme = useMemo(() => {
-		let t = createTheme({
-			palette: {
-				mode,
-			},
-		});
-		return responsiveFontSizes(t);
-	}, [mode]);
-
 	//user states
 	const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 	const [googleApiToken, setGoogleApiToken] = useState(
@@ -87,42 +47,32 @@ function App() {
 
 	return (
 		<GoogleOAuthProvider clientId={googleApiInfo.clientId}>
-			<ColorModeContext.Provider value={colorMode}>
-				<IsGridUnlockedContext.Provider value={gridUnlock}>
-					<ThemeProvider theme={theme}>
-						<CssBaseline />
-						<TopBar
-							colorMode={colorMode}
-							user={user}
-							setGoogleApiToken={setGoogleApiToken}
-							setUser={setUser}
-							setChosenCalendars={setChosenCalendars}
-						/>
+			<ColorModeContextProvider>
+				<TopBar
+					user={user}
+					setGoogleApiToken={setGoogleApiToken}
+					setUser={setUser}
+					setChosenCalendars={setChosenCalendars}
+				/>
 
-						<Container sx={mainContainerStyle} maxWidth='lg'>
-							<Routes>
-								<Route
-									path='/'
-									element={
-										<MainInfoScreen
-											user={user}
-											googleApiToken={googleApiToken}
-											chosenCalendars={chosenCalendars}
-											setChosenCalendars={setChosenCalendars}
-											isGridUnlocked={isGridUnlocked}
-										/>
-									}
+				<Container sx={mainContainerStyle} maxWidth='lg'>
+					<Routes>
+						<Route
+							path='/'
+							element={
+								<MainInfoScreen
+									user={user}
+									googleApiToken={googleApiToken}
+									chosenCalendars={chosenCalendars}
+									setChosenCalendars={setChosenCalendars}
 								/>
-								<Route path='/weather' element={<Weather />} />
-								<Route
-									path='*'
-									element={<div>This route does not exist</div>}
-								/>
-							</Routes>
-						</Container>
-					</ThemeProvider>
-				</IsGridUnlockedContext.Provider>
-			</ColorModeContext.Provider>
+							}
+						/>
+						<Route path='/weather' element={<Weather />} />
+						<Route path='*' element={<div>This route does not exist</div>} />
+					</Routes>
+				</Container>
+			</ColorModeContextProvider>
 		</GoogleOAuthProvider>
 	);
 }
