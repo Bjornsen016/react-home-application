@@ -3,12 +3,8 @@ import { daysOfTheYearApiInfo } from "../../config/daysOfTheYearApiInfo";
 import { React, useState, useEffect } from "react";
 
 import Carousel from "react-material-ui-carousel";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
+import { Card, CardContent, Button, Typography, Link } from "@mui/material";
 
 export default function FactOfTheDay() {
   const day = new Date().getDate();
