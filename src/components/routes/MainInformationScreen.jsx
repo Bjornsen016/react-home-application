@@ -94,7 +94,11 @@ export default function MainInformationScreen({
 			{
 				<>
 					<Box
-						onClick={addUnlockedOnClickBig()}
+						/* onClick={addUnlockedOnClickBig()} */
+						onContextMenu={(event) => {
+							event.preventDefault();
+							setbigComponentDialogIsOpen(true);
+						}}
 						borderColor='textPrimary'
 						gridArea='big-component'
 						sx={addAttributes()}
@@ -102,7 +106,11 @@ export default function MainInformationScreen({
 						{returnComponent(bigComponentValue)}
 					</Box>
 					<Box
-						onClick={addUnlockedOnClickLeft()}
+						/* onClick={addUnlockedOnClickLeft()} */
+						onContextMenu={(event) => {
+							event.preventDefault();
+							setleftComponentDialogIsOpen(true);
+						}}
 						borderColor='textPrimary'
 						gridArea='small-component-left'
 						sx={addAttributes()}
@@ -110,7 +118,11 @@ export default function MainInformationScreen({
 						{returnComponent(leftComponentValue)}
 					</Box>
 					<Box
-						onClick={addUnlockedOnClickRight()}
+						/* onClick={addUnlockedOnClickRight()} */
+						onContextMenu={(event) => {
+							event.preventDefault();
+							setrightComponentDialogIsOpen(true);
+						}}
 						borderColor='textPrimary'
 						gridArea='small-component-right'
 						sx={addAttributes()}
