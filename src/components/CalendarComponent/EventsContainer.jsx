@@ -16,10 +16,10 @@ export const EventsContainer = ({ events, upcoming }) => {
 				sx={{
 					marginBottom: "5px",
 					color: "primary.main",
-					textTransform: upcoming === "UPCOMING" ? "uppercase" : "",
+					textTransform: upcoming ? "uppercase" : "",
 				}}
 			>
-				{upcoming === "UPCOMING"
+				{upcoming
 					? "Upcoming..."
 					: new Date(Date.now())
 							.toLocaleDateString("en-GB", {
@@ -31,7 +31,7 @@ export const EventsContainer = ({ events, upcoming }) => {
 							.toLocaleUpperCase()}
 			</Typography>
 			{events?.length === 0 ? (
-				upcoming === "UPCOMING" ? (
+				upcoming ? (
 					""
 				) : (
 					<Typography variant='p' align='center' sx={{ paddingBottom: "20px" }}>

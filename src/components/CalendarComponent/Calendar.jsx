@@ -110,8 +110,8 @@ const Calendar = ({ googleApiToken, chosenCalendars, setChosenCalendars }) => {
 				<CircularProgress />
 			) : (
 				<>
-					<EventsContainer events={todaysEvents} />
-					<EventsContainer events={upcomingEvents} />
+					<EventsContainer events={todaysEvents} upcoming={false} />
+					<EventsContainer events={upcomingEvents} upcoming={true} />
 				</>
 			)}
 			<CalenderListModal
