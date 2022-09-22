@@ -16,7 +16,7 @@ import WeatherCard from "../WeatherCard";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { ColorModeContext } from "../../App";
 
-//sets the dates of today and the upcoming three days
+//sets the dates of today and the upcoming three days to be able to show current upcoming weekdays in table
 const day1 = new Date();
 const day2 = new Date(day1);
 const day3 = new Date(day1);
@@ -27,19 +27,25 @@ day4.setDate(day4.getDate() + 3);
 
 const Weather = () => {
   //Access user position name from query param in url
+  let fetchUserPosition;
   const location = useLocation();
-  const fetchUserPosition = new URLSearchParams(location.search).get(
-    "location"
-  );
-  const { mode } = useContext(ColorModeContext);
+
+  if (location.search === "") {
+    fetchUserPosition = "Stockholm";
+  } else {
+    fetchUserPosition = new URLSearchParams(location.search).get("location");
+  }
+
+  console.log(location.search);
   //Gets colormode from app
+  const { mode } = useContext(ColorModeContext);
 
   //useState for the four initial city forecast
   const [data0, setData0] = useState(undefined);
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
-  //useState for city names (usePosition is set to "Falun" from URL if there is no userPosition available)
+  //useState for city names (usePosition is set to "Stockholm" if there is no userPosition available)
   const [data1City, setData1City] = useState([]);
   const [data2City, setData2City] = useState([]);
   const [data3City, setData3City] = useState([]);
@@ -57,8 +63,8 @@ const Weather = () => {
   const locations = [
     { name: "", data: data0, cityName: userPosition },
     { name: "Göteborg", data: data1, cityName: data1City },
-    { name: "Stockholm", data: data2, cityName: data2City },
-    { name: "Malmö", data: data3, cityName: data3City },
+    { name: "Falun", data: data2, cityName: data2City },
+    { name: "Kalix", data: data3, cityName: data3City },
   ];
 
   //Urls for fetching data from open weather map API
@@ -99,7 +105,7 @@ const Weather = () => {
     const fetchedData1 = await FetchData(url1);
     const fetchedData2 = await FetchData(url2);
     const fetchedData3 = await FetchData(url3);
-    //Saves city names and sun information for user location
+    //Saves city names and sun (sunset/sunrise) information for user location
     setUserLocationSun({
       sunrise: `${fetchedData0[0].city.sunrise}`,
       sunset: `${fetchedData0[0].city.sunset}`,
