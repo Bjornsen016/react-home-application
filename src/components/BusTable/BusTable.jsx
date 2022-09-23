@@ -28,7 +28,7 @@ export default function BusTable() {
 	const [directionId, setdirectionId] = useState(
 		localStorage.getItem("directionId")
 			? localStorage.getItem("directionId")
-			: "9022014017320004"
+			: "9022014005279002"
 	); //Gråbo busstation
 	const [accessToken, setAccessToken] = useState(null);
 	const [isSearchDialogOpen, setisSearchDialogOpen] = useState(false);
