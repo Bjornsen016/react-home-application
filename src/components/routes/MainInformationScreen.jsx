@@ -29,7 +29,7 @@ export default function MainInformationScreen() {
 	const returnComponent = (value) => {
 		switch (value) {
 			case "Calendar":
-				if (user.user) {
+				if (user.get) {
 					return <Calendar />;
 				}
 				return (
@@ -38,7 +38,7 @@ export default function MainInformationScreen() {
 					</Typography>
 				);
 			case "Tasks":
-				if (user.user) {
+				if (user.get) {
 					return <TasksList />;
 				}
 				return (

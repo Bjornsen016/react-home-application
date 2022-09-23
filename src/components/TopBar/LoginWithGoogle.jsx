@@ -41,7 +41,7 @@ export default function LoginWithGoogle() {
 			};
 			localStorage.setItem("user", JSON.stringify(theApiUser));
 			setTimeout(() => {
-				user.setUser(theApiUser);
+				user.set(theApiUser);
 			}, 1000);
 		},
 	});

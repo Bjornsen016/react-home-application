@@ -16,7 +16,7 @@ import { UserAuth } from "../contexts/UserAuthContext";
 export const CalenderListModal = ({ isOpen, setIsOpen, calendarList }) => {
 	const { chosenCalendars } = UserAuth();
 	const handleSetCalendars = async (values) => {
-		chosenCalendars.setChosenCalendars(values.calendars);
+		chosenCalendars.set(values.calendars);
 		localStorage.setItem("chosenCalendars", JSON.stringify(values.calendars));
 		setIsOpen(false);
 	};

@@ -30,26 +30,16 @@ export default function TopBar() {
 						flexWrap: "wrap",
 					}}
 				>
-					<TopBarMenu
-					/* user={user.user}
-						setGoogleApiToken={setGoogleApiToken}
-						setUser={user.setUser}
-						setChosenCalendars={setChosenCalendars} */
-					/>
+					<TopBarMenu />
 					<Checkbox
 						onChange={toggleColorMode}
 						icon={<LightMode sx={{ color: "yellow" }} />}
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
 					<Typography variant='h6' sx={{ fontSize: { xs: "80%", sm: "100%" } }}>
-						{user.user?.names.displayName}
+						{user.get?.names.displayName}
 					</Typography>
-					{!user.user && (
-						<LoginWithGoogle
-						/* setGoogleApiToken={setGoogleApiToken}
-							setUser={user.setUser} */
-						/>
-					)}
+					{!user.get && <LoginWithGoogle />}
 				</Box>
 				<Clock />
 				<Box sx={{ justifySelf: "end", fontSize: { xs: "80%", sm: "100%" } }}>

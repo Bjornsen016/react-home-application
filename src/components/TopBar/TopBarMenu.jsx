@@ -18,9 +18,9 @@ function TopBarMenu() {
 
 	const handleSignOut = () => {
 		googleLogout();
-		user.setUser();
+		user.set();
 		googleApiToken.set();
-		chosenCalendars.setChosenCalendars();
+		chosenCalendars.set();
 		localStorage.removeItem("user");
 		localStorage.removeItem("googleApiToken");
 		localStorage.removeItem("chosenCalendars");

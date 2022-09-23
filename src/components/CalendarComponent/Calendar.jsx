@@ -85,11 +85,11 @@ const Calendar = () => {
 	//TODO: How often should it automaticly update?
 	useEffect(() => {
 		let interval;
-		if (chosenCalendars.chosenCalendars?.length > 0) {
-			getEvents(chosenCalendars.chosenCalendars);
+		if (chosenCalendars.get?.length > 0) {
+			getEvents(chosenCalendars.get);
 			console.log("Setting up an interval for updating calendars");
 			interval = setInterval(() => {
-				getEvents(chosenCalendars.chosenCalendars);
+				getEvents(chosenCalendars.get);
 				console.log("updating calendars");
 			}, 1000 * 60 * 5);
 		} else {
@@ -104,7 +104,7 @@ const Calendar = () => {
 			console.log("Removing calendar interval");
 			clearInterval(interval);
 		};
-	}, [chosenCalendars.chosenCalendars]);
+	}, [chosenCalendars.get]);
 
 	return (
 		<Container style={{ height: "100%" }} sx={flexStyle} maxWidth='lg'>
@@ -156,7 +156,7 @@ const toUpcomingDateTime = (dateTimeString) => {
 };
 
 //TODO: Add so that if the event starts earlier than today we want to display the start differently
-//TODO: Check the year also
+//TODO: If recurrence exists we need to handle this differently.
 const isEventStartTodayOrEarlier = (e) => {
 	return (
 		(new Date(e.start.dateTime).getDate() <= new Date(Date.now()).getDate() &&

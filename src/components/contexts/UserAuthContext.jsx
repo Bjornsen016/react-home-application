@@ -11,13 +11,17 @@ export const UserAuthContextProvider = ({ children }) => {
 		JSON.parse(localStorage.getItem("chosenCalendars"))
 	);
 
+	//TODO: Change user and chosenCalendars to act lite googleApiToken does.
 	const value = {
-		user: { user, setUser },
+		user: { get: user, set: (user) => setUser(user) },
 		googleApiToken: {
 			get: googleApiToken,
 			set: (token) => setGoogleApiToken(token),
 		},
-		chosenCalendars: { chosenCalendars, setChosenCalendars },
+		chosenCalendars: {
+			get: chosenCalendars,
+			set: (calendar) => setChosenCalendars(calendar),
+		},
 	};
 
 	return (
