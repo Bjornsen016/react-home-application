@@ -1,5 +1,4 @@
 import FetchData from "../utils/FetchData";
-import { daysOfTheYearApiInfo } from "../../config/daysOfTheYearApiInfo";
 import { React, useState, useEffect } from "react";
 
 import Carousel from "react-material-ui-carousel";
@@ -14,7 +13,6 @@ export default function FactOfTheDay() {
   const [historyCard, setHistoryCard] = useState([]);
   const [nameCard, setNameCard] = useState([]);
   const [jokeCard, setJokeCard] = useState([]);
-  const [eventCard, setEventCard] = useState([]);
   const [cardInfo, setCardInfo] = useState([]);
 
   useEffect(() => {
@@ -77,27 +75,7 @@ export default function FactOfTheDay() {
       setNameCard(nameCard);
       setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
     };
-    const fetchEvent = async () => {
-      //TODO needs to fetch via proxy for now
-      const headers = new Headers({
-        "X-Api-Key": daysOfTheYearApiInfo.key,
-      });
-      await fetch(daysOfTheYearApiInfo.getTodaysEventUrl, {
-        headers: headers,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const eventCard = {
-            secondaryHeader: `Event of this day`,
-            primaryHeader: `${data.data[0].name}`,
-            body: () => `${data.data[0].excerpt}`,
-          };
-          setEventCard(eventCard);
-          setCardInfo((prevAppCard) => [...prevAppCard, eventCard]);
-        });
-    };
     setCardInfo([]);
-    fetchEvent();
     fetchHistory();
     fetchJoke();
     fetchName();
@@ -119,7 +97,6 @@ export default function FactOfTheDay() {
     };
     setCardInfo([]);
     await fetchHistory();
-    setCardInfo((prevAppCard) => [...prevAppCard, eventCard]);
     setCardInfo((prevAppCard) => [...prevAppCard, jokeCard]);
     setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
   };
