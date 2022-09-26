@@ -10,16 +10,19 @@ export default function FactOfTheDay() {
   const month = new Date().getMonth() + 1;
   const year = new Date().getFullYear();
 
+  const [historyData, setHistoryData] = useState([]);
   const [historyCard, setHistoryCard] = useState([]);
   const [nameCard, setNameCard] = useState([]);
   const [jokeCard, setJokeCard] = useState([]);
-  const [cardInfo, setCardInfo] = useState([]);
+
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
     const fetchHistory = async () => {
       const historyData = await FetchData(
         `https://byabbe.se/on-this-day/${month}/${day}/events.json`
       );
+      setHistoryData(historyData);
       const index = Math.floor(Math.random() * historyData[0].events.length);
       const historyCard = {
         secondaryHeader: `History of this day`,
@@ -28,7 +31,7 @@ export default function FactOfTheDay() {
         showbutton: true,
       };
       setHistoryCard(historyCard);
-      setCardInfo((prevAppCard) => [...prevAppCard, historyCard]);
+      setCards((prevAppCard) => [...prevAppCard, historyCard]);
     };
     const fetchJoke = async () => {
       const data = await FetchData(`https://v2.jokeapi.dev/joke/Programming`);
@@ -50,7 +53,7 @@ export default function FactOfTheDay() {
         body: () => `${jokeData.setup} ${jokeData.response} `,
       };
       setJokeCard(jokeCard);
-      setCardInfo((prevAppCard) => [...prevAppCard, jokeCard]);
+      setCards((prevAppCard) => [...prevAppCard, jokeCard]);
     };
     const fetchName = async () => {
       let nameData = await FetchData(
@@ -73,32 +76,28 @@ export default function FactOfTheDay() {
         ),
       };
       setNameCard(nameCard);
-      setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
+      setCards((prevAppCard) => [...prevAppCard, nameCard]);
     };
-    setCardInfo([]);
+    setCards([]);
     fetchHistory();
     fetchJoke();
     fetchName();
   }, []);
-  const updateHistoryCard = async () => {
-    const fetchHistory = async () => {
-      const historyData = await FetchData(
-        `https://byabbe.se/on-this-day/${month}/${day}/events.json`
-      );
-      const index = Math.floor(Math.random() * historyData[0].events.length);
-      const historyCard = {
-        secondaryHeader: `History of this day`,
-        primaryHeader: `Year ${historyData[0].events[index].year}`,
-        body: () => `${historyData[0].events[index].description}`,
-        showbutton: true,
-      };
-      setHistoryCard(historyCard);
-      setCardInfo((prevAppCard) => [...prevAppCard, historyCard]);
+
+  const updateHistoryCard = () => {
+    const index = Math.floor(Math.random() * historyData[0].events.length);
+    const newHistoryCard = {
+      secondaryHeader: `History of this day`,
+      primaryHeader: `Year ${historyData[0].events[index].year}`,
+      body: () => `${historyData[0].events[index].description}`,
+      showbutton: true,
     };
-    setCardInfo([]);
-    await fetchHistory();
-    setCardInfo((prevAppCard) => [...prevAppCard, jokeCard]);
-    setCardInfo((prevAppCard) => [...prevAppCard, nameCard]);
+
+    setHistoryCard(newHistoryCard);
+    setCards([]);
+    setCards((prevAppCard) => [...prevAppCard, historyCard]);
+    setCards((prevAppCard) => [...prevAppCard, jokeCard]);
+    setCards((prevAppCard) => [...prevAppCard, nameCard]);
   };
 
   function AppCard(props) {
@@ -168,7 +167,7 @@ export default function FactOfTheDay() {
       sx={{ overflow: { xs: "visible" }, height: { sm: "85%" } }}
       interval={8000}
     >
-      {cardInfo?.map((item, i) =>
+      {cards?.map((item, i) =>
         item.body ? <AppCard key={i} item={item} /> : ""
       )}
     </Carousel>
