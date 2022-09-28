@@ -7,11 +7,16 @@ import LoginWithGoogle from "./LoginWithGoogle";
 import { ColorMode } from "../contexts/ColorModeContext";
 import { UserAuth } from "../contexts/UserAuthContext";
 
+import { auth } from "../../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
 export default function TopBar() {
 	const { toggleColorMode } = ColorMode();
-	const { user } = UserAuth();
+	/* const { user } = UserAuth(); */
+
+	const [user, loading, error] = useAuthState(auth);
 	return (
 		<AppBar position='static' color='primary'>
 			<Toolbar
@@ -37,9 +42,9 @@ export default function TopBar() {
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
 					<Typography variant='h6' sx={{ fontSize: { xs: "80%", sm: "100%" } }}>
-						{user.get?.names.displayName}
+						{user?.displayName}
 					</Typography>
-					{!user.get && <LoginWithGoogle />}
+					{!user && <LoginWithGoogle />}
 				</Box>
 				<Clock />
 				<Box sx={{ justifySelf: "end", fontSize: { xs: "80%", sm: "100%" } }}>

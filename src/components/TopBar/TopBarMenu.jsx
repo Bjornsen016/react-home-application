@@ -5,8 +5,12 @@ import { googleLogout } from "@react-oauth/google";
 import { Link } from "react-router-dom";
 import { UserAuth } from "../contexts/UserAuthContext";
 
+import { auth, logout } from "../../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 function TopBarMenu() {
-	const { user, googleApiToken, chosenCalendars } = UserAuth();
+	const [user] = useAuthState(auth);
+	const { googleApiToken, chosenCalendars } = UserAuth();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -17,12 +21,13 @@ function TopBarMenu() {
 	};
 
 	const handleSignOut = () => {
-		googleLogout();
-		user.set();
+		/* googleLogout(); */
+		logout();
 		googleApiToken.set();
 		chosenCalendars.set();
-		localStorage.removeItem("user");
 		localStorage.removeItem("googleApiToken");
+		localStorage.removeItem("refreshToken");
+		localStorage.removeItem("expirationDate");
 		localStorage.removeItem("chosenCalendars");
 		handleClose();
 	};

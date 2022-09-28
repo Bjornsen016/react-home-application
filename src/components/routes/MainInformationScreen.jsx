@@ -5,6 +5,9 @@ import TasksList from "../TaskList/TasksList";
 import { useState } from "react";
 import { UserAuth } from "../contexts/UserAuthContext";
 
+import { auth } from "../../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 const boxStyle = {
 	border: "2px solid",
 	padding: "10px",
@@ -12,7 +15,8 @@ const boxStyle = {
 
 //TODO: Fix styling
 export default function MainInformationScreen() {
-	const { user } = UserAuth();
+	/* const { user } = UserAuth(); */
+	const [user] = useAuthState(auth);
 	//TODO: Save the values in local storage so that next time you open the app it remembers
 	const [bigComponentDialogIsOpen, setbigComponentDialogIsOpen] =
 		useState(false);
@@ -29,7 +33,7 @@ export default function MainInformationScreen() {
 	const returnComponent = (value) => {
 		switch (value) {
 			case "Calendar":
-				if (user.get) {
+				if (user) {
 					return <Calendar />;
 				}
 				return (
@@ -38,7 +42,7 @@ export default function MainInformationScreen() {
 					</Typography>
 				);
 			case "Tasks":
-				if (user.get) {
+				if (user) {
 					return <TasksList />;
 				}
 				return (

@@ -29,21 +29,21 @@ const mainContainerStyle = {
 
 function App() {
 	return (
-		<GoogleOAuthProvider clientId={googleApiInfo.clientId}>
-			<ColorModeContextProvider>
-				<UserAuthContextProvider>
-					<TopBar />
+		//<GoogleOAuthProvider clientId={googleApiInfo.clientId}>
+		<ColorModeContextProvider>
+			<UserAuthContextProvider>
+				<TopBar />
 
-					<Container sx={mainContainerStyle} maxWidth='lg'>
-						<Routes>
-							<Route path='/' element={<MainInfoScreen />} />
-							<Route path='/weather' element={<Weather />} />
-							<Route path='*' element={<div>This route does not exist</div>} />
-						</Routes>
-					</Container>
-				</UserAuthContextProvider>
-			</ColorModeContextProvider>
-		</GoogleOAuthProvider>
+				<Container sx={mainContainerStyle} maxWidth='lg'>
+					<Routes>
+						<Route path='/' element={<MainInfoScreen />} />
+						<Route path='/weather' element={<Weather />} />
+						<Route path='*' element={<div>This route does not exist</div>} />
+					</Routes>
+				</Container>
+			</UserAuthContextProvider>
+		</ColorModeContextProvider>
+		//</GoogleOAuthProvider>
 	);
 }
 
