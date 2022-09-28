@@ -34,8 +34,8 @@ const loginWithCustomToken = async (token) => {
 	}
 };
 
-const logout = () => {
-	signOut(auth);
+const logout = async () => {
+	await signOut(auth);
 };
 
 export { auth, db, logout, loginWithCustomToken };

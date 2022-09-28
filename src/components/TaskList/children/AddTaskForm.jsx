@@ -7,10 +7,8 @@ import {
 	TextField,
 } from "@mui/material";
 import { postDataToApi } from "../../utils/fetcher";
-import { UserAuth } from "../../contexts/UserAuthContext";
 
 export default function AddTaskForm({ open, setOpen, listId, getTaskList }) {
-	const { googleApiToken } = UserAuth();
 	const taskUrl = new URL("https://content-tasks.googleapis.com");
 	const orginPath = "/tasks/v1";
 	const insertTaskUrl = `/lists/${listId}/tasks`;
@@ -25,7 +23,7 @@ export default function AddTaskForm({ open, setOpen, listId, getTaskList }) {
 	const handleSubmit = async () => {
 		const taskBody = { title: value };
 
-		await postDataToApi(taskUrl, googleApiToken.get, taskBody);
+		await postDataToApi(taskUrl, taskBody);
 
 		taskUrl.pathname = orginPath;
 

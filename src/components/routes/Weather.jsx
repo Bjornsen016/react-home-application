@@ -1,6 +1,6 @@
 import * as React from "react";
 import FetchData from "../utils/FetchData";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import {
 	TextField,
 	Table,
@@ -14,7 +14,6 @@ import {
 import { useLocation, Link } from "react-router-dom";
 import WeatherCard from "../WeatherCard";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-/* import { ColorModeContext } from "../../App"; */
 import { ColorMode } from "../contexts/ColorModeContext";
 
 //sets the dates of today and the upcoming three days

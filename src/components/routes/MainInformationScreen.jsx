@@ -3,7 +3,6 @@ import GridChoiceDialog from "../GridChoiceDialog";
 import { Calendar, BusTable, FactOfTheDay } from "../";
 import TasksList from "../TaskList/TasksList";
 import { useState } from "react";
-import { UserAuth } from "../contexts/UserAuthContext";
 
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -15,20 +14,30 @@ const boxStyle = {
 
 //TODO: Fix styling
 export default function MainInformationScreen() {
-	/* const { user } = UserAuth(); */
 	const [user] = useAuthState(auth);
-	//TODO: Save the values in local storage so that next time you open the app it remembers
 	const [bigComponentDialogIsOpen, setbigComponentDialogIsOpen] =
 		useState(false);
-	const [bigComponentValue, setbigComponentValue] = useState("Calendar");
+	const [bigComponentValue, setbigComponentValue] = useState(
+		localStorage.getItem("bigComponentValue")
+			? localStorage.getItem("bigComponentValue")
+			: "Calendar"
+	);
 
 	const [leftComponentDialogIsOpen, setleftComponentDialogIsOpen] =
 		useState(false);
-	const [leftComponentValue, setleftComponentValue] = useState("Tasks");
+	const [leftComponentValue, setleftComponentValue] = useState(
+		localStorage.getItem("leftComponentValue")
+			? localStorage.getItem("leftComponentValue")
+			: "Tasks"
+	);
 
 	const [rightComponentDialogIsOpen, setrightComponentDialogIsOpen] =
 		useState(false);
-	const [rightComponentValue, setrightComponentValue] = useState("Facts");
+	const [rightComponentValue, setrightComponentValue] = useState(
+		localStorage.getItem("rightComponentValue")
+			? localStorage.getItem("rightComponentValue")
+			: "Facts"
+	);
 
 	const returnComponent = (value) => {
 		switch (value) {
@@ -63,43 +72,39 @@ export default function MainInformationScreen() {
 
 	return (
 		<>
-			{
-				<>
-					<Box
-						onContextMenu={(event) => {
-							event.preventDefault();
-							setbigComponentDialogIsOpen(true);
-						}}
-						borderColor='textPrimary'
-						gridArea='big-component'
-						sx={boxStyle}
-					>
-						{returnComponent(bigComponentValue)}
-					</Box>
-					<Box
-						onContextMenu={(event) => {
-							event.preventDefault();
-							setleftComponentDialogIsOpen(true);
-						}}
-						borderColor='textPrimary'
-						gridArea='small-component-left'
-						sx={boxStyle}
-					>
-						{returnComponent(leftComponentValue)}
-					</Box>
-					<Box
-						onContextMenu={(event) => {
-							event.preventDefault();
-							setrightComponentDialogIsOpen(true);
-						}}
-						borderColor='textPrimary'
-						gridArea='small-component-right'
-						sx={boxStyle}
-					>
-						{returnComponent(rightComponentValue)}
-					</Box>
-				</>
-			}
+			<Box
+				onContextMenu={(event) => {
+					event.preventDefault();
+					setbigComponentDialogIsOpen(true);
+				}}
+				borderColor='textPrimary'
+				gridArea='big-component'
+				sx={boxStyle}
+			>
+				{returnComponent(bigComponentValue)}
+			</Box>
+			<Box
+				onContextMenu={(event) => {
+					event.preventDefault();
+					setleftComponentDialogIsOpen(true);
+				}}
+				borderColor='textPrimary'
+				gridArea='small-component-left'
+				sx={boxStyle}
+			>
+				{returnComponent(leftComponentValue)}
+			</Box>
+			<Box
+				onContextMenu={(event) => {
+					event.preventDefault();
+					setrightComponentDialogIsOpen(true);
+				}}
+				borderColor='textPrimary'
+				gridArea='small-component-right'
+				sx={boxStyle}
+			>
+				{returnComponent(rightComponentValue)}
+			</Box>
 
 			{/* The different dialogs to choose what to show */}
 			<GridChoiceDialog
@@ -107,6 +112,7 @@ export default function MainInformationScreen() {
 				setIsOpen={setbigComponentDialogIsOpen}
 				setValue={setbigComponentValue}
 				value={bigComponentValue}
+				componentName='bigComponentValue'
 				choices={[
 					{ value: "Calendar" },
 					{ value: "Tasks" },
@@ -118,6 +124,7 @@ export default function MainInformationScreen() {
 				setIsOpen={setleftComponentDialogIsOpen}
 				setValue={setleftComponentValue}
 				value={leftComponentValue}
+				componentName='leftComponentValue'
 				choices={[{ value: "Tasks" }, { value: "Facts" }, { value: "Bus" }]}
 			/>
 			<GridChoiceDialog
@@ -125,6 +132,7 @@ export default function MainInformationScreen() {
 				setIsOpen={setrightComponentDialogIsOpen}
 				setValue={setrightComponentValue}
 				value={rightComponentValue}
+				componentName='rightComponentValue'
 				choices={[{ value: "Facts" }, { value: "Tasks" }, { value: "Bus" }]}
 			/>
 		</>

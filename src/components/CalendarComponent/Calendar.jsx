@@ -18,7 +18,7 @@ const {
 } = googleApiInfo;
 
 const Calendar = () => {
-	const { googleApiToken, chosenCalendars } = UserAuth();
+	const { chosenCalendars } = UserAuth();
 
 	const [showCalenderListModal, setShowCalenderListModal] = useState(false);
 	const [calendarList, setCalendarList] = useState([]);
@@ -29,7 +29,7 @@ const Calendar = () => {
 	const getCalendars = async () => {
 		const url = new URL(googleCalendarBaseUrl);
 		url.pathname = googleCalendarListPathname;
-		const data = await fetchDataFromApi(url, googleApiToken.get);
+		const data = await fetchDataFromApi(url);
 		return data.items;
 	};
 
@@ -41,7 +41,7 @@ const Calendar = () => {
 			const today = new Date(Date.now()).toISOString();
 			url.searchParams.set("timeMin", today);
 
-			const data = await fetchDataFromApi(url, googleApiToken.get);
+			const data = await fetchDataFromApi(url);
 			return data.items;
 		});
 		return apiEvents;
@@ -84,24 +84,26 @@ const Calendar = () => {
 
 	//TODO: How often should it automaticly update?
 	useEffect(() => {
+		//TODO: Hopefully able to remove the timeout if implementing GoogleApiCallsContext
 		let interval;
-		if (chosenCalendars.get?.length > 0) {
-			getEvents(chosenCalendars.get);
-			console.log("Setting up an interval for updating calendars");
-			interval = setInterval(() => {
+		setTimeout(() => {
+			if (!localStorage.getItem("googleApiToken")) return;
+			if (chosenCalendars.get?.length > 0) {
 				getEvents(chosenCalendars.get);
-				console.log("updating calendars");
-			}, 1000 * 60 * 5);
-		} else {
-			getCalendars().then(async (items) => {
-				setCalendarList(items);
-				setShowCalenderListModal(true);
-				console.log("Opening the calendar list modal");
-			});
-		}
+				console.log("Setting up an interval for updating calendars");
+				interval = setInterval(() => {
+					getEvents(chosenCalendars.get);
+					console.log("updating calendars");
+				}, 1000 * 60 * 5);
+			} else {
+				getCalendars().then(async (items) => {
+					setCalendarList(items);
+					setShowCalenderListModal(true);
+				});
+			}
+		}, 1000);
 
 		return () => {
-			console.log("Removing calendar interval");
 			clearInterval(interval);
 		};
 	}, [chosenCalendars.get]);

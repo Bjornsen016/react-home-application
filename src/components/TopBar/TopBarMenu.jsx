@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { googleLogout } from "@react-oauth/google";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../contexts/UserAuthContext";
-
 import { auth, logout } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 function TopBarMenu() {
+	const navigate = useNavigate();
 	const [user] = useAuthState(auth);
-	const { googleApiToken, chosenCalendars } = UserAuth();
+	const { chosenCalendars } = UserAuth();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -21,14 +20,13 @@ function TopBarMenu() {
 	};
 
 	const handleSignOut = () => {
-		/* googleLogout(); */
 		logout();
-		googleApiToken.set();
 		chosenCalendars.set();
 		localStorage.removeItem("googleApiToken");
 		localStorage.removeItem("refreshToken");
 		localStorage.removeItem("expirationDate");
 		localStorage.removeItem("chosenCalendars");
+		navigate("/");
 		handleClose();
 	};
 

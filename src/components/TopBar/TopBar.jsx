@@ -5,7 +5,6 @@ import Clock from "./Clock";
 import WeatherWidget from "./WeatherWidget";
 import LoginWithGoogle from "./LoginWithGoogle";
 import { ColorMode } from "../contexts/ColorModeContext";
-import { UserAuth } from "../contexts/UserAuthContext";
 
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";

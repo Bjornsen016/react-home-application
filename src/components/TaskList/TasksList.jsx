@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchDataFromApi } from "../utils/fetcher";
 import { Tabs, Tab, Divider, CircularProgress } from "@mui/material";
 import TabPanel from "./children/TabPanel";
-import { UserAuth } from "../contexts/UserAuthContext";
 
 //useMemo: Returns and stores the calculated value of a function in a variable
 //useCallBack: Returns and stores the actual function itself in a variable
 
 const TasksList = () => {
-	const { googleApiToken } = UserAuth();
 	const [value, setValue] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [taskLists, setTaskLists] = useState();
@@ -26,10 +24,7 @@ const TasksList = () => {
 		for (let i = 0; i < lists.items.length; i++) {
 			taskUrl.pathname += "/lists/" + lists.items[i].id + "/tasks";
 			taskUrl.searchParams.set("showHidden", "True");
-			const listOfTasksData = await fetchDataFromApi(
-				taskUrl,
-				googleApiToken.get
-			);
+			const listOfTasksData = await fetchDataFromApi(taskUrl);
 			const taskObjectList = {
 				items: listOfTasksData.items,
 				title: lists.items[i].title,
@@ -55,7 +50,7 @@ const TasksList = () => {
 
 	const getTaskList = async () => {
 		taskUrl.pathname += getTaskListsUrl;
-		const lists = await fetchDataFromApi(taskUrl, googleApiToken.get);
+		const lists = await fetchDataFromApi(taskUrl);
 		await setTaskLists(lists);
 		taskUrl.pathname = orginPath;
 		getTasks(lists);
@@ -63,13 +58,15 @@ const TasksList = () => {
 
 	useEffect(() => {
 		//Added the timeout to let the system get the ApiKey from localStorage if there is one.
+		//TODO: Hopefully able to remove the timeout if implementing GoogleApiCallsContext
 		let interval;
 		setTimeout(() => {
+			if (!localStorage.getItem("googleApiToken")) return;
 			getTaskList(getTaskListsUrl);
 			interval = setInterval(() => {
 				getTaskList(getTaskListsUrl);
 			}, 1000 * 60 * 5);
-		}, 500);
+		}, 1000);
 		return () => clearInterval(interval);
 	}, []);
 

@@ -1,10 +1,9 @@
 import { googleApiInfo } from "../../config/googleApiInfo";
-import { UserAuth } from "../contexts/UserAuthContext";
 
 const { googleRenewAuthToken } = googleApiInfo;
 
-export async function fetchDataFromApi(url, token) {
-	token = await checkTokenExpiration(token);
+export async function fetchDataFromApi(url) {
+	const token = await checkTokenExpiration();
 	const headers = new Headers({
 		"Content-Type": "application/json;charset=utf-8",
 		Authorization: `Bearer ${token}`,
@@ -17,7 +16,8 @@ export async function fetchDataFromApi(url, token) {
 	return result;
 }
 
-export async function postDataToApi(url, token, body) {
+export async function postDataToApi(url, body) {
+	const token = await checkTokenExpiration();
 	const headers = new Headers({
 		"Content-Type": "application/json;charset=utf-8",
 		Authorization: `Bearer ${token}`,
@@ -33,7 +33,8 @@ export async function postDataToApi(url, token, body) {
 	return result;
 }
 
-export async function patchDataToApi(url, token, body) {
+export async function patchDataToApi(url, body) {
+	const token = await checkTokenExpiration();
 	const headers = new Headers({
 		"Content-Type": "application/json;charset=utf-8",
 		Authorization: `Bearer ${token}`,
@@ -49,7 +50,8 @@ export async function patchDataToApi(url, token, body) {
 	return result;
 }
 
-export async function deleteDataFromApi(url, token) {
+export async function deleteDataFromApi(url) {
+	const token = await checkTokenExpiration();
 	const headers = new Headers({
 		"Content-Type": "application/json;charset=utf-8",
 		Authorization: `Bearer ${token}`,
@@ -62,34 +64,20 @@ export async function deleteDataFromApi(url, token) {
 	return result;
 }
 
-const checkTokenExpiration = async (token) => {
+const checkTokenExpiration = async () => {
+	let token = localStorage.getItem("googleApiToken");
 	const expiration = new Date(localStorage.getItem("expirationDate"));
-	console.log("Expiration first: ", expiration);
-	if (expiration < new Date()) {
-		//send request to my backend.
-		//get response with new token
-		//save new token in localstorage
-		//save new expirationDate in localstorage
-		//return new token
-		const refresh_token = localStorage.getItem("refreshToken");
-		//or
-		//const userRef = ref(db, "user/" + userId)
-		//const refreshToken = userRef.get().refresh_token; //or something like it
+	if (!(expiration < new Date())) return token;
 
-		const newToken = await googleRenewAuthToken(refresh_token);
-		console.log(newToken);
+	const refresh_token = localStorage.getItem("refreshToken");
+	//or //TODO: Below
+	//const userRef = ref(db, "user/" + userId)
+	//const refreshToken = userRef.get().refresh_token; //or something like it
 
-		const { googleApiToken } = UserAuth(); //TODO: Go to useing the localStorage instead of state with the tokens for Google
+	const newToken = await googleRenewAuthToken(refresh_token);
+	localStorage.setItem("googleApiToken", newToken);
 
-		googleApiToken.set(newToken);
-		localStorage.setItem("googleApiToken", newToken);
-
-		const expirationDate = new Date(new Date().getTime() + 3600000);
-		localStorage.setItem("expirationDate", expirationDate);
-
-		console.log("Expiration New: ", expiration);
-		return newToken;
-	} else if (expiration > new Date()) return token;
-
-	//TODO: renew token if nessesary.
+	const expirationDate = new Date(new Date().getTime() + 3600000);
+	localStorage.setItem("expirationDate", expirationDate);
+	return newToken;
 };

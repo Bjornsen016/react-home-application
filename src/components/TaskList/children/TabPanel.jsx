@@ -9,11 +9,8 @@ import Checkbox from "@mui/material/Checkbox";
 import AddTaskForm from "./AddTaskForm";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteDataFromApi, patchDataToApi } from "../../utils/fetcher";
-import { UserAuth } from "../../contexts/UserAuthContext";
-import { internal_processStyles } from "@mui/styled-engine";
 
 function TabPanel({ list, value, index, getTasks, ...other }) {
-	const { googleApiToken } = UserAuth();
 	const label = { inputProps: { "aria-label": "Checkbox" } };
 	const [open, setOpen] = useState(false);
 
@@ -27,7 +24,7 @@ function TabPanel({ list, value, index, getTasks, ...other }) {
 		}
 		const taskUrl = event.target.value;
 
-		await patchDataToApi(taskUrl, googleApiToken.get, taskBody);
+		await patchDataToApi(taskUrl, taskBody);
 		getTasks();
 	};
 
@@ -45,7 +42,7 @@ function TabPanel({ list, value, index, getTasks, ...other }) {
 		}
 
 		//Delete Task
-		await deleteDataFromApi(taskUrl, googleApiToken.get);
+		await deleteDataFromApi(taskUrl);
 		getTasks();
 	};
 

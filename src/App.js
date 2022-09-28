@@ -2,8 +2,6 @@ import { Container } from "@mui/material";
 import "./App.css";
 import { TopBar, MainInfoScreen, Weather } from "./components";
 import { Route, Routes } from "react-router-dom";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { googleApiInfo } from "./config/googleApiInfo";
 import { ColorModeContextProvider } from "./components/contexts/ColorModeContext";
 import { UserAuthContextProvider } from "./components/contexts/UserAuthContext";
 
@@ -29,7 +27,6 @@ const mainContainerStyle = {
 
 function App() {
 	return (
-		//<GoogleOAuthProvider clientId={googleApiInfo.clientId}>
 		<ColorModeContextProvider>
 			<UserAuthContextProvider>
 				<TopBar />
@@ -43,7 +40,6 @@ function App() {
 				</Container>
 			</UserAuthContextProvider>
 		</ColorModeContextProvider>
-		//</GoogleOAuthProvider>
 	);
 }
 
