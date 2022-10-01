@@ -94,6 +94,9 @@ const Calendar = () => {
 	useEffect(() => {
 		let interval;
 
+		if (apiToken.get === undefined || !localStorage.getItem("googleApiToken"))
+			return;
+
 		if (chosenCalendars.get?.length > 0) {
 			getEvents(chosenCalendars.get);
 			console.log("Setting up an interval for updating calendars");

@@ -9,7 +9,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 function TopBarMenu() {
 	const navigate = useNavigate();
 	const [user] = useAuthState(auth);
-	const { chosenCalendars } = UserAuth();
+	const { chosenCalendars, apiToken } = UserAuth();
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -21,6 +21,7 @@ function TopBarMenu() {
 
 	const handleSignOut = () => {
 		logout();
+		apiToken.set();
 		chosenCalendars.set();
 		localStorage.removeItem("googleApiToken");
 		localStorage.removeItem("refreshToken");

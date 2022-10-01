@@ -59,16 +59,9 @@ const TasksList = () => {
 	};
 
 	useEffect(() => {
-		//Added the timeout to let the system get the ApiKey from localStorage if there is one.
-		//TODO: Hopefully able to remove the timeout if implementing GoogleApiCallsContext
 		let interval;
-		/* setTimeout(() => {
-			if (!localStorage.getItem("googleApiToken")) return;
-			getTaskList(getTaskListsUrl);
-			interval = setInterval(() => {
-				getTaskList(getTaskListsUrl);
-			}, 1000 * 60 * 5);
-		}, 1000); */
+		if (apiToken.get === undefined || !localStorage.getItem("googleApiToken"))
+			return;
 
 		getTaskList(getTaskListsUrl);
 		interval = setInterval(() => {
