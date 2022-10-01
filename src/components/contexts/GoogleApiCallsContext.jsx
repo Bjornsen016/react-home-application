@@ -1,7 +1,10 @@
 import { useState, useContext, createContext } from "react";
-import { googleApiInfo } from "../../config/googleApiInfo";
-
-const { googleRenewAuthToken } = googleApiInfo;
+import {
+	fetchDataFromApi,
+	postDataToApi,
+	patchDataToApi,
+	deleteDataFromApi,
+} from "../utils/fetcher";
 
 const GoogleApiCallsContext = createContext();
 
@@ -16,73 +19,18 @@ export const GoogleApiCallsContextProvider = ({ children }) => {
 	const [apiToken, setApiToken] = useState(
 		localStorage.getItem("googleApiToken")
 	);
-
-	async function fetchDataFromApi(url) {
-		const token = await checkTokenExpiration();
-		const headers = new Headers({
-			"Content-Type": "application/json;charset=utf-8",
-			Authorization: `Bearer ${token}`,
-		});
-		const result = await fetch(url, {
-			method: "GET",
-			headers: headers,
-		}).then((res) => res.json());
-		console.log(result);
-		return result;
-	}
-
-	async function postDataToApi(url, body) {
-		const token = await checkTokenExpiration();
-		const headers = new Headers({
-			"Content-Type": "application/json;charset=utf-8",
-			Authorization: `Bearer ${token}`,
-		});
-
-		const result = await fetch(url, {
-			method: "POST",
-			body: JSON.stringify(body),
-			headers: headers,
-		}).then((res) => res.json());
-		console.log(result);
-
-		return result;
-	}
-
-	async function patchDataToApi(url, body) {
-		const token = await checkTokenExpiration();
-		const headers = new Headers({
-			"Content-Type": "application/json;charset=utf-8",
-			Authorization: `Bearer ${token}`,
-		});
-
-		const result = await fetch(url, {
-			method: "PATCH",
-			body: JSON.stringify(body),
-			headers: headers,
-		}).then((res) => res.json());
-		console.log(result);
-
-		return result;
-	}
-
-	async function deleteDataFromApi(url) {
-		const token = await checkTokenExpiration();
-		const headers = new Headers({
-			"Content-Type": "application/json;charset=utf-8",
-			Authorization: `Bearer ${token}`,
-		});
-		const result = await fetch(url, {
-			method: "DELETE",
-			headers: headers,
-		}).then((res) => res);
-		console.log(result);
-		return result;
-	}
+	const [chosenCalendars, setChosenCalendars] = useState(
+		JSON.parse(localStorage.getItem("chosenCalendars"))
+	);
 
 	const value = {
 		apiToken: {
 			get: apiToken,
 			set: (token) => setApiToken(token),
+		},
+		chosenCalendars: {
+			get: chosenCalendars,
+			set: (calendar) => setChosenCalendars(calendar),
 		},
 		fetchDataFromApi: (url) => fetchDataFromApi(url),
 		postDataToApi: (url, body) => postDataToApi(url, body),
@@ -95,24 +43,6 @@ export const GoogleApiCallsContextProvider = ({ children }) => {
 			{children}
 		</GoogleApiCallsContext.Provider>
 	);
-};
-
-const checkTokenExpiration = async () => {
-	let token = localStorage.getItem("googleApiToken");
-	const expiration = new Date(localStorage.getItem("expirationDate"));
-	if (!(expiration < new Date())) return token;
-
-	const refresh_token = localStorage.getItem("refreshToken");
-	//or //TODO: Below
-	//const userRef = ref(db, "user/" + userId)
-	//const refreshToken = userRef.get().refresh_token; //or something like it
-
-	const newToken = await googleRenewAuthToken(refresh_token);
-	localStorage.setItem("googleApiToken", newToken);
-
-	const expirationDate = new Date(new Date().getTime() + 3600000);
-	localStorage.setItem("expirationDate", expirationDate);
-	return newToken;
 };
 
 export const UserAuth = () => {

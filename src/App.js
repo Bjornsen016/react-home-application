@@ -3,7 +3,6 @@ import "./App.css";
 import { TopBar, MainInfoScreen, Weather } from "./components";
 import { Route, Routes } from "react-router-dom";
 import { ColorModeContextProvider } from "./components/contexts/ColorModeContext";
-import { UserAuthContextProvider } from "./components/contexts/UserAuthContext";
 import { GoogleApiCallsContextProvider } from "./components/contexts/GoogleApiCallsContext";
 
 const mainContainerStyle = {
@@ -30,17 +29,15 @@ function App() {
 	return (
 		<ColorModeContextProvider>
 			<GoogleApiCallsContextProvider>
-				<UserAuthContextProvider>
-					<TopBar />
+				<TopBar />
 
-					<Container sx={mainContainerStyle} maxWidth='lg'>
-						<Routes>
-							<Route path='/' element={<MainInfoScreen />} />
-							<Route path='/weather' element={<Weather />} />
-							<Route path='*' element={<div>This route does not exist</div>} />
-						</Routes>
-					</Container>
-				</UserAuthContextProvider>
+				<Container sx={mainContainerStyle} maxWidth='lg'>
+					<Routes>
+						<Route path='/' element={<MainInfoScreen />} />
+						<Route path='/weather' element={<Weather />} />
+						<Route path='*' element={<div>This route does not exist</div>} />
+					</Routes>
+				</Container>
 			</GoogleApiCallsContextProvider>
 		</ColorModeContextProvider>
 	);

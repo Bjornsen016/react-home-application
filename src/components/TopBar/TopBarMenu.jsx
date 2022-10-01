@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
-import { UserAuth } from "../contexts/UserAuthContext";
+import { UserAuth } from "../contexts/GoogleApiCallsContext";
 import { auth, logout } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 

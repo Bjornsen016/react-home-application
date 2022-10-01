@@ -6,7 +6,7 @@ import {
 	DialogTitle,
 	TextField,
 } from "@mui/material";
-import { postDataToApi } from "../../utils/fetcher";
+import { UserAuth } from "../../contexts/GoogleApiCallsContext";
 
 export default function AddTaskForm({ open, setOpen, listId, getTaskList }) {
 	const taskUrl = new URL("https://content-tasks.googleapis.com");
@@ -16,6 +16,8 @@ export default function AddTaskForm({ open, setOpen, listId, getTaskList }) {
 	taskUrl.pathname += insertTaskUrl;
 
 	const [value, setValue] = useState(null);
+
+	const { postDataToApi } = UserAuth();
 	const handleClose = () => {
 		setOpen(false);
 	};

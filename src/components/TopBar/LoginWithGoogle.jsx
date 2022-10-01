@@ -45,7 +45,6 @@ export default function LoginWithGoogle() {
 					const userRef = ref(db, "user/" + userId);
 					onValue(userRef, (snapshot) => {
 						const dbUser = snapshot.val();
-						console.log(snapshot.val(dbUser));
 						apiToken.set(acessToken);
 						localStorage.setItem("googleApiToken", acessToken);
 						localStorage.setItem("refreshToken", dbUser.refresh_token);
@@ -68,7 +67,6 @@ export default function LoginWithGoogle() {
 			size='small'
 			color='success'
 			onClick={loginWithFireBaseAndCustomServer}
-			/* onClick={login} */
 		>
 			Google Sign in
 		</Button>

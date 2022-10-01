@@ -11,7 +11,7 @@ import {
 	FormControlLabel,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import { UserAuth } from "../contexts/UserAuthContext";
+import { UserAuth } from "../contexts/GoogleApiCallsContext";
 
 export const CalenderListModal = ({ isOpen, setIsOpen, calendarList }) => {
 	const { chosenCalendars } = UserAuth();

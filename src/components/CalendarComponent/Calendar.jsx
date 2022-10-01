@@ -1,10 +1,8 @@
 import { Container, CircularProgress } from "@mui/material";
 import { EventsContainer } from "./EventsContainer";
 import { CalenderListModal } from "./CalenderListModal";
-import { fetchDataFromApi } from "../utils/fetcher";
 import { useEffect, useState } from "react";
 import { googleApiInfo } from "../../config/googleApiInfo";
-import { UserAuth } from "../contexts/UserAuthContext";
 
 import { UserAuth as GoogleUserAuth } from "../contexts/GoogleApiCallsContext";
 
@@ -20,8 +18,7 @@ const {
 } = googleApiInfo;
 
 const Calendar = () => {
-	const { chosenCalendars } = UserAuth();
-	const { apiToken } = GoogleUserAuth();
+	const { apiToken, chosenCalendars, fetchDataFromApi } = GoogleUserAuth();
 
 	const [showCalenderListModal, setShowCalenderListModal] = useState(false);
 	const [calendarList, setCalendarList] = useState([]);

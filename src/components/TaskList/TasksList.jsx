@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { fetchDataFromApi } from "../utils/fetcher";
 import { Tabs, Tab, Divider, CircularProgress } from "@mui/material";
 import TabPanel from "./children/TabPanel";
 
-import { UserAuth as GoogleUserAuth } from "../contexts/GoogleApiCallsContext";
+import { UserAuth } from "../contexts/GoogleApiCallsContext";
 
 //useMemo: Returns and stores the calculated value of a function in a variable
 //useCallBack: Returns and stores the actual function itself in a variable
@@ -13,7 +12,7 @@ const TasksList = () => {
 	const [loading, setLoading] = useState(true);
 	const [taskLists, setTaskLists] = useState();
 	const [task, setTask] = useState([]);
-	const { apiToken } = GoogleUserAuth();
+	const { apiToken, fetchDataFromApi } = UserAuth();
 
 	const taskUrl = new URL("https://content-tasks.googleapis.com");
 	const orginPath = "/tasks/v1";
