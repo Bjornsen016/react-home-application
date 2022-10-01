@@ -8,12 +8,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ref, onValue } from "firebase/database";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+import { UserAuth } from "../contexts/GoogleApiCallsContext";
+
 const { googleAuthLinkGen } = googleApiInfo;
 
 export default function LoginWithGoogle() {
 	const [user, loading, error] = useAuthState(auth);
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	const { apiToken } = UserAuth();
 
 	const loginWithFireBaseAndCustomServer = async () => {
 		try {
@@ -42,6 +46,7 @@ export default function LoginWithGoogle() {
 					onValue(userRef, (snapshot) => {
 						const dbUser = snapshot.val();
 						console.log(snapshot.val(dbUser));
+						apiToken.set(acessToken);
 						localStorage.setItem("googleApiToken", acessToken);
 						localStorage.setItem("refreshToken", dbUser.refresh_token);
 						const expirationDate = new Date(new Date().getTime() + 3600000);

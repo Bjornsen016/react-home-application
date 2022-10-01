@@ -10,6 +10,8 @@ import AddTaskForm from "./AddTaskForm";
 import CloseIcon from "@mui/icons-material/Close";
 import { deleteDataFromApi, patchDataToApi } from "../../utils/fetcher";
 
+//TODO: Maybe we can send in only the tasklist and let the tabpanel make the call to get the tasks for their own.
+//That way we can make the component independet of the actual parent and able to update the innerlist only, and not all the lists if something changes.
 function TabPanel({ list, value, index, getTasks, ...other }) {
 	const label = { inputProps: { "aria-label": "Checkbox" } };
 	const [open, setOpen] = useState(false);

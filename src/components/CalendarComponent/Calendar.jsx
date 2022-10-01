@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { googleApiInfo } from "../../config/googleApiInfo";
 import { UserAuth } from "../contexts/UserAuthContext";
 
+import { UserAuth as GoogleUserAuth } from "../contexts/GoogleApiCallsContext";
+
 const flexStyle = {
 	display: "flex",
 	flexDirection: "column",
@@ -19,6 +21,7 @@ const {
 
 const Calendar = () => {
 	const { chosenCalendars } = UserAuth();
+	const { apiToken } = GoogleUserAuth();
 
 	const [showCalenderListModal, setShowCalenderListModal] = useState(false);
 	const [calendarList, setCalendarList] = useState([]);
@@ -37,9 +40,12 @@ const Calendar = () => {
 		const apiEvents = calendars.map(async (calendar) => {
 			const url = new URL(googleCalendarBaseUrl);
 			url.pathname = googleCalendarEventsPathname(calendar);
-			url.searchParams.set("maxResults", maxAmountPerCalendar);
+
 			const today = new Date(Date.now()).toISOString();
 			url.searchParams.set("timeMin", today);
+			url.searchParams.set("orderBy", "startTime");
+			url.searchParams.set("maxResults", maxAmountPerCalendar);
+			url.searchParams.set("singleEvents", true);
 
 			const data = await fetchDataFromApi(url);
 			return data.items;
@@ -84,29 +90,26 @@ const Calendar = () => {
 
 	//TODO: How often should it automaticly update?
 	useEffect(() => {
-		//TODO: Hopefully able to remove the timeout if implementing GoogleApiCallsContext
 		let interval;
-		setTimeout(() => {
-			if (!localStorage.getItem("googleApiToken")) return;
-			if (chosenCalendars.get?.length > 0) {
+
+		if (chosenCalendars.get?.length > 0) {
+			getEvents(chosenCalendars.get);
+			console.log("Setting up an interval for updating calendars");
+			interval = setInterval(() => {
 				getEvents(chosenCalendars.get);
-				console.log("Setting up an interval for updating calendars");
-				interval = setInterval(() => {
-					getEvents(chosenCalendars.get);
-					console.log("updating calendars");
-				}, 1000 * 60 * 5);
-			} else {
-				getCalendars().then(async (items) => {
-					setCalendarList(items);
-					setShowCalenderListModal(true);
-				});
-			}
-		}, 1000);
+				console.log("updating calendars");
+			}, 1000 * 60 * 5);
+		} else {
+			getCalendars().then(async (items) => {
+				setCalendarList(items);
+				setShowCalenderListModal(true);
+			});
+		}
 
 		return () => {
 			clearInterval(interval);
 		};
-	}, [chosenCalendars.get]);
+	}, [chosenCalendars.get, apiToken.get]);
 
 	return (
 		<Container style={{ height: "100%" }} sx={flexStyle} maxWidth='lg'>

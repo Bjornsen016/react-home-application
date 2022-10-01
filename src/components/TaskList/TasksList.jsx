@@ -3,6 +3,8 @@ import { fetchDataFromApi } from "../utils/fetcher";
 import { Tabs, Tab, Divider, CircularProgress } from "@mui/material";
 import TabPanel from "./children/TabPanel";
 
+import { UserAuth as GoogleUserAuth } from "../contexts/GoogleApiCallsContext";
+
 //useMemo: Returns and stores the calculated value of a function in a variable
 //useCallBack: Returns and stores the actual function itself in a variable
 
@@ -11,6 +13,7 @@ const TasksList = () => {
 	const [loading, setLoading] = useState(true);
 	const [taskLists, setTaskLists] = useState();
 	const [task, setTask] = useState([]);
+	const { apiToken } = GoogleUserAuth();
 
 	const taskUrl = new URL("https://content-tasks.googleapis.com");
 	const orginPath = "/tasks/v1";
@@ -60,15 +63,20 @@ const TasksList = () => {
 		//Added the timeout to let the system get the ApiKey from localStorage if there is one.
 		//TODO: Hopefully able to remove the timeout if implementing GoogleApiCallsContext
 		let interval;
-		setTimeout(() => {
+		/* setTimeout(() => {
 			if (!localStorage.getItem("googleApiToken")) return;
 			getTaskList(getTaskListsUrl);
 			interval = setInterval(() => {
 				getTaskList(getTaskListsUrl);
 			}, 1000 * 60 * 5);
-		}, 1000);
+		}, 1000); */
+
+		getTaskList(getTaskListsUrl);
+		interval = setInterval(() => {
+			getTaskList(getTaskListsUrl);
+		}, 1000 * 60 * 5);
 		return () => clearInterval(interval);
-	}, []);
+	}, [apiToken.get]);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
