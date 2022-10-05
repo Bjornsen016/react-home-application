@@ -73,11 +73,12 @@ const checkTokenExpiration = async () => {
 	//or //TODO: Below
 	//const userRef = ref(db, "user/" + userId)
 	//const refreshToken = userRef.get().refresh_token; //or something like it
-
+	console.log("Renewing token");
 	const newToken = await googleRenewAuthToken(refresh_token);
 	localStorage.setItem("googleApiToken", newToken);
 
 	const expirationDate = new Date(new Date().getTime() + 3600000);
 	localStorage.setItem("expirationDate", expirationDate);
+	console.log("Token has been renewed");
 	return newToken;
 };

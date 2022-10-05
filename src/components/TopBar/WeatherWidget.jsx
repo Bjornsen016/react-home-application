@@ -6,10 +6,9 @@ import { Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const WeatherWidget = () => {
-  const [lat, setLat] = useState("59.32932349999999");
+  const [lat, setLat] = useState("59.32932349999999"); //default value if no user position is targeted - targets Stockholm
   const [long, setLong] = useState("18.068580800000063");
   const [data, setData] = useState([]);
-  const [locationName, setLocationName] = useState("Falun");
 
   useEffect(() => {
     fetchDataWithLocation();
