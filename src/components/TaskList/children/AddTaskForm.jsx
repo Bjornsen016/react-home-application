@@ -1,63 +1,59 @@
 import React, { useState } from "react";
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  TextField,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogTitle,
+	TextField,
 } from "@mui/material";
-import { postDataToApi } from "../../utils/fetcher";
+import { UserAuth } from "../../contexts/GoogleApiCallsContext";
 
-export default function AddTaskForm({
-  open,
-  setOpen,
-  listId,
-  getTaskList,
-  token,
-}) {
-  const taskUrl = new URL("https://content-tasks.googleapis.com");
-  const orginPath = "/tasks/v1";
-  const insertTaskUrl = `/lists/${listId}/tasks`;
-  taskUrl.pathname = orginPath;
-  taskUrl.pathname += insertTaskUrl;
+export default function AddTaskForm({ open, setOpen, listId, getTaskList }) {
+	const taskUrl = new URL("https://content-tasks.googleapis.com");
+	const orginPath = "/tasks/v1";
+	const insertTaskUrl = `/lists/${listId}/tasks`;
+	taskUrl.pathname = orginPath;
+	taskUrl.pathname += insertTaskUrl;
 
-  const [value, setValue] = useState(null);
-  const handleClose = () => {
-    setOpen(false);
-  };
+	const [value, setValue] = useState(null);
 
-  const handleSubmit = async () => {
-    const taskBody = { title: value };
+	const { postDataToApi } = UserAuth();
+	const handleClose = () => {
+		setOpen(false);
+	};
 
-    await postDataToApi(taskUrl, token, taskBody);
+	const handleSubmit = async () => {
+		const taskBody = { title: value };
 
-    taskUrl.pathname = orginPath;
+		await postDataToApi(taskUrl, taskBody);
 
-    setOpen(false);
-    setValue(null);
+		taskUrl.pathname = orginPath;
 
-    getTaskList();
-  };
+		setOpen(false);
+		setValue(null);
 
-  return (
-    <Dialog open={open}>
-      <DialogTitle>Add Task</DialogTitle>
-      <TextField
-        value={value}
-        autoFocus
-        margin="dense"
-        id="task"
-        type="text"
-        variant="standard"
-        style={{ padding: " 0 20px", minWidth: "300px" }}
-        onChange={(e) => {
-          setValue(e.target.value);
-        }}
-      />
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-        <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
-      </DialogActions>
-    </Dialog>
-  );
+		getTaskList();
+	};
+
+	return (
+		<Dialog open={open}>
+			<DialogTitle>Add Task</DialogTitle>
+			<TextField
+				value={value}
+				autoFocus
+				margin='dense'
+				id='task'
+				type='text'
+				variant='standard'
+				style={{ padding: " 0 20px", minWidth: "300px" }}
+				onChange={(e) => {
+					setValue(e.target.value);
+				}}
+			/>
+			<DialogActions>
+				<Button onClick={handleClose}>Close</Button>
+				<Button onClick={(e) => handleSubmit(e)}>Submit</Button>
+			</DialogActions>
+		</Dialog>
+	);
 }

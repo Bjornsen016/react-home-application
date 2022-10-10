@@ -4,16 +4,18 @@ import TopBarMenu from "./TopBarMenu";
 import Clock from "./Clock";
 import WeatherWidget from "./WeatherWidget";
 import LoginWithGoogle from "./LoginWithGoogle";
+import { ColorMode } from "../contexts/ColorModeContext";
+
+import { auth } from "../../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 //TODO: Make this into more smaller components
 //TODO: Refactor to have a better understanding of what happens
-export default function TopBar({
-	colorMode,
-	user,
-	setGoogleApiToken,
-	setUser,
-	setChosenCalendars,
-}) {
+export default function TopBar() {
+	const { toggleColorMode } = ColorMode();
+	/* const { user } = UserAuth(); */
+
+	const [user, loading, error] = useAuthState(auth);
 	return (
 		<AppBar position='static' color='primary'>
 			<Toolbar
@@ -32,29 +34,18 @@ export default function TopBar({
 						flexWrap: "wrap",
 					}}
 				>
-					<TopBarMenu
-						user={user}
-						setGoogleApiToken={setGoogleApiToken}
-						setUser={setUser}
-						setChosenCalendars={setChosenCalendars}
-					/>
+					<TopBarMenu />
 					<Checkbox
-						onChange={colorMode.toggleColorMode}
+						onChange={toggleColorMode}
 						icon={<LightMode sx={{ color: "yellow" }} />}
 						checkedIcon={<DarkMode sx={{ color: "white" }} />}
 					/>
 					<Typography variant='h6' sx={{ fontSize: { xs: "80%", sm: "100%" } }}>
-						{user?.names.displayName}
+						{user?.displayName}
 					</Typography>
-					{!user && (
-						<LoginWithGoogle
-							setGoogleApiToken={setGoogleApiToken}
-							setUser={setUser}
-						/>
-					)}
+					{!user && <LoginWithGoogle />}
 				</Box>
 				<Clock />
-				{/* TODO: Make center on the top everytime, make instead of flex? */}
 				<Box sx={{ justifySelf: "end", fontSize: { xs: "80%", sm: "100%" } }}>
 					<Typography variant='p'>
 						<WeatherWidget />

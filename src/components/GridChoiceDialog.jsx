@@ -16,8 +16,10 @@ export default function GridChoiceDialog({
 	setValue,
 	value,
 	choices,
+	componentName,
 }) {
 	const handleChange = (event) => {
+		localStorage.setItem(componentName, event.target.value);
 		setValue(event.target.value);
 	};
 

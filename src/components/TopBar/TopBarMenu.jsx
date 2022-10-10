@@ -1,19 +1,34 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { googleLogout } from "@react-oauth/google";
-import { Link } from "react-router-dom";
-import { IsGridUnlockedContext } from "../../App";
+import { Link, useNavigate } from "react-router-dom";
+import { UserAuth } from "../contexts/GoogleApiCallsContext";
+import { auth, logout } from "../../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
+function TopBarMenu() {
+	const navigate = useNavigate();
+	const [user] = useAuthState(auth);
+	const { chosenCalendars, apiToken } = UserAuth();
 	const [anchorEl, setAnchorEl] = useState(null);
-	const isGridUnlocked = useContext(IsGridUnlockedContext);
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleSignOut = () => {
+		logout();
+		apiToken.set();
+		chosenCalendars.set();
+		localStorage.removeItem("googleApiToken");
+		localStorage.removeItem("refreshToken");
+		localStorage.removeItem("expirationDate");
+		localStorage.removeItem("chosenCalendars");
+		navigate("/");
+		handleClose();
 	};
 
 	return (
@@ -51,32 +66,7 @@ function TopBarMenu({ user, setGoogleApiToken, setUser, setChosenCalendars }) {
 					</MenuItem>
 				</Link>
 
-				<MenuItem
-					divider
-					onClick={() => {
-						isGridUnlocked.toggleUnlockGrid();
-						handleClose();
-					}}
-				>
-					{isGridUnlocked.unlocked ? "Lock widgets" : "Change widgets"}
-				</MenuItem>
-
-				{user && (
-					<MenuItem
-						onClick={() => {
-							googleLogout();
-							setUser();
-							setGoogleApiToken();
-							setChosenCalendars();
-							localStorage.removeItem("user");
-							localStorage.removeItem("googleApiToken");
-							localStorage.removeItem("chosenCalendars");
-							handleClose();
-						}}
-					>
-						Sign out
-					</MenuItem>
-				)}
+				{user && <MenuItem onClick={handleSignOut}>Sign out</MenuItem>}
 			</Menu>
 		</>
 	);
