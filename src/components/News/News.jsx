@@ -1,7 +1,7 @@
 import { genereteNewsUrl } from "../../config/newsApiInfo";
-import FetchData from "../utils/FetchData";
 import { React, useState, useEffect } from "react";
 import { Card, CardContent, Button, Typography } from "@mui/material";
+import Carousel from "react-material-ui-carousel";
 
 export default function News() {
   const [newsData, setNewsData] = useState([]);
@@ -14,26 +14,9 @@ export default function News() {
 
     return data;
   }
-  useEffect(() => {
-    const fetchNews = async () => {
-      const url = genereteNewsUrl();
-      const newsData = await fetchData(url);
-      setNewsData(newsData);
-      console.log(newsData);
-      const newsCard = {
-        secondaryHeader: `News of todays`,
-        primaryHeader: `${newsData.articles[8].source.name}`,
-        body: `${newsData.articles[8].description}`,
-        showbutton: false,
-      };
-      setNewsCard(newsCard);
-    };
 
-    fetchNews();
-  }, []);
-
-  return (
-    <div>
+  function caruselCard(props) {
+    return (
       <Card>
         <CardContent
           sx={{
@@ -74,6 +57,35 @@ export default function News() {
           </Typography>
         </CardContent>
       </Card>
-    </div>
+    );
+  }
+  useEffect(() => {
+    const fetchNews = async () => {
+      const url = genereteNewsUrl();
+      const newsData = await fetchData(url);
+      setNewsData(newsData);
+      console.log(newsData);
+      const newsCard = {
+        secondaryHeader: `Todays news`,
+        primaryHeader: `${newsData.articles[14].author}`,
+        body: `${newsData.articles[14].title}`,
+        showbutton: false,
+      };
+      setNewsCard(newsCard);
+    };
+
+    fetchNews();
+  }, []);
+
+  return (
+    <Carousel
+      className="carousel"
+      sx={{ overflow: { xs: "visible" }, height: { sm: "85%" } }}
+      interval={8000}
+    >
+      {newsCard?.map((item, i) =>
+        item.body ? <caruselCard key={i} item={item} /> : ""
+      )}
+    </Carousel>
   );
 }
