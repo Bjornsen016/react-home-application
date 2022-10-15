@@ -61,6 +61,8 @@ export default function MainInformationScreen() {
         );
       case "Facts":
         return <FactOfTheDay />;
+      case "News":
+        return <News />;
       case "Bus":
         return <BusTable />;
       default:
@@ -117,6 +119,7 @@ export default function MainInformationScreen() {
           { value: "Calendar" },
           { value: "Tasks" },
           { value: "Facts" },
+          { value: "News" },
         ]}
       />
       <GridChoiceDialog
@@ -125,7 +128,12 @@ export default function MainInformationScreen() {
         setValue={setleftComponentValue}
         value={leftComponentValue}
         componentName="leftComponentValue"
-        choices={[{ value: "Tasks" }, { value: "Facts" }, { value: "Bus" }]}
+        choices={[
+          { value: "Tasks" },
+          { value: "Facts" },
+          { value: "Bus" },
+          { value: "News" },
+        ]}
       />
       <GridChoiceDialog
         isOpen={rightComponentDialogIsOpen}
@@ -133,7 +141,12 @@ export default function MainInformationScreen() {
         setValue={setrightComponentValue}
         value={rightComponentValue}
         componentName="rightComponentValue"
-        choices={[{ value: "Facts" }, { value: "Tasks" }, { value: "Bus" }]}
+        choices={[
+          { value: "Facts" },
+          { value: "Tasks" },
+          { value: "Bus" },
+          { value: "News" },
+        ]}
       />
     </>
   );
