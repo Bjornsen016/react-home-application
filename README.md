@@ -34,7 +34,7 @@ For design and responsive content we have mainly used [MUI](https://mui.com/).
 ## Important when using this app
 
 - You currently need an invite from one of us to make your google account to be connected to this app.
-- To unlock the grid, and customize the UI, you choose `Change widget` from the top menu. The border of the grid is now yellow and dotted, which means that each box content can be changed. Left click on the box to see alternatives of content to choose from. When satisfied, lock the grid again by clicking `Lock widgets` in the menu.
+- To unlock the grid, and customize the UI, right click on the box to see alternatives of content to choose from.
 
 ### After downloading of project
 

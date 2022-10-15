@@ -68,7 +68,9 @@ function BusStopChoiceDialog({
 					onSubmit={(event) => {
 						event.preventDefault();
 						setstopId(chosenStop[0].id);
+						localStorage.setItem("stopId", chosenStop[0].id);
 						setdirectionId(chosenDirectionStop[0].id);
+						localStorage.setItem("directionId", chosenDirectionStop[0].id);
 						setisSearchDialogOpen((prev) => !prev);
 					}}
 				>

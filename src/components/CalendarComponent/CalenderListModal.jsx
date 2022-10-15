@@ -11,15 +11,12 @@ import {
 	FormControlLabel,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
+import { UserAuth } from "../contexts/GoogleApiCallsContext";
 
-export const CalenderListModal = ({
-	isOpen,
-	setIsOpen,
-	calendarList,
-	setChosenCalendars,
-}) => {
+export const CalenderListModal = ({ isOpen, setIsOpen, calendarList }) => {
+	const { chosenCalendars } = UserAuth();
 	const handleSetCalendars = async (values) => {
-		setChosenCalendars(values.calendars);
+		chosenCalendars.set(values.calendars);
 		localStorage.setItem("chosenCalendars", JSON.stringify(values.calendars));
 		setIsOpen(false);
 	};
