@@ -6,6 +6,7 @@ import Carousel from "react-material-ui-carousel";
 export default function News() {
   const [articles, setArticles] = useState([]);
 
+  //TODO filter articels to present only some, max 7?
   useEffect(() => {
     const fetchNews = async () => {
       const url = genereteNewsUrl();
